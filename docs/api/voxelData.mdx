@@ -16,6 +16,10 @@ The data will only render if the object also has a `VoxelRender` component.
 
 ### nil Mirror(Vec3, Vec3) {#nil-Mirror-Vec3-Vec3}
 
+### Vec3, Vec3 GetAABounds() {#Vec3-Vec3-GetAABounds}
+
+### Vec3, Quat, Vec3 GetBounds() {#Vec3-Quat-Vec3-GetBounds}
+
 ### boolean, string SetPath(string) {#boolean-string-SetPath-string}
 
 ### nil SetPathAsync(string, userdata) {#nil-SetPathAsync-string-userdata}
@@ -28,6 +32,9 @@ If load is already running when new SetPathAsync is called, the new load is queu
 ### boolean __eq(VoxelData, VoxelData) {#boolean-eq-VoxelData-VoxelData}
 
 ## Properties
+
+### boolean copyOnWrite {#boolean-copyOnWrite}
+make local copy of voxel data resource if edited 
 
 ### Object object {#Object-object}
 
@@ -45,13 +52,14 @@ If load is already running when new SetPathAsync is called, the new load is queu
 
 ### string Type {#string-Type}
 
+### Vec3 Size {#Vec3-Size}
+
 ### string path {#string-path}
+
+### string originalPath {#string-originalPath}
 
 ### VoxelDataResource data {#VoxelDataResource-data}
 The voxel data resource that this voxel data is using
-
-### boolean copyOnWrite {#boolean-copyOnWrite}
-make local copy of voxel data resource if edited 
 
 ### boolean save {#boolean-save}
 

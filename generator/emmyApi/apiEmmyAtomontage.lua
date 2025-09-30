@@ -650,6 +650,7 @@ function Object:GetRefCount() end
 ---| '"MeshData"'
 ---| '"MeshRenderer"'
 ---| '"Prefab"'
+---| '"RigidBody"'
 ---| '"Script"'
 ---| '"Sky"'
 ---| '"StaticVoxelData"'
@@ -814,11 +815,13 @@ This class is only available on client
 --- @field mode ClientMode
 --- @field isMaker boolean
 --- @field EditMode boolean
+--- @field WannaShowLuaConsole boolean
 --- @field platform string
 --- @field sysInfo string
 --- @field MasterVolume number
 --- @field SoundVolume number
 --- @field MusicVolume number
+--- @field TracyProfiler boolean
 Client = {
 	MasterVolume = nil, ---Audio volume in range 0 - 1.
 	SoundVolume = nil, ---Audio volume in range 0 - 1.
@@ -1340,6 +1343,9 @@ function Client:ClearEntityPath() end
 --- @return nil
 function Client:AddEntityPathWaypoint() end
 
+--- @return table
+function Client:GetEntityPath() end
+
 --- @param p1 string
 --- @param p2 boolean
 --- @return nil
@@ -1846,9 +1852,8 @@ function Cylinder(p1, p2) end
 Effect = {}
 
 --- @param p1 string
---- @param p2 FilePath
 --- @return Effect
-function Effect(p1, p2) end
+function Effect(p1) end
 
 --[[
 `Client`
@@ -3207,9 +3212,69 @@ RealtimeLightingInfo = {}
 `Client`
 `Server`
 
+[View Documentation](https://docs.atomontage.com/api/RigidBody)
+]]
+--- @class RigidBody
+--- @field object Object
+--- @field isDestroyed boolean
+--- @field type string
+--- @field Active boolean
+--- @field ActiveInHierarchy boolean
+--- @field Object Object
+--- @field IsDestroyed boolean
+--- @field Type string
+--- @field Velocity Vec3
+--- @field AngularVelocity Vec3
+--- @field Mass number
+--- @field MassByObject boolean
+--- @field Inertia Vec3
+--- @field InertiaByObject boolean
+--- @field InertiaMul number
+--- @field Sleeping boolean
+--- @field StartSleeping boolean
+--- @field AllowSleeping boolean
+--- @field CenterOfMass Vec3
+--- @field GravityScale number
+RigidBody = {}
+
+--- @param p1 Vec3
+--- @param p2 Vec3
+--- @return nil
+function RigidBody:AddImpulse(p1, p2) end
+
+--- @param p1 Vec3
+--- @return nil
+function RigidBody:AddAngularImpulse(p1) end
+
+--- @param p1 Vec3
+--- @return nil
+function RigidBody:AddForce(p1) end
+
+--- @param p1 Vec3
+--- @return nil
+function RigidBody:AddTorque(p1) end
+
+--- @param p1 Vec3
+--- @return nil
+function RigidBody:AddAcceleration(p1) end
+
+--- @param p1 Vec3
+--- @return nil
+function RigidBody:AddAngularAcceleration(p1) end
+
+--- @param p1 RigidBody
+--- @param p2 RigidBody
+--- @return boolean
+function RigidBody:__eq(p1, p2) end
+
+--[[
+`Client`
+`Server`
+
 [View Documentation](https://docs.atomontage.com/api/Scene)
 ]]
 --- @class Scene
+--- @field VoxelDataResourceTemplateSizeThreshold integer
 --- @field lighting LightingUpdate
 --- @field objectLighting LightingUpdate
 --- @field SimulationPaused boolean
@@ -3295,6 +3360,11 @@ Also see [`Scene:MakeNameValid`](#string-MakeNameValid-string)
 --- @return Object
 function Scene:CreateObject(p1) end
 
+--[[
+Flags the object for deletion. The object will not actually be destroyed until the next frame.
+
+[View Documentation](https://docs.atomontage.com/api/Scene#nil-DestroyObject-Object)
+]]
 --- @param p1 Object
 --- @return nil
 function Scene:DestroyObject(p1) end
@@ -3467,12 +3537,15 @@ Script component. Not to be confused with the actual [lua table instance](Script
 --- @field IsDestroyed boolean
 --- @field Type string
 --- @field instance table
---- @field name string
---- @field syncToClients boolean
 --- @field Instance table
+--- @field name string
 --- @field Name string
+--- @field file string
 --- @field File string
+--- @field syncToClients boolean
 --- @field SyncToClients boolean
+--- @field priority integer
+--- @field Priority integer
 --- @field LuaFile Asset
 Script = {}
 
@@ -3712,6 +3785,7 @@ This class is only available on server
 --- @field EditMode boolean
 --- @field ModeChangeReloadGeom boolean
 --- @field Assets AssetManager
+--- @field TracyProfiler boolean
 Server = {}
 
 --- @return table
@@ -4014,6 +4088,7 @@ All shapes inherit from this class. It is not meant to be instantiated directly.
 [View Documentation](https://docs.atomontage.com/api/Shape)
 ]]
 --- @class Shape
+--- @field type string
 --- @field pos Vec3
 --- @field rot Quat
 --- @field size Vec3
@@ -4025,6 +4100,9 @@ All shapes inherit from this class. It is not meant to be instantiated directly.
 --- @field points table
 --- @field useShellPositions boolean
 Shape = {}
+
+--- @return string
+function Shape:__typefunc() end
 
 --[[
 `Client`
@@ -5283,6 +5361,9 @@ function Vec3:__eq(p1, p2) end
 function Vec3:Len() end
 
 --- @return number
+function Vec3:LenSqr() end
+
+--- @return number
 function Vec3:Length() end
 
 --- @return number
@@ -5710,6 +5791,9 @@ function Vec3i:__eq(p1, p2) end
 
 --- @return integer
 function Vec3i:Len() end
+
+--- @return integer
+function Vec3i:LenSqr() end
 
 --- @return integer
 function Vec3i:Length() end
@@ -7579,6 +7663,7 @@ The data will only render if the object also has a `VoxelRender` component.
 [View Documentation](https://docs.atomontage.com/api/VoxelData)
 ]]
 --- @class VoxelData
+--- @field copyOnWrite boolean
 --- @field object Object
 --- @field isDestroyed boolean
 --- @field type string
@@ -7587,14 +7672,15 @@ The data will only render if the object also has a `VoxelRender` component.
 --- @field Object Object
 --- @field IsDestroyed boolean
 --- @field Type string
+--- @field Size Vec3
 --- @field path string
+--- @field originalPath string
 --- @field data VoxelDataResource
---- @field copyOnWrite boolean
 --- @field save boolean
 --- @field editable boolean
 VoxelData = {
-	data = nil, ---The voxel data resource that this voxel data is using
 	copyOnWrite = nil, ---make local copy of voxel data resource if edited 
+	data = nil, ---The voxel data resource that this voxel data is using
 }
 
 --- @return VoxelData
@@ -7604,6 +7690,12 @@ function VoxelData() end
 --- @param p2 Vec3
 --- @return nil
 function VoxelData:Mirror(p1, p2) end
+
+--- @return Vec3, Vec3
+function VoxelData:GetAABounds() end
+
+--- @return Vec3, Quat, Vec3
+function VoxelData:GetBounds() end
 
 --- @param p1 string
 --- @return boolean, string
@@ -7648,16 +7740,11 @@ VoxelDataResource = {
 }
 
 --- @param p1 string
---- @param p2 boolean
 --- @return VoxelDataResource
-function VoxelDataResource(p1, p2) end
+function VoxelDataResource(p1) end
 
 --- @return VoxelDataResource
 function VoxelDataResource() end
-
---- @param p1 string
---- @return VoxelDataResource
-function VoxelDataResource(p1) end
 
 --[[
 save voxel data in AM file
@@ -7809,6 +7896,8 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 --- @field useMaterialColor boolean
 --- @field material string
 --- @field removeList table
+--- @field carveList table
+--- @field removeCountList table
 --- @field removeStats boolean
 --- @field usesPbr boolean
 --- @field copyOperation CopyOperation
@@ -7951,6 +8040,13 @@ function VoxelEdit:SetStaticSceneMaterial(p1, p2, p3) end
 --- @return nil
 function VoxelEdit:SetVoxelDataResourceMaterial(p1, p2) end
 
+--- @param p1 VoxelDataResource
+--- @param p2 string
+--- @param p3 string
+--- @param p4 boolean
+--- @return nil
+function VoxelEdit:ReplaceVoxelDataResourceMaterial(p1, p2, p3, p4) end
+
 --- @return nil
 function VoxelEdit:BackupSurfaceAttributes() end
 
@@ -8040,11 +8136,6 @@ function VoxelRenderer:AddAcceleration(p1) end
 --- @return nil
 function VoxelRenderer:AddAngularAcceleration(p1) end
 
---- @param p1 VoxelRenderer
---- @param p2 VoxelRenderer
---- @return boolean
-function VoxelRenderer:__eq(p1, p2) end
-
 --[[
 World position and size of AABB (axis-aligned bounding box) of the object
 
@@ -8055,6 +8146,25 @@ function VoxelRenderer:GetAABounds() end
 
 --- @return Vec3, Quat, Vec3
 function VoxelRenderer:GetBounds() end
+
+--- @param p1 VoxelRenderer
+--- @param p2 VoxelRenderer
+--- @return boolean
+function VoxelRenderer:__eq(p1, p2) end
+
+--- @enum AlignmentType
+AlignmentType = {
+	AlignToTopLeft = 0,
+	AlignToTopRight = 1,
+	AlignToBottomLeft = 2,
+	AlignToBottomRight = 3,
+	AlignToTopCenter = 4,
+	AlignToBottomCenter = 5,
+	AlignToLeftCenter = 6,
+	AlignToRightCenter = 7,
+	AlignToCenter = 8,
+	ScaleToFit = 9,
+}
 
 --[[
 
@@ -8146,6 +8256,13 @@ LuaErrorType = {
 	DoFile = 1,
 	Runtime = 2,
 	UIAction = 3,
+}
+
+--- @enum PhysSimEventType
+PhysSimEventType = {
+	Unspecified = 0,
+	Impulse = 1,
+	Force = 2,
 }
 
 --- @enum PixelFormat

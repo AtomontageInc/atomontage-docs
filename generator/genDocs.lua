@@ -161,6 +161,7 @@ function genDocs:gen()
         "Sound",
         "Asset",
         "FilePath",
+        "RigidBody",
     }
 
     local show = {}
