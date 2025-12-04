@@ -5,7 +5,37 @@ id: Polyhedron
 `Client`
 `Server`
 
+A polyhedron is built from half-spaces.
+Each half-space is defined by a plane (a point + a normal) and represents “everything on one side of that plane.”
+
+```lua
+function self:examplePolyhedron(pos)
+    local dirs = {
+        Vec3( 1, 0, 0),
+        Vec3(-1, 0, 0),
+        Vec3( 0, 1, 0),
+        Vec3( 0, 0, 1)
+    }
+
+    local sides = {}
+    for _, n in ipairs(dirs) do
+        local pl = Vec4()
+        pl:MakePlane(pos + n, n)
+        table.insert(sides, pl)
+    end
+
+    local sh = Polyhedron()
+    sh.sides = sides
+    return sh
+end
+```
+
 ## Constructors
 
 ### Polyhedron() {#Polyhedron}
 
+## Properties
+
+### Vec4[] sides {#Vec4[]-sides}
+the half spaces that make up the polyhedron.
+Use `Vec4:MakePlane(pos, normal)` to create a plane.

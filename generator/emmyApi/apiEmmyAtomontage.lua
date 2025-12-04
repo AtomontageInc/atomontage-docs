@@ -2942,6 +2942,7 @@ function Polygon() end
 [View Documentation](https://docs.atomontage.com/api/Polyhedron)
 ]]
 --- @class Polyhedron
+--- @field sides Vec4[]
 Polyhedron = {}
 
 --- @return Polyhedron
@@ -6540,6 +6541,10 @@ function Vec4:GetRounded(p1) end
 --- @param p1 Vec4
 --- @return number
 function Vec4:DistanceTo(p1) end
+
+--- @param p1 Vec4
+--- @param p2 Vec4
+function Vec4:MakePlane(p1, p2) end
 
 --- @param p1 Vec4
 --- @return string
