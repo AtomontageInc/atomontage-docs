@@ -709,7 +709,7 @@ function genEmmy:generateEmmyLua(file, name, intro, finalMethods, finalPropertie
     local docsPath = ""
     self:writeClassHeader(file, className, intro, docsPath)
     file:write("--- @class ",className, "\n")
-    self:writeOperators(file, className, finalMethods)
+    --self:writeOperators(file, className, finalMethods)
     self:writeProps(file, className, finalProperties)
     self:writeMethods(file, className, finalMethods)
 end
@@ -844,6 +844,7 @@ function genEmmy:writeMethods(file, className, finalMethods)
                 file:write(line, "\n")
             end
             local _, _, headingId = string.find(header, "{(%S*)}")
+            assert(headingId, "headingId not found: " .. header.." "..className)
             local uri = "https://docs.atomontage.com/api/" .. className .. headingId
             file:write("[View Documentation](", uri, ")", "\n")
             file:write("]]", "\n")

@@ -74,17 +74,14 @@ function genDocs:gen()
  
     --itterate sorted by ABC for emmy order
     local tkeys = {}
-    for k, v in pairs(_BindingsServer) do
-        --TEMP filtering out the old stuff here
-        if k ~= "Classes" and k ~= "Enums" and k ~= "Global Functions" and k ~= "Namespaces" and k ~= "Pointers" then
-            table.insert(tkeys, k)
-        end
+    for k, v in pairs(_BindingsServer.Classes) do
+        table.insert(tkeys, k)
     end
     table.sort(tkeys)
 
 
     for _, nameOrig in ipairs(tkeys) do
-        local class = _BindingsServer[nameOrig]
+        local class = _BindingsServer.Classes[nameOrig]
         local name = util:firstToLower(nameOrig)
         fileNamesClasses[name] = nil
         genDocs:generateClassFile(name, class)
@@ -133,7 +130,7 @@ function genDocs:generateClassFile(name, class)
     --get current sections
     local intro, currentMethods, currentProperties = self:getSections(filename)
     local finalMethods = self:getFinalFunctionEntries(currentMethods, class.functions, name)
-    local finalProperties = self:getFinalPropEntries(currentProperties, class.props, name)
+    local finalProperties = self:getFinalPropEntries(currentProperties, class.properties, name)
 
     --TODO if adding new class auto generated info is not there yet and not included in emmy file
     --use final entries for emmy generator
@@ -186,7 +183,7 @@ function genDocs:generateClassFile(name, class)
             end
         end
     end
-    if (class.props) then
+    if (class.properties) then
         file:write("## Properties", "\n\n")
         for i, v in ipairs(finalProperties) do
             local lines = v.entry
@@ -253,6 +250,8 @@ function genDocs:genFunctionEntry(info)
         end
         table.remove(entry) --comma
         table.insert(entry, " ")
+    else
+        table.insert(entry, "nil ")
     end
 
     --name
