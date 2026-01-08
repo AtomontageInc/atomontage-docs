@@ -709,7 +709,7 @@ function genEmmy:generateEmmyLua(file, name, intro, finalMethods, finalPropertie
     local docsPath = ""
     self:writeClassHeader(file, className, intro, docsPath)
     file:write("--- @class ",className, "\n")
-    --self:writeOperators(file, className, finalMethods)
+    self:writeOperators(file, className, finalMethods)
     self:writeProps(file, className, finalProperties)
     self:writeMethods(file, className, finalMethods)
 end

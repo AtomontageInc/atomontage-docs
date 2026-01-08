@@ -127,9 +127,18 @@ function genDocs:generateClassFile(name, class)
         fileW:close()
     end
 
+    --concat
+    local constructorsAndFuncs = {}
+    for _, v in ipairs(class.constructors or {}) do
+        table.insert(constructorsAndFuncs, v)
+    end
+    for _, v in ipairs(class.functions or {}) do
+        table.insert(constructorsAndFuncs, v)
+    end
+
     --get current sections
     local intro, currentMethods, currentProperties = self:getSections(filename)
-    local finalMethods = self:getFinalFunctionEntries(currentMethods, class.functions, name)
+    local finalMethods = self:getFinalFunctionEntries(currentMethods, constructorsAndFuncs, name)
     local finalProperties = self:getFinalPropEntries(currentProperties, class.properties, name)
 
     --TODO if adding new class auto generated info is not there yet and not included in emmy file
@@ -157,7 +166,8 @@ function genDocs:generateClassFile(name, class)
         end
     end
     
-    local constructorStrPart = "## "..util:firstToUpper(name).."("
+    --local constructorStrPart = "## "..util:firstToUpper(name).."("
+    local constructorStrPart = "### " .. util:firstToUpper(name) .." " .. util:firstToUpper(name) .. "("
     local wroteMetamethods = false
     local wroteConstructors = false
     local wroteMethods = false
