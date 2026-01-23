@@ -366,7 +366,7 @@ function genDocs:generateEnumFile(name, values)
 
     --get values, conert to this table
     local updatedRowsKeys = {}
-    for i, val in pairs(values) do
+    for val, i in pairs(values) do
         updatedRowsKeys[val] = true
     end
 
@@ -400,11 +400,11 @@ function genDocs:generateEnumFile(name, values)
     --add remaing (new) updatedRows in correct order (sorted by keys)
     local tkeys = {}
     for k in pairs(values) do table.insert(tkeys, k) end
-    table.sort(tkeys)
+    --table.sort(tkeys)
     for _, k in ipairs(tkeys) do
         local v = values[k]
-        if (updatedRowsKeys[v]) then
-            local info = {v, ""}
+        if (updatedRowsKeys[k]) then
+            local info = {k, ""}
             table.insert(finalRows, info)
         end
     end
