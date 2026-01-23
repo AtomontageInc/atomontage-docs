@@ -890,7 +890,7 @@ end
 function genEmmy:dissectMethodEntry(lines)
     local header = lines[1]
     header = header:gsub("const ", "") --for now just remove that
-    local _, _, returnType, name, paramsStr = string.find(header, "### ([%w%s%,%[%]]-)%s?(%S*)%((.*)%)")
+    local _, _, returnType, name, paramsStr = string.find(header, "### ([%w%s%,%[%]?]-)%s?(%S*)%((.*)%)")
     local params = {}
     assert(paramsStr, "header contains illegal characters: " .. header.." " .. tostring(returnType).. " " .. tostring(name).. " " .. tostring(paramsStr))
     for word in string.gmatch(paramsStr, '%s?([^,]+)') do

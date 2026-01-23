@@ -171,7 +171,7 @@ function genDocs:generateClassFile(name, class)
     local wroteMetamethods = false
     local wroteConstructors = false
     local wroteMethods = false
-    if (class.functions) then
+    if next(finalMethods) then
         for i, v in ipairs(finalMethods) do
             local lines = v.entry
             --make all kinds of function type headers
@@ -193,7 +193,7 @@ function genDocs:generateClassFile(name, class)
             end
         end
     end
-    if (class.properties) then
+    if next(finalProperties) then
         file:write("## Properties", "\n\n")
         for i, v in ipairs(finalProperties) do
             local lines = v.entry
