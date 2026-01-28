@@ -7,9 +7,10 @@ function util:getAllComponents(_Bindings)
         if name ~= "Component" then 
             local hasType = false
             local hasObject = false
-            for i, prop in ipairs(class.Properties or {}) do
-                hasType = hasType or prop:find("const char type")
-                hasObject = hasObject or prop:find(" object")
+            for i, prop in ipairs(class.properties or {}) do
+                local name = prop.name
+                hasType = hasType or name:find("Type")
+                hasObject = hasObject or name:find("Obj")
             end
             if hasType and hasObject then
                 table.insert(components, name)          
