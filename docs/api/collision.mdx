@@ -16,17 +16,21 @@ Instead use `Cast:Ray()` and `Collide()`
 
 ## Methods
 
-### table Raycast() {#table-Raycast}
+### Hit[] Raycast() {#Hit-Raycast}
 Use rayPos, rayDir, returns table of Hit values or empty table for no hit.
 Returns [Hit](Hit).
 
-### table Raycast(Vec3, Vec3) {#table-Raycast-Vec3-Vec3}
+### Hit[] Raycast(boolean ignoreTmp, boolean ignoreCommon, boolean precise) {#Hit-Raycast-boolean-ignoreTmp-boolean-ignoreCommon-boolean-precise}
 
-### table GetOverlap() {#table-GetOverlap}
+### Hit[] Raycast(Vec3 pos, Vec3 dir) {#Hit-Raycast-Vec3-pos-Vec3-dir}
+
+### Hit[] Raycast(Vec3 pos, Vec3 dir, boolean ignoreTmp, boolean ignoreCommon, boolean precise) {#Hit-Raycast-Vec3-pos-Vec3-dir-boolean-ignoreTmp-boolean-ignoreCommon-boolean-precise}
+
+### Overlap[] GetOverlap() {#Overlap-GetOverlap}
 Checks collision between shape and geometry passed by filter.
 Returns [Overlap](Overlap).
 
-### table GetOverlap(Shape) {#table-GetOverlap-Shape}
+### Overlap[] GetOverlap(Shape shape) {#Overlap-GetOverlap-Shape-shape}
 
 ## Properties
 
