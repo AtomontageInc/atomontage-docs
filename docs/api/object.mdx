@@ -12,21 +12,27 @@ The object visible in the hierarchy. Every object has a transform and can have a
 ### Object GetChild(string) {#Object-GetChild-string}
 Get child object by name
 
-### Object GetChildById(Guid) {#Object-GetChildById-Guid}
+### Vec3 LocalToWorld(Vec3 point) {#Vec3-LocalToWorld-Vec3-point}
 
-### boolean RemoveParent() {#boolean-RemoveParent}
+### Vec3 WorldToLocal(Vec3 point) {#Vec3-WorldToLocal-Vec3-point}
 
-### boolean IsPrefab() {#boolean-IsPrefab}
+### Vec3 LocalToWorldVec(Vec3 vec) {#Vec3-LocalToWorldVec-Vec3-vec}
 
-### boolean IsPrefab(string) {#boolean-IsPrefab-string}
+### Vec3 WorldToLocalVec(Vec3 vec) {#Vec3-WorldToLocalVec-Vec3-vec}
 
-### Script AddScript(string, boolean) {#Script-AddScript-string-boolean}
+### nil LookAt(Vec3 pos) {#nil-LookAt-Vec3-pos}
+
+### nil LookAt(Vec3 pos, Vec3 up) {#nil-LookAt-Vec3-pos-Vec3-up}
+
+### Object? GetChild(string name) {#Object-GetChild-string-name}
+
+### Script AddScript(string fileName, boolean sync) {#Script-AddScript-string-fileName-boolean-sync}
 
 ### MeshData AddMeshData() {#MeshData-AddMeshData}
 
-### VoxelData AddVoxelData(string) {#VoxelData-AddVoxelData-string}
+### VoxelData? AddVoxelData(string fileName) {#VoxelData-AddVoxelData-string-fileName}
 
-### StaticVoxelData AddStaticVoxelData(string) {#StaticVoxelData-AddStaticVoxelData-string}
+### StaticVoxelData? AddStaticVoxelData(string fileName) {#StaticVoxelData-AddStaticVoxelData-string-fileName}
 
 ### VoxelRenderer AddVoxelRenderer() {#VoxelRenderer-AddVoxelRenderer}
 
@@ -34,22 +40,39 @@ Get child object by name
 
 ### Sky AddSkybox() {#Sky-AddSkybox}
 
-### userdata AddComponent(string) {#userdata-AddComponent-string}
+### boolean RemoveParent() {#boolean-RemoveParent}
 
-### boolean RemoveComponent(string) {#boolean-RemoveComponent-string}
+### boolean RemoveComponent(Component component) {#boolean-RemoveComponent-Component-component}
 
-### boolean RemoveComponent(userdata) {#boolean-RemoveComponent-userdata}
+### boolean RemoveComponent(string componentType) {#boolean-RemoveComponent-string-componentType}
 
-### userdata GetComponentByType(string) {#userdata-GetComponentByType-string}
+### Component? GetComponentByType(string typeName) {#Component-GetComponentByType-string-typeName}
 Find a component by type name. Returns the first component found
 
-### table GetComponentsByType(string) {#table-GetComponentsByType-string}
+### Component[] GetComponentsByType(string typeName) {#Component-GetComponentsByType-string-typeName}
 Find all components by type name
 
-### userdata FindScript(string) {#userdata-FindScript-string}
+### Component? GetComponent(string typeName) {#Component-GetComponent-string-typeName}
+
+### Component[] GetComponents(string typeName) {#Component-GetComponents-string-typeName}
+
+### Component AddComponent(string componentType) {#Component-AddComponent-string-componentType}
+
+### boolean IsPrefab() {#boolean-IsPrefab}
+
+### boolean IsPrefab(string name) {#boolean-IsPrefab-string-name}
+
+### Object[] WithChildren() {#Object-WithChildren}
+
+### Object[] WithChildren(boolean searchInHierarchy) {#Object-WithChildren-boolean-searchInHierarchy}
+
+### ScriptInstance FindScript(string name) {#ScriptInstance-FindScript-string-name}
 Find attached script component lua table by name
 
-### Camera GetCamera() {#Camera-GetCamera}
+### boolean HasScript(string name) {#boolean-HasScript-string-name}
+
+### number GetTotalVolume(string stopIfChildObjHasScript) {#number-GetTotalVolume-string-stopIfChildObjHasScript}
+Volume of all the VoxelData components in the object and all its children
 
 ### string GetNetworkFlow() {#string-GetNetworkFlow}
 
@@ -59,14 +82,63 @@ Find attached script component lua table by name
 
 ## Properties
 
-### Transform transform {#Transform-transform}
-Get the transform to modify the position, rotation and scale of the object
+### Vec3 Pos {#Vec3-Pos}
 
-### boolean isDestroyed {#boolean-isDestroyed}
-True if the object was destroyed. Note that references to this object will still be valid 
+### number PosX {#number-PosX}
 
-### string id {#string-id}
-This is id is unique across clients and server
+### number PosY {#number-PosY}
+
+### number PosZ {#number-PosZ}
+
+### Quat Rot {#Quat-Rot}
+
+### Vec3 EulerRot {#Vec3-EulerRot}
+
+### number Scale {#number-Scale}
+
+### Vec3 LocalPos {#Vec3-LocalPos}
+
+### Quat LocalRot {#Quat-LocalRot}
+
+### Vec3 LocalEulerRot {#Vec3-LocalEulerRot}
+
+### number LocalScale {#number-LocalScale}
+
+### Vec3 Right {#Vec3-Right}
+
+### Vec3 Up {#Vec3-Up}
+
+### Vec3 Forward {#Vec3-Forward}
+
+### string Name {#string-Name}
+
+### boolean Active {#boolean-Active}
+
+### boolean ActiveInHierarchy {#boolean-ActiveInHierarchy}
+
+### boolean Save {#boolean-Save}
+
+### Transform Transform {#Transform-Transform}
+
+### boolean IsDestroyed {#boolean-IsDestroyed}
+
+### string Id {#string-Id}
+
+### Object? Parent {#Object-Parent}
+
+### Object[] Children {#Object-Children}
+
+### integer SiblingIndex {#integer-SiblingIndex}
+
+### boolean IsPrefabObject {#boolean-IsPrefabObject}
+
+### Component[] Components {#Component-Components}
+
+### VoxelData? VoxelData {#VoxelData-VoxelData}
+
+### VoxelRenderer? VoxelRenderer {#VoxelRenderer-VoxelRenderer}
+
+### RigidBody? RigidBody {#RigidBody-RigidBody}
 
 ### string name {#string-name}
 
@@ -80,9 +152,18 @@ Readonly. Check if the object is active in the scene. It may be inactive because
 ### boolean save {#boolean-save}
 Save this object in the hierarchy. If not saved it will be deleted after lua reset or server restart
 
-### Object parent {#Object-parent}
+### Transform transform {#Transform-transform}
+Get the transform to modify the position, rotation and scale of the object
 
-### table children {#table-children}
+### boolean isDestroyed {#boolean-isDestroyed}
+True if the object was destroyed. Note that references to this object will still be valid 
+
+### string id {#string-id}
+This is id is unique across clients and server
+
+### Object? parent {#Object-parent}
+
+### Object[] children {#Object-children}
 
 ### integer childCount {#integer-childCount}
 
@@ -90,7 +171,7 @@ Save this object in the hierarchy. If not saved it will be deleted after lua res
 
 ### boolean isPrefabObject {#boolean-isPrefabObject}
 
-### table components {#table-components}
+### Component[] components {#Component-components}
 
 ### integer componentsCount {#integer-componentsCount}
 
