@@ -7,8 +7,8 @@ local genDocsNew = require("generator.genDocsNew")
 local serpent = require("generator.serpent")
 
 print("start")
-genDocs:gen()
---genDocsNew:gen()
+--genDocs:gen()
+genDocsNew:gen()
 
 --only works on windows
 local function copyFile(fromFolder, toFolder)
