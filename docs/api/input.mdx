@@ -14,27 +14,19 @@ because it respects the order in which the input was received and other benefits
 
 ## Methods
 
-### table GetEvents() {#table-GetEvents}
+### table[] GetEvents() {#table-GetEvents}
 
-### boolean KeyDown(string) {#boolean-KeyDown-string}
+### boolean KeyDown(keycode key) {#boolean-KeyDown-keycode-key}
 
-### boolean Key(string) {#boolean-Key-string}
+### boolean Key(keycode key) {#boolean-Key-keycode-key}
 
-### boolean KeyUp(string) {#boolean-KeyUp-string}
+### boolean KeyUp(keycode key) {#boolean-KeyUp-keycode-key}
 
-### table KeyCombosDown() {#table-KeyCombosDown}
+### keycode[] KeyCombosDown() {#keycode-KeyCombosDown}
 
-### boolean KeyComboDown(string) {#boolean-KeyComboDown-string}
+### boolean KeyComboDown(keycode key1, keycode? key2, keycode? key3) {#boolean-KeyComboDown-keycode-key1-keycode-key2-keycode-key3}
 
-### boolean KeyComboDown(string, string, string) {#boolean-KeyComboDown-string-string-string}
-
-### boolean KeyComboDown(string, string) {#boolean-KeyComboDown-string-string}
-
-### boolean KeyCombo(string) {#boolean-KeyCombo-string}
-
-### boolean KeyCombo(string, string, string) {#boolean-KeyCombo-string-string-string}
-
-### boolean KeyCombo(string, string) {#boolean-KeyCombo-string-string}
+### boolean KeyCombo(keycode key1, keycode? key2, keycode? key3) {#boolean-KeyCombo-keycode-key1-keycode-key2-keycode-key3}
 
 ### boolean ShiftKey() {#boolean-ShiftKey}
 
@@ -42,11 +34,11 @@ because it respects the order in which the input was received and other benefits
 
 ### boolean AltKey() {#boolean-AltKey}
 
-### boolean MouseButtonDown(integer) {#boolean-MouseButtonDown-integer}
+### boolean MouseButtonDown(integer button) {#boolean-MouseButtonDown-integer-button}
 
-### boolean MouseButton(integer) {#boolean-MouseButton-integer}
+### boolean MouseButton(integer button) {#boolean-MouseButton-integer-button}
 
-### boolean MouseButtonUp(integer) {#boolean-MouseButtonUp-integer}
+### boolean MouseButtonUp(integer button) {#boolean-MouseButtonUp-integer-button}
 
 ### integer MouseWheel() {#integer-MouseWheel}
 
@@ -64,15 +56,15 @@ because it respects the order in which the input was received and other benefits
 
 ### boolean GetRelativeMouseMode() {#boolean-GetRelativeMouseMode}
 
-### nil SetRelativeMouseMode(boolean) {#nil-SetRelativeMouseMode-boolean}
+### nil SetRelativeMouseMode(boolean relative) {#nil-SetRelativeMouseMode-boolean-relative}
 
 ### boolean GetEmulateMouseWithTouch() {#boolean-GetEmulateMouseWithTouch}
 
-### nil SetEmulateMouseWithTouch(boolean) {#nil-SetEmulateMouseWithTouch-boolean}
+### nil SetEmulateMouseWithTouch(boolean emulate) {#nil-SetEmulateMouseWithTouch-boolean-emulate}
 
 ### boolean GetEmulateTouchWithMouse() {#boolean-GetEmulateTouchWithMouse}
 
-### nil SetEmulateTouchWithMouse(boolean) {#nil-SetEmulateTouchWithMouse-boolean}
+### nil SetEmulateTouchWithMouse(boolean emulate) {#nil-SetEmulateTouchWithMouse-boolean-emulate}
 
 ### number GesturePinch() {#number-GesturePinch}
 
@@ -82,40 +74,40 @@ because it respects the order in which the input was received and other benefits
 
 ### integer NumFingers() {#integer-NumFingers}
 
-### boolean FingerDown(integer) {#boolean-FingerDown-integer}
+### boolean FingerDown(integer fingerIndex) {#boolean-FingerDown-integer-fingerIndex}
 int passed is the unique ID of that touch obtained i.e. from Input:Fingers() or Input:GetEvents()
 
-### userdata Fingers() {#userdata-Fingers}
+### integer[] Fingers() {#integer-Fingers}
 
-### boolean FingerUp(integer) {#boolean-FingerUp-integer}
+### boolean FingerUp(integer fingerIndex) {#boolean-FingerUp-integer-fingerIndex}
 
-### Vec2 FingerPos(integer) {#Vec2-FingerPos-integer}
+### Vec2 FingerPos(integer fingerIndex) {#Vec2-FingerPos-integer-fingerIndex}
 
-### boolean VRButtonDown(integer, VRControllerButton) {#boolean-VRButtonDown-integer-VRControllerButton}
+### boolean VRButtonDown(integer hand, VRControllerButton button) {#boolean-VRButtonDown-integer-hand-VRControllerButton-button}
 
-### boolean VRButton(integer, VRControllerButton) {#boolean-VRButton-integer-VRControllerButton}
+### boolean VRButton(integer hand, VRControllerButton button) {#boolean-VRButton-integer-hand-VRControllerButton-button}
 
-### boolean VRButtonUp(integer, VRControllerButton) {#boolean-VRButtonUp-integer-VRControllerButton}
+### boolean VRButtonUp(integer hand, VRControllerButton button) {#boolean-VRButtonUp-integer-hand-VRControllerButton-button}
 
-### number VRHandTrigger(integer) {#number-VRHandTrigger-integer}
+### number VRHandTrigger(integer hand) {#number-VRHandTrigger-integer-hand}
 
-### number VRIndexTrigger(integer) {#number-VRIndexTrigger-integer}
+### number VRIndexTrigger(integer hand) {#number-VRIndexTrigger-integer-hand}
 
-### Vec2 VRThumbStick(integer) {#Vec2-VRThumbStick-integer}
+### Vec2 VRThumbStick(integer hand) {#Vec2-VRThumbStick-integer-hand}
 
-### Vec2 VRTrackpad(integer) {#Vec2-VRTrackpad-integer}
+### Vec2 VRTrackpad(integer hand) {#Vec2-VRTrackpad-integer-hand}
 
-### boolean VRIsControllerValid(integer) {#boolean-VRIsControllerValid-integer}
+### boolean VRIsControllerValid(integer hand) {#boolean-VRIsControllerValid-integer-hand}
 
-### Vec3 VRControllerPos(integer) {#Vec3-VRControllerPos-integer}
+### Vec3 VRControllerPos(integer hand) {#Vec3-VRControllerPos-integer-hand}
 
-### Vec3 VRControllerDir(integer) {#Vec3-VRControllerDir-integer}
+### Vec3 VRControllerDir(integer hand) {#Vec3-VRControllerDir-integer-hand}
 
-### Vec3, Quat VRControllerTransform(integer, Space) {#Vec3-Quat-VRControllerTransform-integer-Space}
+### Vec3 posLocal, Quat rotLocal VRControllerTransform(integer hand, Side space) {#Vec3-posLocal-Quat-rotLocal-VRControllerTransform-integer-hand-Side-space}
 
-### Vec3, Quat VRPointerTransform(integer, Space) {#Vec3-Quat-VRPointerTransform-integer-Space}
+### Vec3 posLocal, Quat rotLocal VRPointerTransform(integer hand, Side space) {#Vec3-posLocal-Quat-rotLocal-VRPointerTransform-integer-hand-Side-space}
 
-### userdata Gamepads() {#userdata-Gamepads}
+### Gamepad[] Gamepads() {#Gamepad-Gamepads}
 
-### userdata GetActiveGamepad() {#userdata-GetActiveGamepad}
+### Gamepad GetActiveGamepad() {#Gamepad-GetActiveGamepad}
 

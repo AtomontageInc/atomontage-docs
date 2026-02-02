@@ -91,11 +91,11 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 
 ## Constructors
 
-### VoxelEdit() {#VoxelEdit}
+### VoxelEdit VoxelEdit() {#VoxelEdit-VoxelEdit}
 
-### VoxelEdit(Shape, Vec3) {#VoxelEdit-Shape-Vec3}
+### VoxelEdit VoxelEdit(Shape shape) {#VoxelEdit-VoxelEdit-Shape-shape}
 
-### VoxelEdit(Shape) {#VoxelEdit-Shape}
+### VoxelEdit VoxelEdit(Shape shape, Vec3 position) {#VoxelEdit-VoxelEdit-Shape-shape-Vec3-position}
 
 ## Methods
 
@@ -118,30 +118,29 @@ Copy voxels somewhere
 ### nil Kernel() {#nil-Kernel}
 Smoothing/Inflate/Deflate
 
-### Image CaptureImage(Mat4, number) {#Image-CaptureImage-Mat4-number}
+### Image CaptureImage(Mat4 textureUvTmWorld, number relBorderSize) {#Image-CaptureImage-Mat4-textureUvTmWorld-number-relBorderSize}
 
-### Image GetImageResource(string) {#Image-GetImageResource-string}
+### Image GetImageResource(string name) {#Image-GetImageResource-string-name}
 
-### nil FreeTmpLayers(integer) {#nil-FreeTmpLayers-integer}
+### nil FreeTmpLayers(integer clientId) {#nil-FreeTmpLayers-integer-clientId}
 It projects cone on voxel geometry and everything inside will be copies to tmp
 all raycasts will collide with this tmp layer instead until FreeTmpLayers
-
-### nil FillTmpLayers(integer, Vec3, table, number, integer) {#nil-FillTmpLayers-integer-Vec3-table-number-integer}
+### nil FillTmpLayers(integer clientId) {#nil-FillTmpLayers-integer-clientId}
 It projects cone on voxel geometry and everything inside will be copies to tmp
 all raycasts will collide with this tmp layer instead until FreeTmpLayers
 parameters specify "cone" - two positions and end radius
 
-### table GetMaterialNames() {#table-GetMaterialNames}
+### string[] GetMaterialNames() {#string-GetMaterialNames}
 
-### table GetMaterial(string) {#table-GetMaterial-string}
+### table GetMaterial(string materialName) {#table-GetMaterial-string-materialName}
 
-### nil SetMaterial(string, table) {#nil-SetMaterial-string-table}
+### nil SetMaterial(string materialName, table matData) {#nil-SetMaterial-string-materialName-table-matData}
 
-### nil SetStaticSceneMaterial(string, number, number) {#nil-SetStaticSceneMaterial-string-number-number}
+### nil SetStaticSceneMaterial(string materialName, number roughness, number metallicity) {#nil-SetStaticSceneMaterial-string-materialName-number-roughness-number-metallicity}
 
-### nil SetVoxelDataResourceMaterial(VoxelDataResource, string) {#nil-SetVoxelDataResourceMaterial-VoxelDataResource-string}
+### nil SetVoxelDataResourceMaterial(VoxelDataResource vdr, string materialName) {#nil-SetVoxelDataResourceMaterial-VoxelDataResource-vdr-string-materialName}
 
-### nil ReplaceVoxelDataResourceMaterial(VoxelDataResource, string, string, boolean) {#nil-ReplaceVoxelDataResourceMaterial-VoxelDataResource-string-string-boolean}
+### nil ReplaceVoxelDataResourceMaterial(VoxelDataResource vdr, string destMaterialName, string srcMaterialName, boolean clearSourceMat) {#nil-ReplaceVoxelDataResourceMaterial-VoxelDataResource-vdr-string-destMaterialName-string-srcMaterialName-boolean-clearSourceMat}
 
 ### nil BackupSurfaceAttributes() {#nil-BackupSurfaceAttributes}
 
@@ -158,9 +157,9 @@ Various blend modes which you may know from Photoshop. See a list of explanation
 
 ### Vec3 color {#Vec3-color}
 
-### userdata filter {#userdata-filter}
+### Filter filter {#Filter-filter}
 
-### userdata shape {#userdata-shape}
+### Shape shape {#Shape-shape}
 if shape is nil the operation will match all targets 
 
 ### boolean clampToMinVoxelSize {#boolean-clampToMinVoxelSize}
@@ -182,7 +181,7 @@ if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least
 
 ### number copySourceScale {#number-copySourceScale}
 
-### userdata copyResource {#userdata-copyResource}
+### VoxelDataResource copyResource {#VoxelDataResource-copyResource}
 
 ### number roughness {#number-roughness}
 
@@ -223,9 +222,9 @@ if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least
 5 = Normals smooth
 6 = Normals sharp
 
-### userdata imageColor {#userdata-imageColor}
+### Image imageColor {#Image-imageColor}
 
-### userdata imageNormal {#userdata-imageNormal}
+### Image imageNormal {#Image-imageNormal}
 
 ### Mat4 imageUVTm {#Mat4-imageUVTm}
 
@@ -235,12 +234,10 @@ if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least
 
 ### number imageNormalBlendPower {#number-imageNormalBlendPower}
 
-### userdata onProgress {#userdata-onProgress}
+### fun(progress:number) OnProgress {#fun-progressnumber-OnProgress}
 callback function. progress from 0-1. May not be called every frame. Is called after script updates 
 
-### userdata onFinished {#userdata-onFinished}
+### fun(info:RemoveCountInfo) OnFinished {#fun-infoRemoveCountInfo-OnFinished}
 callback function. onFinished is called after onProgress if it was last part
-
-### userdata onError {#userdata-onError}
+### fun() OnError {#fun-OnError}
 callback function
-
