@@ -32,10 +32,25 @@ end
 
 ## Constructors
 
-### Polyhedron() {#Polyhedron}
+### Polyhedron Polyhedron() {#Polyhedron-Polyhedron}
+
+## Methods
+
+### Vec4 side GetSide(integer index) {#Vec4-side-GetSide-integer-index}
+
+### nil SetSide(integer index, Vec4 side) {#nil-SetSide-integer-index-Vec4-side}
+
+### nil BuildWheelTrack(number width, number height, number border, number bevel, Vec3 fromPos, Vec3 toPos, Vec3 fromUp, Vec3 toUp, boolean addDirBevels) {#nil-BuildWheelTrack-number-width-number-height-number-border-number-bevel-Vec3-fromPos-Vec3-toPos-Vec3-fromUp-Vec3-toUp-boolean-addDirBevels}
+
+### boolean valid, string error IsValid() {#boolean-valid-string-error-IsValid}
 
 ## Properties
 
-### Vec4[] sides {#Vec4[]-sides}
+### Vec3 pos {#Vec3-pos}
+
+### Vec4[] sides {#Vec4-sides}
 the half spaces that make up the polyhedron.
 Use `Vec4:MakePlane(pos, normal)` to create a plane.
+
+### integer sidesCount {#integer-sidesCount}
+

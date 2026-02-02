@@ -851,11 +851,8 @@ function genEmmy:writeMethods(file, className, finalMethods)
         end
 
         --is constructor
-        local isConstructor = returnType == ""
-        if isConstructor then
-            returnType = className
-        end
-
+        local isConstructor = name == className and returnType == className
+        
         --write function
         local paramNames = {}
         for i, info in ipairs(params) do

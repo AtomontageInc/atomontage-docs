@@ -7,12 +7,20 @@ id: Box
 
 ## Constructors
 
-### Box() {#Box}
+### Box Box() {#Box-Box}
 
-### Box(Vec3, Quat, Vec3) {#Box-Vec3-Quat-Vec3}
+### Box Box(Vec3 pos) {#Box-Box-Vec3-pos}
+
+### Box Box(Vec3 pos, Vec3 size) {#Box-Box-Vec3-pos-Vec3-size}
+
+### Box Box(Vec3 pos, Quat rot, Vec3 size) {#Box-Box-Vec3-pos-Quat-rot-Vec3-size}
 Centered box
 
-### Box(Vec3, Vec3) {#Box-Vec3-Vec3}
+## Properties
 
-### Box(Vec3) {#Box-Vec3}
+### Vec3 pos {#Vec3-pos}
+
+### Quat rot {#Quat-rot}
+
+### Vec3 size {#Vec3-size}
 

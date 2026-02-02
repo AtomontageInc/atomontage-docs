@@ -9,47 +9,57 @@ This class is only available on server
 
 ## Methods
 
-### table GetClients() {#table-GetClients}
+### integer[] GetClients() {#integer-GetClients}
 
-### table GetUsersID() {#table-GetUsersID}
+### string[] GetUsersID() {#string-GetUsersID}
 
-### string GetUserID(integer) {#string-GetUserID-integer}
+### integer GetUserID(integer clientID) {#integer-GetUserID-integer-clientID}
 
-### boolean IsVRClient(integer) {#boolean-IsVRClient-integer}
+### boolean IsVRClient(integer clientID) {#boolean-IsVRClient-integer-clientID}
 
-### nil DisconnectClient(integer) {#nil-DisconnectClient-integer}
+### nil DisconnectClient(integer clientID) {#nil-DisconnectClient-integer-clientID}
 
 ### integer GetScriptsVersion() {#integer-GetScriptsVersion}
 
-### string GetScript(string) {#string-GetScript-string}
+### string GetScript(string scriptName) {#string-GetScript-string-scriptName}
 
 ### nil LuaReset() {#nil-LuaReset}
 
-### nil ResendScripts() {#nil-ResendScripts}
+### string[] GetLuaFilesList() {#string-GetLuaFilesList}
 
-### table GetLuaFilesList() {#table-GetLuaFilesList}
-
-### table, table GetVoxelFilesList() {#table-table-GetVoxelFilesList}
+### string[] GetVoxelFilesList() {#string-GetVoxelFilesList}
 Voxel files in the Montage/Voxels, those you saved in your montage and they are not necessary uploaded to the cloud already. local montage assets
 
-### table, table GetMakerAssetsList() {#table-table-GetMakerAssetsList}
+### string[] GetMakerAssetsList() {#string-GetMakerAssetsList}
 Assets in cloud of maker that made this montage
 
-### table, table GetCommonAssetsList() {#table-table-GetCommonAssetsList}
+### string[] GetCommonAssetsList() {#string-GetCommonAssetsList}
 Common, those we provide cloud with as free to use
 
-### table, table GetCommonScenesList() {#table-table-GetCommonScenesList}
+### string[] GetCommonScenesList() {#string-GetCommonScenesList}
 Common scenes
 
-### table GetPrefabsList() {#table-GetPrefabsList}
+### string[] GetPrefabsList() {#string-GetPrefabsList}
 
-### Object InsertPrefab(integer) {#Object-InsertPrefab-integer}
+### Object InsertPrefab(integer id) {#Object-InsertPrefab-integer-id}
 
-### Object InsertPrefab(string, string) {#Object-InsertPrefab-string-string}
+### Object InsertPrefab(integer id, boolean deepCopy) {#Object-InsertPrefab-integer-id-boolean-deepCopy}
 
-### Object InsertPrefab(string) {#Object-InsertPrefab-string}
+### Object InsertPrefab(string name) {#Object-InsertPrefab-string-name}
 
-### boolean MakePrefab(Object) {#boolean-MakePrefab-Object}
+### Object InsertPrefab(string name, boolean setSave) {#Object-InsertPrefab-string-name-boolean-setSave}
+
+### Object InsertPrefab(string name, string newName) {#Object-InsertPrefab-string-name-string-newName}
+
+### Object InsertPrefab(string name, string newName, boolean setSave) {#Object-InsertPrefab-string-name-string-newName-boolean-setSave}
+
+### Object InsertPrefab(string name, string newName, boolean setSave, boolean deepCopy) {#Object-InsertPrefab-string-name-string-newName-boolean-setSave-boolean-deepCopy}
+
+### nil MakePrefab(string name) {#nil-MakePrefab-string-name}
+
+### table GetInsertPrefabStats() {#table-GetInsertPrefabStats}
+
+### nil PreloadVDRsForPrefab(string name, integer count) {#nil-PreloadVDRsForPrefab-string-name-integer-count}
 
 ### nil SaveScene() {#nil-SaveScene}
 
@@ -66,10 +76,6 @@ Common scenes
 ### boolean IsServer() {#boolean-IsServer}
 
 ### boolean DevMode() {#boolean-DevMode}
-
-### string GetSystemConsole() {#string-GetSystemConsole}
-
-### string GetSystemOutput() {#string-GetSystemOutput}
 
 ### integer GetCurrentUIActionID() {#integer-GetCurrentUIActionID}
 
@@ -89,23 +95,25 @@ Common scenes
 
 ### integer GetMaxConnections() {#integer-GetMaxConnections}
 
-### nil ResetTracy() {#nil-ResetTracy}
+### nil HttpPost(string url, table headers, string data, function onResponse) {#nil-HttpPost-string-url-table-headers-string-data-function-onResponse}
 
-### nil HttpPost(string, table, string, userdata) {#nil-HttpPost-string-table-string-userdata}
+### nil HttpGet(string url, table headers, function onResponse) {#nil-HttpGet-string-url-table-headers-function-onResponse}
 
-### nil HttpGet(string, table, userdata) {#nil-HttpGet-string-table-userdata}
+### nil HttpDownload(string url, table headers, function onResponse) {#nil-HttpDownload-string-url-table-headers-function-onResponse}
 
-### nil HttpDownload(string, table, userdata) {#nil-HttpDownload-string-table-userdata}
+### integer GetPing(integer clientID) {#integer-GetPing-integer-clientID}
 
-### number GetPing(integer) {#number-GetPing-integer}
+### boolean MoveFileToMontageVoxelsFolder(File fileLua, string subPath) {#boolean-MoveFileToMontageVoxelsFolder-File-fileLua-string-subPath}
 
-### boolean MoveFileToMontageVoxelsFolder(File, string) {#boolean-MoveFileToMontageVoxelsFolder-File-string}
+### nil MakeUrlForFile(File fileLua, function eventUpdate, function eventFinish) {#nil-MakeUrlForFile-File-fileLua-function-eventUpdate-function-eventFinish}
 
-### nil MakeUrlForFile(File, userdata, userdata) {#nil-MakeUrlForFile-File-userdata-userdata}
+### string GetLogTime(string logName) {#string-GetLogTime-string-logName}
 
-### number GetLogTime(string) {#number-GetLogTime-string}
+### table GetLogTimers(string logName) {#table-GetLogTimers-string-logName}
 
-### table GetLogTimers(string) {#table-GetLogTimers-string}
+### number GetLogValue(string logName) {#number-GetLogValue-string-logName}
+
+### number GetFPS() {#number-GetFPS}
 
 ### table GetStreamingStats() {#table-GetStreamingStats}
 
@@ -119,21 +127,13 @@ Common scenes
 
 ### nil Restart() {#nil-Restart}
 
-### nil AnalyticsServer(string, table) {#nil-AnalyticsServer-string-table}
+### nil AnalyticsServer(string name, table props) {#nil-AnalyticsServer-string-name-table-props}
 
-### nil AnalyticsClient(integer, string, table) {#nil-AnalyticsClient-integer-string-table}
+### nil AnalyticsClient(integer clientID, string name, table props) {#nil-AnalyticsClient-integer-clientID-string-name-table-props}
 
-### nil TeamcityApiTest() {#nil-TeamcityApiTest}
+### integer GetCollectionPreferredLoad(integer collectionIndex) {#integer-GetCollectionPreferredLoad-string-collectionName}
 
-### nil TeamcityApiTest2(integer) {#nil-TeamcityApiTest2-integer}
-
-### table GetTeamcityBuilds() {#table-GetTeamcityBuilds}
-
-### table GetTeamcityBuild(integer) {#table-GetTeamcityBuild-integer}
-
-### integer GetCollectionPreferredLoad(integer) {#integer-GetCollectionPreferredLoad-integer}
-
-### nil SetCollectionPreferredLoad(integer, integer) {#nil-SetCollectionPreferredLoad-integer-integer}
+### nil SetCollectionPreferredLoad(integer collectionIndex, integer preferredLoad) {#nil-SetCollectionPreferredLoad-string-collectionName-integer-preferredLoad}
 
 ### nil GenTestVoxelScene() {#nil-GenTestVoxelScene}
 
@@ -141,19 +141,19 @@ Common scenes
 
 ### nil GenTestVoxelScene3() {#nil-GenTestVoxelScene3}
 
-### nil MakeVoxelScene(integer, integer, integer, integer) {#nil-MakeVoxelScene-integer-integer-integer-integer}
+### nil MakeVoxelScene(integer maxZ, integer maxY, integer maxX, integer patternSize) {#nil-MakeVoxelScene-integer-maxZ-integer-maxY-integer-maxX-integer-patternSize}
 
 ### nil RebuildLODsBrightnessMethod() {#nil-RebuildLODsBrightnessMethod}
 
-### nil RebuildLODsBrightnessMethod(Vec3i, Vec3i) {#nil-RebuildLODsBrightnessMethod-Vec3i-Vec3i}
+### nil RebuildLODsBrightnessMethod(Vec3i minPos, Vec3i maxPos) {#nil-RebuildLODsBrightnessMethod-Vec3i-minPos-Vec3i-maxPos}
 
 ### boolean RebuildLODsGradientMethod() {#boolean-RebuildLODsGradientMethod}
 
-### boolean RebuildLODsGradientMethod(Vec3i, Vec3i) {#boolean-RebuildLODsGradientMethod-Vec3i-Vec3i}
+### boolean RebuildLODsGradientMethod(Vec3i minPos, Vec3i maxPos) {#boolean-RebuildLODsGradientMethod-Vec3i-minPos-Vec3i-maxPos}
 
-### boolean ShowAllNormalsPerVoxel(integer) {#boolean-ShowAllNormalsPerVoxel-integer}
+### boolean ShowAllNormalsPerVoxel(integer lodI) {#nil-ShowAllNormalsPerVoxel-integer-lodI}
 
-### boolean ShowAllNormalsPerBT(integer) {#boolean-ShowAllNormalsPerBT-integer}
+### boolean ShowAllNormalsPerBT(integer lodI) {#nil-ShowAllNormalsPerBT-integer-lodI}
 
 ### nil PBRTranscodeToPBR0Ver1() {#nil-PBRTranscodeToPBR0Ver1}
 
@@ -164,8 +164,4 @@ Common scenes
 ### boolean EditMode {#boolean-EditMode}
 
 ### boolean ModeChangeReloadGeom {#boolean-ModeChangeReloadGeom}
-
-### AssetManager Assets {#AssetManager-Assets}
-
-### boolean TracyProfiler {#boolean-TracyProfiler}
 
