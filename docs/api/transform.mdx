@@ -9,39 +9,36 @@ Holds position, rotation, and scale
 
 ## Metamethods
 
-### boolean __eq(Transform, Transform) {#boolean-eq-Transform-Transform}
+### boolean __eq(Transform a, Transform b) {#boolean-eq-Transform-a-Transform-b}
 
 ## Methods
 
-### Vec3 LocalToWorld(Vec3) {#Vec3-LocalToWorld-Vec3}
+### Vec3 LocalToWorld(Vec3 v) {#Vec3-LocalToWorld-Vec3-v}
 Transforms a local position to world space, allowing you to convert coordinates relative to an object into global coordinates.
 
-### Vec3 WorldToLocal(Vec3) {#Vec3-WorldToLocal-Vec3}
+
+### Vec3 WorldToLocal(Vec3 v) {#Vec3-WorldToLocal-Vec3-v}
 Converts a world position to local space, making it useful for determining an object's position relative to another object.
 
-### Vec3 LocalToWorldVec(Vec3) {#Vec3-LocalToWorldVec-Vec3}
+### Vec3 LocalToWorldVec(Vec3 v) {#Vec3-LocalToWorldVec-Vec3-v}
 
-### Vec3 WorldToLocalVec(Vec3) {#Vec3-WorldToLocalVec-Vec3}
+### Vec3 WorldToLocalVec(Vec3 v) {#Vec3-WorldToLocalVec-Vec3-v}
 
-### nil LookAt(Vec3) {#nil-LookAt-Vec3}
+### nil LookAt(Vec3 pos) {#nil-LookAt-Vec3-pos}
 Adjusts the object's rotation to look at a specified point in the world, aligning it with the target position.
 
-### nil LookAt(Vec3, Vec3) {#nil-LookAt-Vec3-Vec3}
+### nil LookAt(Vec3 pos, Vec3 up) {#nil-LookAt-Vec3-pos-Vec3-up}
 A more customizable version of LookAt, allowing you to specify both the target point and an up direction for the object's orientation.
 
 ## Properties
-
-### Object object {#Object-object}
-
-### boolean isDestroyed {#boolean-isDestroyed}
-
-### string type {#string-type}
 
 ### boolean Active {#boolean-Active}
 
 ### boolean ActiveInHierarchy {#boolean-ActiveInHierarchy}
 
 ### Object Object {#Object-Object}
+
+### Object Obj {#Object-Obj}
 
 ### boolean IsDestroyed {#boolean-IsDestroyed}
 

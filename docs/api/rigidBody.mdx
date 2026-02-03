@@ -5,37 +5,33 @@ id: RigidBody
 `Client`
 `Server`
 
-## Methods
-
-### nil AddImpulse(Vec3, Vec3) {#nil-AddImpulse-Vec3-Vec3}
-
-### nil AddAngularImpulse(Vec3) {#nil-AddAngularImpulse-Vec3}
-
-### nil AddForce(Vec3) {#nil-AddForce-Vec3}
-
-### nil AddTorque(Vec3) {#nil-AddTorque-Vec3}
-
-### nil AddAcceleration(Vec3) {#nil-AddAcceleration-Vec3}
-
-### nil AddAngularAcceleration(Vec3) {#nil-AddAngularAcceleration-Vec3}
-
 ## Metamethods
 
-### boolean __eq(RigidBody, RigidBody) {#boolean-eq-RigidBody-RigidBody}
+### boolean __eq(RigidBody a, RigidBody b) {#boolean-eq-RigidBody-a-RigidBody-b}
+
+## Methods
+
+### nil AddImpulse(Vec3 atPointM, Vec3 impulse) {#nil-AddImpulse-Vec3-atPointM-Vec3-impulse}
+
+### nil AddAngularImpulse(Vec3 impulse) {#nil-AddAngularImpulse-Vec3-impulse}
+
+### nil AddForce(Vec3 force) {#nil-AddForce-Vec3-force}
+
+### nil AddTorque(Vec3 torque) {#nil-AddTorque-Vec3-torque}
+
+### nil AddAcceleration(Vec3 acceleration) {#nil-AddAcceleration-Vec3-acceleration}
+
+### nil AddAngularAcceleration(Vec3 acceleration) {#nil-AddAngularAcceleration-Vec3-acceleration}
 
 ## Properties
-
-### Object object {#Object-object}
-
-### boolean isDestroyed {#boolean-isDestroyed}
-
-### string type {#string-type}
 
 ### boolean Active {#boolean-Active}
 
 ### boolean ActiveInHierarchy {#boolean-ActiveInHierarchy}
 
 ### Object Object {#Object-Object}
+
+### Object Obj {#Object-Obj}
 
 ### boolean IsDestroyed {#boolean-IsDestroyed}
 
@@ -49,6 +45,8 @@ id: RigidBody
 
 ### boolean MassByObject {#boolean-MassByObject}
 
+### number Volume {#number-Volume}
+
 ### Vec3 Inertia {#Vec3-Inertia}
 
 ### boolean InertiaByObject {#boolean-InertiaByObject}
@@ -60,6 +58,8 @@ id: RigidBody
 ### boolean StartSleeping {#boolean-StartSleeping}
 
 ### boolean AllowSleeping {#boolean-AllowSleeping}
+
+### boolean Simulate {#boolean-Simulate}
 
 ### Vec3 CenterOfMass {#Vec3-CenterOfMass}
 
