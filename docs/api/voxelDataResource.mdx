@@ -7,23 +7,23 @@ id: VoxelDataResource
 
 ## Constructors
 
-### VoxelDataResource(string) {#VoxelDataResource-string}
+### VoxelDataResource VoxelDataResource(string path) {#VoxelDataResource-VoxelDataResource-string-path}
 
-### VoxelDataResource() {#VoxelDataResource}
+### VoxelDataResource VoxelDataResource() {#VoxelDataResource-VoxelDataResource}
 
 ## Methods
 
-### string Save(string, boolean) {#string-Save-string-boolean}
+### string Save(string path, boolean overwrite) {#string-Save-string-path-boolean-overwrite}
 save voxel data in AM file
 second parameter controls if file will be overwritten
 
-### Vec3, Vec3 GetLocalBounds() {#Vec3-Vec3-GetLocalBounds}
+### Vec3 center, Vec3 size GetLocalBounds() {#Vec3-center-Vec3-size-GetLocalBounds}
 get center (in local space) and approximate dimensions of the voxel data
 
-### Vec3, Vec3 GetPreciseLocalBounds() {#Vec3-Vec3-GetPreciseLocalBounds}
+### Vec3 center, Vec3 size GetPreciseLocalBounds() {#Vec3-center-Vec3-size-GetPreciseLocalBounds}
 get center (in local space) and dimensions of the voxel data
 
-### userdata Duplicate() {#userdata-Duplicate}
+### VoxelDataResource Duplicate() {#VoxelDataResource-Duplicate}
 
 ### nil RebuildLighting() {#nil-RebuildLighting}
 
@@ -40,11 +40,11 @@ returns true if data was modified
 ### number volumePerc {#number-volumePerc}
 Approximate. Quickly count non-zero blocks of voxel object. Block size is 8x8x8. Block can be fully filled or just 1 voxel
 
-### number volume {#number-volume}
+### integer volume {#integer-volume}
 
 ### number scaleToStatic {#number-scaleToStatic}
 
 ### number loadLodScale {#number-loadLodScale}
 
-### number voxelSize {#number-voxelSize}
+### integer voxelSize {#integer-voxelSize}
 

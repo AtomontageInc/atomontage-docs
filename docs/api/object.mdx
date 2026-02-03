@@ -9,9 +9,6 @@ The object visible in the hierarchy. Every object has a transform and can have a
 
 ## Methods
 
-### Object GetChild(string) {#Object-GetChild-string}
-Get child object by name
-
 ### Vec3 LocalToWorld(Vec3 point) {#Vec3-LocalToWorld-Vec3-point}
 
 ### Vec3 WorldToLocal(Vec3 point) {#Vec3-WorldToLocal-Vec3-point}
@@ -25,6 +22,7 @@ Get child object by name
 ### nil LookAt(Vec3 pos, Vec3 up) {#nil-LookAt-Vec3-pos-Vec3-up}
 
 ### Object? GetChild(string name) {#Object-GetChild-string-name}
+Get child object by name
 
 ### Script AddScript(string fileName, boolean sync) {#Script-AddScript-string-fileName-boolean-sync}
 
@@ -64,7 +62,8 @@ Find all components by type name
 
 ### Object[] WithChildren() {#Object-WithChildren}
 
-### Object[] WithChildren(boolean searchInHierarchy) {#Object-WithChildren-boolean-searchInHierarchy}
+### Object[] WithChildren(boolean includeInactive) {#Object-WithChildren-boolean-includeInactive}
+get the object and all its children, descendants, does not returns destroyed objects
 
 ### ScriptInstance FindScript(string name) {#ScriptInstance-FindScript-string-name}
 Find attached script component lua table by name
