@@ -130,6 +130,10 @@ function genDocs:generateClassFile(name, class)
     --concat
     local constructorsAndFuncs = {}
     for _, v in ipairs(class.constructors or {}) do
+        if v.name:lower() ~= name:lower() then
+            print("Constructor name '"..v.name.."' does not match class name '"..name.."'")
+        end
+        --assert(v.name:lower() == name:lower(), "Constructor name '"..v.name.."' does not match class name '"..name.."'")
         table.insert(constructorsAndFuncs, v)
     end
     for _, v in ipairs(class.operators or {}) do
