@@ -5,6 +5,10 @@ id: Camera
 `Client`
 `Server`
 
+## Metamethods
+
+### boolean __eq(Camera a, Camera b) {#boolean-eq-Camera-a-Camera-b}
+
 ## Methods
 
 ### Vec3 ScreenToWorldRay(Vec2 screenRelPos) {#Vec3-ScreenToWorldRay-Vec2-screenRelPos}
@@ -17,8 +21,14 @@ Transforms a 3D world coordinate (Vec3) to a 2D screen space percentage coordina
 
 ## Properties
 
+### boolean active {#boolean-active}
+
+### boolean activeInHierarchy {#boolean-activeInHierarchy}
+
 ### Object object {#Object-object}
 Reference to object instance
+
+### Object obj {#Object-obj}
 
 ### boolean isDestroyed {#boolean-isDestroyed}
 Indicates whether the object is destroyed (true) or not (false).

@@ -83,24 +83,6 @@ end
 
 ## Methods
 
-### nil Start() {#nil-Start}
-Called once on object creation after Attach() once the script becomes active
-
-### nil Update(number deltaTime) {#nil-Update-number-deltaTime}
-Called once a frame after Start() if the object is active 
-
-### nil Attach() {#nil-Attach}
-Called once on object creation before Start() even if the script is not active
-
-### nil Detach() {#nil-Detach}
-Called when script component or object is destroyed
-
-### nil OnActivate() {#nil-OnActivate}
-Script active state changed through object or component. Never called before Start() 
-
-### nil OnDeactivate() {#nil-OnDeactivate}
-Script active state changed through object or component. Never called before Start() and OnActivate() 
-
 ### nil LateUpdate() {#nil-LateUpdate}
 Called after Update(), before rendering
 
@@ -144,13 +126,52 @@ end
 ### nil RPC(integer, string, ...) {#nil-RPC-integer-string}
 From server call a lua function by name on one specific client
 
+### nil Attach() {#nil-Attach}
+Called once on object creation before Start() even if the script is not active
+
+### nil Detach() {#nil-Detach}
+Called when script component or object is destroyed
+
+### nil Start() {#nil-Start}
+Called once on object creation after Attach() once the script becomes active
+
+### nil FixedUpdate() {#nil-FixedUpdate}
+
+### nil Update(number deltaTime) {#nil-Update-number-deltaTime}
+Called once a frame after Start() if the object is active 
+
+### nil LateUpdate(number deltaTime) {#nil-LateUpdate-number-deltaTime}
+
+### nil OnActivate() {#nil-OnActivate}
+Script active state changed through object or component. Never called before Start() 
+
+### nil OnDeactivate() {#nil-OnDeactivate}
+Script active state changed through object or component. Never called before Start() and OnActivate() 
+
+### nil EditorAttach() {#nil-EditorAttach}
+
+### nil EditorDetach() {#nil-EditorDetach}
+
+### nil EditorStart() {#nil-EditorStart}
+
+### nil EditorFixedUpdate() {#nil-EditorFixedUpdate}
+
+### nil EditorUpdate(number deltaTime) {#nil-EditorUpdate-number-deltaTime}
+
+### nil EditorLateUpdate(number deltaTime) {#nil-EditorLateUpdate-number-deltaTime}
+
+### nil EditorOnActivate() {#nil-EditorOnActivate}
+
+### nil OnDeactivate() {#nil-OnDeactivate}
+Script active state changed through object or component. Never called before Start() and OnActivate() 
+
+### nil RPC(string funcName, ... args) {#nil-RPC-string-funcName-args}
+
 ## Properties
 
-### Script component {#Script-component}
-The script component, separate from the lua table
+### Object obj {#Object-obj}
 
-### Object object {#Object-object}
-The object this script is attached to
+### Script com {#Script-com}
 
 ### Transform transform {#Transform-transform}
 The transform of the object this script is attached to
@@ -173,9 +194,19 @@ end
 
 import { render } from "react-dom"
 
+### Script Com {#Script-Com}
+
 ### Script Component {#Script-Component}
 
+### Script component {#Script-component}
+The script component, separate from the lua table
+
+### Object Obj {#Object-Obj}
+
 ### Object Object {#Object-Object}
+
+### Object object {#Object-object}
+The object this script is attached to
 
 ### Transform Transform {#Transform-Transform}
 

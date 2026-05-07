@@ -34,15 +34,21 @@ end
 
 ### Polyhedron Polyhedron() {#Polyhedron-Polyhedron}
 
+### Polyhedron Polyhedron(Vec4[] sides) {#Polyhedron-Polyhedron-Vec4-sides}
+
 ## Methods
 
 ### Vec4 side GetSide(integer index) {#Vec4-side-GetSide-integer-index}
 
 ### nil SetSide(integer index, Vec4 side) {#nil-SetSide-integer-index-Vec4-side}
 
+### nil AddPlane(number px, number py, number pz, number nx, number ny, number nz) {#nil-AddPlane-number-px-number-py-number-pz-number-nx-number-ny-number-nz}
+
 ### nil BuildWheelTrack(number width, number height, number border, number bevel, Vec3 fromPos, Vec3 toPos, Vec3 fromUp, Vec3 toUp, boolean addDirBevels) {#nil-BuildWheelTrack-number-width-number-height-number-border-number-bevel-Vec3-fromPos-Vec3-toPos-Vec3-fromUp-Vec3-toUp-boolean-addDirBevels}
 
 ### boolean valid, string error IsValid() {#boolean-valid-string-error-IsValid}
+
+### Polyhedron Transform(Vec3 pos, Quat rot, number scale) {#Polyhedron-Transform-Vec3-pos-Quat-rot-number-scale}
 
 ## Properties
 

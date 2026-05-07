@@ -9,11 +9,11 @@ This class is only available on client
 
 ## Methods
 
+### string GetUserID() {#string-GetUserID}
+
 ### integer GetID() {#integer-GetID}
 
-### Guid GetUserID() {#Guid-GetUserID}
-
-### string UIItemUpdate(integer actionID, UIItem item, userdata value) {#string-UIItemUpdate-integer-actionID-UIItem-item-userdata-value}
+### string UIItemUpdate(integer itemId, UIItem uiItem, any value) {#nil-UIItemUpdate-integer-itemId-UIItem-uiItem-any-value}
 
 ### nil OpenKeyboardShortcutInput(string keyActionID) {#nil-OpenKeyboardShortcutInput-string-keyActionID}
 
@@ -21,11 +21,7 @@ This class is only available on client
 
 ### nil ToggleUIVisibility() {#nil-ToggleUIVisibility}
 
-### nil ToggleMainMenuVisibility() {#nil-ToggleMainMenuVisibility}
-
-### nil SetToClientUI() {#nil-SetToClientUI}
-
-### nil SetShowWindows(boolean) {#nil-SetShowWindows-boolean}
+### nil SetShowWindows(boolean show) {#nil-SetShowWindows-boolean-show}
 
 ### boolean GetShowWindows() {#boolean-GetShowWindows}
 
@@ -39,17 +35,17 @@ This class is only available on client
 
 ### boolean GetUIIsInEditMode() {#boolean-GetUIIsInEditMode}
 
-### nil OpenUIWindow(string windowID) {#nil-OpenUIWindow-string-windowID}
+### nil OpenUIWindow(string windowName) {#nil-OpenUIWindow-string-windowName}
 
-### nil CloseUIWindow(string windowID) {#nil-CloseUIWindow-string-windowID}
+### nil CloseUIWindow(string windowName) {#nil-CloseUIWindow-string-windowName}
 
-### nil SetUIWindowOpen(string windowID, boolean open) {#nil-SetUIWindowOpen-string-windowID-boolean-open}
+### nil SetUIWindowOpen(string windowName, boolean open) {#nil-SetUIWindowOpen-string-windowName-boolean-open}
 
-### nil ToggleUIWindow(string windowID) {#nil-ToggleUIWindow-string-windowID}
+### nil ToggleUIWindow(string windowName) {#nil-ToggleUIWindow-string-windowName}
 
-### boolean IsWindowOpen(string windowID) {#boolean-IsWindowOpen-string-windowID}
+### boolean IsWindowOpen(string windowName) {#boolean-IsWindowOpen-string-windowName}
 
-### nil SetWindowPos(string windowID, Vec2 position) {#nil-SetWindowPos-string-windowID-Vec2-position}
+### nil SetWindowPos(string windowName, Vec2 pos) {#nil-SetWindowPos-string-windowName-Vec2-pos}
 
 ### nil OpenUI() {#nil-OpenUI}
 
@@ -57,15 +53,13 @@ This class is only available on client
 
 ### boolean IsUIOpen() {#boolean-IsUIOpen}
 
-### nil SetUIPose(Quat, Vec3) {#nil-SetUIPose-Quat-Vec3}
+### nil SetUIPose(Quat rot, Vec3 pose) {#nil-SetUIPose-Quat-rot-Vec3-pose}
 
-### Quat, Vec3 GetUIPose() {#Quat-Vec3-GetUIPose}
+### Quat rot, Vec3 pos GetUIPose() {#Quat-rot-Vec3-pos-GetUIPose-string-uiName}
 
-### nil OpenScriptFile(string) {#nil-OpenScriptFile-string}
+### Script GetScript(string scriptName) {#Script-GetScript-string-scriptName}
 
-### nil OpenScriptFile(string, integer) {#nil-OpenScriptFile-string-integer}
-
-### string GetScript(string) {#string-GetScript-string}
+### nil OpenScriptFile(string fileName, integer? lineNumber) {#nil-OpenScriptFile-string-fileName-integer-lineNumber}
 
 ### nil SetUIScale(number scale) {#nil-SetUIScale-number-scale}
 
@@ -73,7 +67,7 @@ This class is only available on client
 
 ### boolean GetUIScaleAuto() {#boolean-GetUIScaleAuto}
 
-### nil SetUIScaleAuto(boolean autoScale) {#nil-SetUIScaleAuto-boolean-autoScale}
+### nil SetUIScaleAuto(boolean auto) {#nil-SetUIScaleAuto-boolean-auto}
 
 ### string GetUILayout() {#string-GetUILayout}
 
@@ -81,15 +75,13 @@ This class is only available on client
 
 ### string GetMontageURLBase() {#string-GetMontageURLBase}
 
-### userdata GetMontageURLParameters() {#userdata-GetMontageURLParameters}
+### table GetMontageURLParameters() {#table-GetMontageURLParameters}
 
 ### string GetMontageURLParametersRaw() {#string-GetMontageURLParametersRaw}
 
-### string GetMontageURLWithParameters(userdata) {#string-GetMontageURLWithParameters-userdata}
+### string GetMontageURLWithParameters(table params) {#string-GetMontageURLWithParameters-table-params}
 
-### nil CancelLoadMontageByURL() {#nil-CancelLoadMontageByURL}
-
-### nil ConnectToMontage(string) {#nil-ConnectToMontage-string}
+### nil ConnectToMontage(string url) {#nil-ConnectToMontage-string-url}
 
 ### string GetConnectionStatus() {#string-GetConnectionStatus}
 Unknown,
@@ -102,48 +94,41 @@ Disconnected
 
 ### string GetConnectionStatusDetailed() {#string-GetConnectionStatusDetailed}
 
-### nil Disconnect() {#nil-Disconnect}
+### nil Disconnect(string? reason) {#nil-Disconnect-string-reason}
 
-### number GetPing() {#number-GetPing}
+### integer GetPing() {#integer-GetPing}
 Time for a network message to travel from client to server and back
 
-### number GetLogValue(string) {#number-GetLogValue-string}
 
-### number GetLogValue(string, number) {#number-GetLogValue-string-number}
+### number GetLogValue(string name, number? defaultValue) {#number-GetLogValue-string-name-number-defaultValue}
 
-### nil SetLogValue(string, number) {#nil-SetLogValue-string-number}
+### nil SetLogValue(string name, number value) {#nil-SetLogValue-string-name-number-value}
 
-### nil SetStrLogValue(string, string) {#nil-SetStrLogValue-string-string}
+### nil SetStrLogValue(string name, string value) {#nil-SetStrLogValue-string-name-string-value}
 
-### number GetLogIValue(integer) {#number-GetLogIValue-integer}
+### integer GetLogIValue(integer index) {#integer-GetLogIValue-integer-index}
 
-### string GetLogIValueName(integer) {#string-GetLogIValueName-integer}
+### string GetLogIValueName(integer index) {#string-GetLogIValueName-integer-index}
 
-### string GetLogIValueOutputName(integer) {#string-GetLogIValueOutputName-integer}
+### string GetLogIValueOutputName(integer index) {#string-GetLogIValueOutputName-integer-index}
 
-### boolean GetLogIsValue(integer) {#boolean-GetLogIsValue-integer}
+### boolean GetLogIsValue(string name) {#boolean-GetLogIsValue-string-name}
 
 ### integer GetLogValuesCount() {#integer-GetLogValuesCount}
 
-### userdata GetLogValueForPlot(string) {#userdata-GetLogValueForPlot-string}
+### table GetLogValueForPlot(string name) {#table-GetLogValueForPlot-string-name}
 
-### nil ResetTracy() {#nil-ResetTracy}
+### string GetLogStrValue(string name) {#string-GetLogStrValue-string-name}
 
-### string GetLogStrValue(string) {#string-GetLogStrValue-string}
+### string GetLogStrIValue(integer index) {#string-GetLogStrIValue-integer-index}
 
-### string GetLogStrIValue(integer) {#string-GetLogStrIValue-integer}
+### string GetLogStrIValueName(integer index) {#string-GetLogStrIValueName-integer-index}
 
-### string GetLogStrIValueName(integer) {#string-GetLogStrIValueName-integer}
+### string GetLogStrIValueOutputName(integer index) {#string-GetLogStrIValueOutputName-integer-index}
 
-### string GetLogStrIValueOutputName(integer) {#string-GetLogStrIValueOutputName-integer}
-
-### boolean GetLogStrIsValue(integer) {#boolean-GetLogStrIsValue-integer}
+### boolean GetLogStrIsValue(string name) {#boolean-GetLogStrIsValue-string-name}
 
 ### integer GetLogStrValuesCount() {#integer-GetLogStrValuesCount}
-
-### number GetLogTime(string) {#number-GetLogTime-string}
-
-### table GetLogTimers(string) {#table-GetLogTimers-string}
 
 ### table GetMainDispatcherStats() {#table-GetMainDispatcherStats}
 
@@ -153,17 +138,11 @@ Time for a network message to travel from client to server and back
 
 ### nil ConnectToServer() {#nil-ConnectToServer}
 
-### nil Disconnect(string) {#nil-Disconnect-string}
-
-### boolean OpenFolder(string folder) {#boolean-OpenFolder-string-folder}
+### boolean opened OpenFolder(string path) {#boolean-opened-OpenFolder-string-path}
 
 ### integer GetScriptsVersion() {#integer-GetScriptsVersion}
 
 ### integer GetLoadedScriptsVersion() {#integer-GetLoadedScriptsVersion}
-
-### nil LuaOpenDebugger() {#nil-LuaOpenDebugger}
-
-### nil LuaEnableDebugging(boolean enable) {#nil-LuaEnableDebugging-boolean-enable}
 
 ### nil OnLuaLog() {#nil-OnLuaLog}
 
@@ -171,7 +150,8 @@ Time for a network message to travel from client to server and back
 
 ### boolean IsContainerEnabledAndVisible(UIItem uiItem) {#boolean-IsContainerEnabledAndVisible-UIItem-uiItem}
 
-### nil Log(string) {#nil-Log-string}
+### nil Log(string message) {#nil-Log-string-message}
+Log a message to file. In most cases you wanna use print() for console output
 
 ### boolean IsClient() {#boolean-IsClient}
 
@@ -183,25 +163,21 @@ Time for a network message to travel from client to server and back
 
 ### nil SelectItemInUICreator(UIItem uiItem) {#nil-SelectItemInUICreator-UIItem-uiItem}
 
-### UIItem GetUIItemByUIActionID(integer uiActionID) {#UIItem-GetUIItemByUIActionID-integer-uiActionID}
+### UIItem GetUIItemByUIActionID(integer actionID) {#UIItem-GetUIItemByUIActionID-integer-actionID}
 
-### string GetUIActionType(integer uiActionID) {#string-GetUIActionType-integer-uiActionID}
+### string GetUIActionType(integer actionID) {#string-GetUIActionType-integer-actionID}
 
-### string GetUIActionScript(integer uiActionID) {#string-GetUIActionScript-integer-uiActionID}
+### string GetUIActionScript(integer actionID) {#string-GetUIActionScript-integer-actionID}
 
-### integer GetCurrentUIActionID() {#integer-GetCurrentUIActionID}
+### string GetCurrentUIActionID() {#string-GetCurrentUIActionID}
 
-### nil SetIntersectionTint(Vec4) {#nil-SetIntersectionTint-Vec4}
+### nil SetIntersectionTint(Color color) {#nil-SetIntersectionTint-Color-color}
 
-### nil SetIntersectionBox(Vec3, Quat, Vec3) {#nil-SetIntersectionBox-Vec3-Quat-Vec3}
+### nil SetIntersectionBox(Vec3 centerWC, Quat rot, Vec3 sizeWC) {#nil-SetIntersectionBox-Vec3-centerWC-Quat-rot-Vec3-sizeWC}
 
-### nil SetIntersectionSphere(Vec3, number) {#nil-SetIntersectionSphere-Vec3-number}
+### nil SetIntersectionSphere(Vec3 posWC, number radius) {#nil-SetIntersectionSphere-Vec3-posWC-number-radius}
 
-### nil WriteToScreen(string, Vec2, Vec2, Vec4, integer, Vec4, number) {#nil-WriteToScreen-string-Vec2-Vec2-Vec4-integer-Vec4-number}
-
-### nil WriteToScreen(string, Vec2, Vec2, Vec4, integer) {#nil-WriteToScreen-string-Vec2-Vec2-Vec4-integer}
-
-### nil WriteToScreen(string, Vec2, Vec2, Vec4, integer, Vec4) {#nil-WriteToScreen-string-Vec2-Vec2-Vec4-integer-Vec4}
+### nil WriteToScreen(string text, Vec2 pos, Vec2 anchor, Color color, integer? size, Color? outlineColor, number? time) {#nil-WriteToScreen-string-text-Vec2-pos-Vec2-anchor-Color-color-integer-size-Color-outlineColor-number-time}
 
 ### nil CloseApp() {#nil-CloseApp}
 
@@ -214,25 +190,25 @@ Time for a network message to travel from client to server and back
 ### CommandLine GetCommandLine() {#CommandLine-GetCommandLine}
 Returns [`CommandLine`](./commandLine.mdx)
 
-### Vec4 GetBGColor() {#Vec4-GetBGColor}
+### Color GetBGColor() {#Color-GetBGColor}
 
-### nil SetBGColor(Vec4) {#nil-SetBGColor-Vec4}
+### nil SetBGColor(Color color) {#nil-SetBGColor-Color-color}
 
 ### boolean GetVREnabled() {#boolean-GetVREnabled}
 
-### nil SetVREnabled(boolean, string) {#nil-SetVREnabled-boolean-string}
+### nil SetVREnabled(boolean enable, string vrDevice) {#nil-SetVREnabled-boolean-enable-string-vrDevice}
 
-### nil ToggleVREnabled(string) {#nil-ToggleVREnabled-string}
+### nil ToggleVREnabled() {#nil-ToggleVREnabled}
 
-### Vec3, Quat GetVREyeTransform(integer, Space) {#Vec3-Quat-GetVREyeTransform-integer-Space}
+### Vec3 pos, Quat rot GetVREyeTransform(integer side, Space space) {#Vec3-pos-Quat-rot-GetVREyeTransform-integer-side-Space-space}
 
-### Vec3, Quat GetVRHeadsetTransform(Space) {#Vec3-Quat-GetVRHeadsetTransform-Space}
+### Vec3 pos, Quat rot GetVRHeadsetTransform(Space space) {#Vec3-pos-Quat-rot-GetVRHeadsetTransform-Space-space}
 
-### nil ApplyVRHapticFeedback(integer, number, number, number) {#nil-ApplyVRHapticFeedback-integer-number-number-number}
+### nil ApplyVRHapticFeedback(integer hand, number duration, number frequency, number amplitude) {#nil-ApplyVRHapticFeedback-integer-hand-number-duration-number-frequency-number-amplitude}
 
 ### boolean GetVREyeTrackingSupported() {#boolean-GetVREyeTrackingSupported}
 
-### number SetVRUserScale(number) {#number-SetVRUserScale-number}
+### number scale SetVRUserScale(number scale) {#number-scale-SetVRUserScale-number-scale}
 
 ### number GetVRUserScale() {#number-GetVRUserScale}
 
@@ -248,9 +224,9 @@ Returns [`CommandLine`](./commandLine.mdx)
 
 ### boolean IsVRPassthroughSupported() {#boolean-IsVRPassthroughSupported}
 
-### boolean SendFile(File) {#boolean-SendFile-File}
+### boolean SendFile(File file) {#boolean-SendFile-File-file}
 
-### boolean SendFiles(table) {#boolean-SendFiles-table}
+### nil SendFiles(File[] files) {#nil-SendFiles-File-files}
 
 ### boolean IsUploadingFiles() {#boolean-IsUploadingFiles}
 
@@ -266,15 +242,13 @@ Returns [`CommandLine`](./commandLine.mdx)
 
 ### nil TriggerCriticalError() {#nil-TriggerCriticalError}
 
-### AssetManager GetResourceManScene() {#AssetManager-GetResourceManScene}
-
 ### nil ToggleChannelRendering() {#nil-ToggleChannelRendering}
 
 ### integer GetRenderChannelsCount() {#integer-GetRenderChannelsCount}
 
-### number GetRenderChannelOpacity(integer) {#number-GetRenderChannelOpacity-integer}
+### number GetRenderChannelOpacity(integer which) {#number-GetRenderChannelOpacity-integer-which}
 
-### nil SetRenderChannelOpacity(integer, number) {#nil-SetRenderChannelOpacity-integer-number}
+### nil SetRenderChannelOpacity(integer which, number value) {#nil-SetRenderChannelOpacity-integer-which-number-value}
 
 ### nil LoadEntityPath() {#nil-LoadEntityPath}
 
@@ -286,9 +260,9 @@ Returns [`CommandLine`](./commandLine.mdx)
 
 ### nil AddEntityPathWaypoint() {#nil-AddEntityPathWaypoint}
 
-### table GetEntityPath() {#table-GetEntityPath}
+### Vec4[]? GetEntityPath() {#Vec4-GetEntityPath}
 
-### nil TakeScreenshot(string, boolean) {#nil-TakeScreenshot-string-boolean}
+### nil TakeScreenshot(string name, boolean attachTimestamp) {#nil-TakeScreenshot-string-name-boolean-attachTimestamp}
 
 ### table GetVersion() {#table-GetVersion}
 
@@ -300,69 +274,47 @@ Returns [`CommandLine`](./commandLine.mdx)
 
 ### string GetCredits() {#string-GetCredits}
 
-### string GetSystemConsole() {#string-GetSystemConsole}
-
-### string GetSystemOutput() {#string-GetSystemOutput}
-
 ### table GetErrors() {#table-GetErrors}
 
-### string GetDateTime() {#string-GetDateTime}
-
-### string GetLastSyncMessageRecv() {#string-GetLastSyncMessageRecv}
-
-### string GetLastSyncMessageSent() {#string-GetLastSyncMessageSent}
-
-### boolean GetUpdateSyncMessageString() {#boolean-GetUpdateSyncMessageString}
-
-### nil SetUpdateSyncMessageString(boolean) {#nil-SetUpdateSyncMessageString-boolean}
-
-### nil CopyToClipboard(string) {#nil-CopyToClipboard-string}
+### nil CopyToClipboard(string text) {#nil-CopyToClipboard-string-text}
 
 ### string GetClipboardText() {#string-GetClipboardText}
 may not work on all platforms
 
-### nil OpenBrowserWithURL(string) {#nil-OpenBrowserWithURL-string}
+### nil OpenBrowserWithURL(string url) {#nil-OpenBrowserWithURL-string-url}
 
-### nil ReloadPage(boolean) {#nil-ReloadPage-boolean}
-
-## Metamethods
-
-### string __tostring() {#string-tostring}
+### nil ReloadPage(boolean fromCache) {#nil-ReloadPage-boolean-fromCache}
 
 ### table EnumerateTestRenderObjects() {#table-EnumerateTestRenderObjects}
 
-### boolean IsTestRenderObjectEnabled(string) {#boolean-IsTestRenderObjectEnabled-string}
+### boolean IsTestRenderObjectEnabled(string objectName) {#boolean-IsTestRenderObjectEnabled-string-objectName}
 
-### boolean SetTestRenderObjectEnabled(string, boolean) {#boolean-SetTestRenderObjectEnabled-string-boolean}
+### boolean SetTestRenderObjectEnabled(string objectName, boolean enabled) {#boolean-SetTestRenderObjectEnabled-string-objectName-boolean-enabled}
 
-### boolean ToggleTestRenderObjectEnabled(string) {#boolean-ToggleTestRenderObjectEnabled-string}
+### boolean ToggleTestRenderObjectEnabled(string objectName) {#boolean-ToggleTestRenderObjectEnabled-string-objectName}
 
 ### nil ResetPlayerLODPriorityBubble() {#nil-ResetPlayerLODPriorityBubble}
 
-### nil AddPlayerLODPriorityBubbleShape(Vec3, Vec3, number, Vec3, number) {#nil-AddPlayerLODPriorityBubbleShape-Vec3-Vec3-number-Vec3-number}
+### nil AddPlayerLODPriorityBubbleShape(Vec3 capsulePointA, Vec3 capsulePointB, number capsuleRadius, Vec3 velocity, number size) {#nil-AddPlayerLODPriorityBubbleShape-Vec3-capsulePointA-Vec3-capsulePointB-number-capsuleRadius-Vec3-velocity-number-size}
 LODs in this bubble are prioritized, should be placed around the player or camera
 params: capsuleStart, capsuleEnd, capsuleRadius, velocity, size
 
-### nil SetScreenColor(Vec4) {#nil-SetScreenColor-Vec4}
-
-### nil SetScreenColor(Vec4, boolean) {#nil-SetScreenColor-Vec4-boolean}
+### nil SetScreenColor(Color color, boolean? permanent) {#nil-SetScreenColor-Color-color-boolean-permanent}
 Tint the view for this frame or permanently
 
-### AudioSource PlaySound(string) {#AudioSource-PlaySound-string}
-
-### AudioSource PlaySound(string, Vec3, number, boolean) {#AudioSource-PlaySound-string-Vec3-number-boolean}
+### AudioSource PlaySound(string soundPath, Vec3? position, number? volume, boolean? loop) {#AudioSource-PlaySound-string-soundPath-Vec3-position-number-volume-boolean-loop}
 Play sound with asset name, at position, with volume and loop. Only single channel audio.
 Returns [AudioSource](./AudioSource.mdx)
 
-### AudioSource PlaySound(string, Vec3, number) {#AudioSource-PlaySound-string-Vec3-number}
-
-### AudioSource PlaySound(string, Vec3) {#AudioSource-PlaySound-string-Vec3}
-
-### AudioMusic PlayMusic(string) {#AudioMusic-PlayMusic-string}
-
-### AudioMusic PlayMusic(string, number, boolean) {#AudioMusic-PlayMusic-string-number-boolean}
+### AudioMusic PlayMusic(string musicFile, number? volume, boolean? loop) {#AudioMusic-PlayMusic-string-musicFile-number-volume-boolean-loop}
 Play sound with asset name, with volume and loop. This play stereo music without any position just like normal audio player.
 Returns [AudioMusic](./AudioMusic.mdx)
+
+### AudioMusic PrepareMusic(string musicFile, number? volume, boolean? loop) {#AudioMusic-PrepareMusic-string-musicFile-number-volume-boolean-loop}
+
+### boolean HasMusic(string musicFile) {#boolean-HasMusic-string-musicFile}
+
+### nil GetMusicFromServer(string musicFile) {#nil-GetMusicFromServer-string-musicFile}
 
 ### nil PauseAudio() {#nil-PauseAudio}
 Pause all playing sounds and music
@@ -376,19 +328,25 @@ Resume all paused sounds and music
 
 ### integer clientID {#integer-clientID}
 
-### Guid userID {#Guid-userID}
+### string userID {#string-userID}
 
 ### ClientMode mode {#ClientMode-mode}
 
 ### boolean isMaker {#boolean-isMaker}
 
+### boolean editMode {#boolean-editMode}
+
+### boolean wannaShowLuaConsole {#boolean-wannaShowLuaConsole}
+
+### number masterVolume {#number-masterVolume}
+
+### number soundVolume {#number-soundVolume}
+
+### number musicVolume {#number-musicVolume}
+
 ### boolean EditMode {#boolean-EditMode}
 
 ### boolean WannaShowLuaConsole {#boolean-WannaShowLuaConsole}
-
-### string platform {#string-platform}
-
-### string sysInfo {#string-sysInfo}
 
 ### number MasterVolume {#number-MasterVolume}
 Audio volume in range 0 - 1.
@@ -398,6 +356,4 @@ Audio volume in range 0 - 1.
 
 ### number MusicVolume {#number-MusicVolume}
 Audio volume in range 0 - 1.
-
-### boolean TracyProfiler {#boolean-TracyProfiler}
 

@@ -7,41 +7,41 @@ id: Quat
 
 ## Constructors
 
-### Quat() {#Quat}
+### Quat Quat() {#Quat-Quat}
 
-### Quat(number, Vec3) {#Quat-number-Vec3}
+### Quat Quat(number w, number x, number y, number z) {#Quat-Quat-number-w-number-x-number-y-number-z}
 
-### Quat(Mat4) {#Quat-Mat4}
+### Quat Quat(Mat3 mat3) {#Quat-Quat-Mat3-mat3}
 
-### Quat(Mat3) {#Quat-Mat3}
+### Quat Quat(Mat4 mat4) {#Quat-Quat-Mat4-mat4}
 
-### Quat(number, number, number, number) {#Quat-number-number-number-number}
-
-### Quat(Quat) {#Quat-Quat}
+### Quat Quat(number angle, Vec3 axis) {#Quat-Quat-number-angle-Vec3-axis}
 
 ## Metamethods
 
-### Quat __add(Quat, Quat) {#Quat-add-Quat-Quat}
+### Quat __add(Quat a, Quat b) {#Quat-add-Quat-a-Quat-b}
 
-### Quat __sub(Quat, Quat) {#Quat-sub-Quat-Quat}
+### Quat __sub(Quat a, Quat b) {#Quat-sub-Quat-a-Quat-b}
 
-### Quat __mul(Quat, Quat) {#Quat-mul-Quat-Quat}
+### Quat __mul(Quat a, Quat b) {#Quat-mul-Quat-a-Quat-b}
 
-### Vec4 __mul(Quat, Vec4) {#Vec4-mul-Quat-Vec4}
+### Quat __mul(Quat q, number s) {#Quat-mul-Quat-q-number-s}
 
-### Vec3 __mul(Quat, Vec3) {#Vec3-mul-Quat-Vec3}
+### Quat __mul(number s, Quat q) {#Quat-mul-number-s-Quat-q}
 
-### Quat __mul(number, Quat) {#Quat-mul-number-Quat}
+### Vec3 __mul(Quat q, Vec3 v) {#Vec3-mul-Quat-q-Vec3-v}
 
-### Quat __mul(Quat, number) {#Quat-mul-Quat-number}
+### Vec4 __mul(Quat q, Vec4 v) {#Vec4-mul-Quat-q-Vec4-v}
 
-### Quat __div(Quat, number) {#Quat-div-Quat-number}
+### Quat __div(Quat a, number b) {#Quat-div-Quat-a-number-b}
 
-### Quat __pow(Quat, number) {#Quat-pow-Quat-number}
+### Quat __pow(Quat a, number b) {#Quat-pow-Quat-a-number-b}
 
-### Quat __unm(Quat) {#Quat-unm-Quat}
+### Quat __unm(Quat a) {#Quat-unm-Quat-a}
 
-### boolean __eq(Quat, Quat) {#boolean-eq-Quat-Quat}
+### boolean __eq(Quat a, Quat b) {#boolean-eq-Quat-a-Quat-b}
+
+### string __tostring() {#string-tostring}
 
 ## Methods
 
@@ -53,15 +53,17 @@ id: Quat
 
 ### boolean IsZero() {#boolean-IsZero}
 
-### number Dot(Quat) {#number-Dot-Quat}
+### nil Set(number w, number x, number y, number z) {#nil-Set-number-w-number-x-number-y-number-z}
 
-### Quat Lerp(Quat, Quat, number) {#Quat-Lerp-Quat-Quat-number}
+### Quat Copy() {#Quat-Copy}
 
-### Quat Slerp(Quat, Quat, number) {#Quat-Slerp-Quat-Quat-number}
+### number Dot(Quat other) {#number-Dot-Quat-other}
 
-### Quat Sterp(Quat, Quat, number) {#Quat-Sterp-Quat-Quat-number}
+### Quat Lerp(Quat a, Quat b, number t) {#Quat-Lerp-Quat-a-Quat-b-number-t}
 
-### Quat Sterp(Quat, Quat, number, Vec3) {#Quat-Sterp-Quat-Quat-number-Vec3}
+### Quat Slerp(Quat a, Quat b, number t) {#Quat-Slerp-Quat-a-Quat-b-number-t}
+
+### Quat Sterp(Quat a, Quat b, number t, Vec3? twistAxis) {#Quat-Sterp-Quat-a-Quat-b-number-t-Vec3-twistAxis}
 
 ### nil Normalize() {#nil-Normalize}
 
@@ -71,37 +73,35 @@ id: Quat
 
 ### Quat GetInversed() {#Quat-GetInversed}
 
-### nil Rotate(Quat, number, Vec3) {#nil-Rotate-Quat-number-Vec3}
+### nil RotateByEuler(number ex, number ey, number ez) {#nil-RotateByEuler-number-ex-number-ey-number-ez}
 
-### Quat GetRotated(Quat, number, Vec3) {#Quat-GetRotated-Quat-number-Vec3}
+### Quat Rotate(number angle, Vec3 v) {#Quat-Rotate-number-angle-Vec3-v}
+
+### Quat GetRotated(number angle, Vec3 v) {#Quat-GetRotated-number-angle-Vec3-v}
 
 ### Quat GetConjugate() {#Quat-GetConjugate}
 
-### number GetPitch(Quat) {#number-GetPitch-Quat}
+### number GetPitch() {#number-GetPitch}
 
-### number GetYaw(Quat) {#number-GetYaw-Quat}
+### number GetYaw() {#number-GetYaw}
 
-### number GetRoll(Quat) {#number-GetRoll-Quat}
+### number GetRoll() {#number-GetRoll}
 
-### Vec3 GetEuler(Quat) {#Vec3-GetEuler-Quat}
+### Vec3 GetEuler() {#Vec3-GetEuler}
 
-### number GetAngle(Quat) {#number-GetAngle-Quat}
+### number GetAngle() {#number-GetAngle}
 
 ### Vec3 GetAxis() {#Vec3-GetAxis}
 
-### Quat Euler(number, number, number) {#Quat-Euler-number-number-number}
+### Quat Euler(number pitch, number yaw, number roll) {#Quat-Euler-number-pitch-number-yaw-number-roll}
 
-### Quat Euler(Vec3) {#Quat-Euler-Vec3}
+### Quat Euler(Vec3 eulerAngles) {#Quat-Euler-Vec3-eulerAngles}
 
-### Quat Axes(Vec3, Vec3) {#Quat-Axes-Vec3-Vec3}
+### Quat Axes(Vec3 xaxis, Vec3 yaxis, Vec3 zaxis) {#Quat-Axes-Vec3-xaxis-Vec3-yaxis-Vec3-zaxis}
 
-### Quat AngleAxis(number, Vec3) {#Quat-AngleAxis-number-Vec3}
+### Quat AngleAxis(number angle, Vec3 axis) {#Quat-AngleAxis-number-angle-Vec3-axis}
 
-### Quat LookAt(Vec3) {#Quat-LookAt-Vec3}
-
-### Quat LookAt(Vec3, Vec3) {#Quat-LookAt-Vec3-Vec3}
-
-### string __tostring(Quat) {#string-tostring-Quat}
+### Quat LookAt(Vec3 dir, Vec3? up) {#Quat-LookAt-Vec3-dir-Vec3-up}
 
 ## Properties
 
