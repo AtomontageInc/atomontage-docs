@@ -27,17 +27,7 @@ end
 ### string GetProcessState() {#string-GetProcessState}
 What is currently being processed i.e Start, Update, LateUpdate etc.
 
-### Object CreateObject() {#Object-CreateObject}
-
-### Object CreateObject(string, boolean, boolean) {#Object-CreateObject-string-boolean-boolean}
-
-### Object CreateObject(string, Object, boolean, boolean) {#Object-CreateObject-string-Object-boolean-boolean}
-
-### Object CreateObject(string, Object) {#Object-CreateObject-string-Object}
-
-### Object CreateObject(Object) {#Object-CreateObject-Object}
-
-### Object CreateObject(string) {#Object-CreateObject-string}
+### Object CreateObject(string? name, Object? parentObj, boolean? save, boolean? selectInEditor) {#Object-CreateObject-string-name-Object-parentObj-boolean-save-boolean-selectInEditor}
 Create an object on server or client. The object is not automatically synced to clients unless its set to.
 For naming we recommend to: 
 * Use capital case 
@@ -51,88 +41,93 @@ local ob = Scene:CreateObject("Player Controller 1")
 
 Also see [`Scene:MakeNameValid`](#string-MakeNameValid-string)
 
-### nil DestroyObject(Object) {#nil-DestroyObject-Object}
+
+### Object CreateObject(string name, boolean save, boolean selectInEditor) {#Object-CreateObject-string-name-boolean-save-boolean-selectInEditor}
+
+### nil DestroyObject(Object obj) {#nil-DestroyObject-Object-obj}
 Flags the object for deletion. The object will not actually be destroyed until the next frame.
 
-### table GetObjectsByName(string) {#table-GetObjectsByName-string}
+### table GetObjectsByName(string name) {#table-GetObjectsByName-string-name}
 
-### Object GetObjectByName(string) {#Object-GetObjectByName-string}
+### Object GetObjectByName(string name) {#Object-GetObjectByName-string-name}
 
-### Object GetObjectById(string) {#Object-GetObjectById-string}
+### Object GetObjectById(string id) {#Object-GetObjectById-string-id}
 
 ### table GetRootObjects() {#table-GetRootObjects}
 
 ### table GetAllObjects() {#table-GetAllObjects}
 
-### Object CloneObject(Object) {#Object-CloneObject-Object}
+### Object CloneObject(Object obj) {#Object-CloneObject-Object-obj}
 
-### Object CloneObject(Object, string, boolean) {#Object-CloneObject-Object-string-boolean}
+### Object CloneObject(Object obj, Object intoObj) {#Object-CloneObject-Object-obj-Object-intoObj}
 
-### Object CloneObject(Object, boolean) {#Object-CloneObject-Object-boolean}
+### Object CloneObject(Object obj, string name) {#Object-CloneObject-Object-obj-string-name}
 
-### Object CloneObject(Object, string) {#Object-CloneObject-Object-string}
+### Object CloneObject(Object obj, boolean keepPrefabLink) {#Object-CloneObject-Object-obj-boolean-keepPrefabLink}
 
-### boolean MoveObject(Object, Object) {#boolean-MoveObject-Object-Object}
+### Object CloneObject(Object obj, string name, boolean keepPrefabLink) {#Object-CloneObject-Object-obj-string-name-boolean-keepPrefabLink}
 
-### boolean MoveObjectAfter(Object, Object) {#boolean-MoveObjectAfter-Object-Object}
+### nil MoveObject(Object obj, Object newParentObj) {#nil-MoveObject-Object-obj-Object-newParentObj}
 
-### boolean MoveObjectBefore(Object, Object) {#boolean-MoveObjectBefore-Object-Object}
+### nil MoveObjectAfter(Object obj, Object siblingObj) {#nil-MoveObjectAfter-Object-obj-Object-siblingObj}
 
-### boolean MoveObjectToRoot(Object) {#boolean-MoveObjectToRoot-Object}
+### nil MoveObjectBefore(Object obj, Object siblingObj) {#nil-MoveObjectBefore-Object-obj-Object-siblingObj}
 
-### boolean CanMoveObject(Object, Object) {#boolean-CanMoveObject-Object-Object}
+### nil MoveObjectToRoot(Object obj) {#nil-MoveObjectToRoot-Object-obj}
 
-### userdata CreateMaterial(string) {#userdata-CreateMaterial-string}
+### boolean CanMoveObject(Object obj, Object newParentObj) {#boolean-CanMoveObject-Object-obj-Object-newParentObj}
+
+### Material? CreateMaterial(string path) {#Material-CreateMaterial-string-path}
 
 ### Camera GetActiveCamera() {#Camera-GetActiveCamera}
 
-### nil SetActiveCamera(Camera) {#nil-SetActiveCamera-Camera}
+### nil SetActiveCamera(Camera cam) {#nil-SetActiveCamera-Camera-cam}
 
-### string AddNewScriptFile(string, Object) {#string-AddNewScriptFile-string-Object}
+### string AddNewScriptFile(string scriptName, Object forObject) {#string-AddNewScriptFile-string-scriptName-Object-forObject}
 
-### VoxelDB GetVoxelDB(string) {#VoxelDB-GetVoxelDB-string}
+### VoxelDB? GetVoxelDB(string db) {#VoxelDB-GetVoxelDB-string-db}
 
-### table TraceRay(table) {#table-TraceRay-table}
+### table TraceRay(table params) {#table-TraceRay-table-params}
 
-### Vec3 ConvertWcToDc(VoxelRenderer, Vec3) {#Vec3-ConvertWcToDc-VoxelRenderer-Vec3}
+### Vec3|Vec3[] ConvertWcToDc(VoxelRenderer vr, Vec3|Vec3[] wcPos) {#Vec3Vec3-ConvertWcToDc-VoxelRenderer-vr-Vec3Vec3-wcPos}
 
-### table ConvertWcToDc(VoxelRenderer, table) {#table-ConvertWcToDc-VoxelRenderer-table}
+### Vec3|Vec3[] ConvertDcToWc(VoxelRenderer vr, Vec3|Vec3[] dcPos) {#Vec3Vec3-ConvertDcToWc-VoxelRenderer-vr-Vec3Vec3-dcPos}
 
-### Vec3 ConvertDcToWc(VoxelRenderer, Vec3) {#Vec3-ConvertDcToWc-VoxelRenderer-Vec3}
+### boolean IsNameValid(string name) {#boolean-IsNameValid-string-name}
 
-### table ConvertDcToWc(VoxelRenderer, table) {#table-ConvertDcToWc-VoxelRenderer-table}
+### string MakeNameValid(string name) {#string-MakeNameValid-string-name}
 
-### boolean IsNameValid(string) {#boolean-IsNameValid-string}
+### table GetLogCounters() {#table-GetLogCounters}
 
-### string MakeNameValid(string) {#string-MakeNameValid-string}
+### nil ResetLogCountersDif() {#nil-ResetLogCountersDif}
 
-### boolean UpdatePrefab(Object) {#boolean-UpdatePrefab-Object}
+### boolean UpdatePrefab(Object obj) {#boolean-UpdatePrefab-Object-obj}
 
-### boolean ResetPrefab(Object) {#boolean-ResetPrefab-Object}
+### boolean ResetPrefab(Object obj) {#boolean-ResetPrefab-Object-obj}
 
 ### nil ResetAllPrefabs() {#nil-ResetAllPrefabs}
 
-### nil UnpackPrefab(Object) {#nil-UnpackPrefab-Object}
+### nil UnpackPrefab(Object obj) {#nil-UnpackPrefab-Object-obj}
 
 ### nil RebuildLighting() {#nil-RebuildLighting}
 
-### LightingUpdate CreateLighting(string, string) {#LightingUpdate-CreateLighting-string-string}
+### nil CreateLighting(string type, string algo) {#nil-CreateLighting-string-type-string-algo}
 
 ### boolean GetProfileScriptsUpdate() {#boolean-GetProfileScriptsUpdate}
 
-### nil SetProfileScriptsUpdate(boolean) {#nil-SetProfileScriptsUpdate-boolean}
+### nil SetProfileScriptsUpdate(boolean value) {#nil-SetProfileScriptsUpdate-boolean-value}
 
 ### table GetSimpleStats() {#table-GetSimpleStats}
 
 ### table GetVDRStats() {#table-GetVDRStats}
 
+### table GetScriptsProfiling() {#table-GetScriptsProfiling}
+
 ## Properties
 
+### integer voxelDataResourceTemplateSizeThreshold {#integer-voxelDataResourceTemplateSizeThreshold}
+
 ### integer VoxelDataResourceTemplateSizeThreshold {#integer-VoxelDataResourceTemplateSizeThreshold}
-
-### LightingUpdate lighting {#LightingUpdate-lighting}
-
-### LightingUpdate objectLighting {#LightingUpdate-objectLighting}
 
 ### boolean SimulationPaused {#boolean-SimulationPaused}
 

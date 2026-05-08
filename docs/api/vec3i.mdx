@@ -5,119 +5,101 @@ id: Vec3i
 `Client`
 `Server`
 
-## Constructors
+## Methods
 
-### Vec3i() {#Vec3i}
+### nil Vec3i(integer? xyz) {#nil-Vec3i-integer-xyz}
 
-### Vec3i(integer) {#Vec3i-integer}
+### nil Vec3i(integer x, integer y, integer z) {#nil-Vec3i-integer-x-integer-y-integer-z}
 
-### Vec3i(number) {#Vec3i-number}
+### nil Vec3i(Vec2i xy, integer z) {#nil-Vec3i-Vec2i-xy-integer-z}
 
-### Vec3i(integer, integer, integer) {#Vec3i-integer-integer-integer}
+### nil Vec3i(integer x, Vec2i yz) {#nil-Vec3i-integer-x-Vec2i-yz}
 
-### Vec3i(integer, integer, number) {#Vec3i-integer-integer-number}
+### nil Vec3i(Vec3i vec3) {#nil-Vec3i-Vec3i-vec3}
 
-### Vec3i(integer, number, integer) {#Vec3i-integer-number-integer}
-
-### Vec3i(integer, number, number) {#Vec3i-integer-number-number}
-
-### Vec3i(number, integer, integer) {#Vec3i-number-integer-integer}
-
-### Vec3i(number, integer, number) {#Vec3i-number-integer-number}
-
-### Vec3i(number, number, integer) {#Vec3i-number-number-integer}
-
-### Vec3i(number, number, number) {#Vec3i-number-number-number}
-
-### Vec3i(Vec2i, integer) {#Vec3i-Vec2i-integer}
-
-### Vec3i(Vec2i, number) {#Vec3i-Vec2i-number}
-
-### Vec3i(Vec2, integer) {#Vec3i-Vec2-integer}
-
-### Vec3i(Vec2, number) {#Vec3i-Vec2-number}
-
-### Vec3i(integer, Vec2i) {#Vec3i-integer-Vec2i}
-
-### Vec3i(integer, Vec2) {#Vec3i-integer-Vec2}
-
-### Vec3i(number, Vec2i) {#Vec3i-number-Vec2i}
-
-### Vec3i(number, Vec2) {#Vec3i-number-Vec2}
-
-### Vec3i(Vec3i) {#Vec3i-Vec3i}
-
-### Vec3i(Vec3) {#Vec3i-Vec3}
-
-### Vec3i(Vec4i) {#Vec3i-Vec4i}
-
-### Vec3i(Vec4) {#Vec3i-Vec4}
+### nil Vec3i(Vec4i vec4) {#nil-Vec3i-Vec4i-vec4}
 
 ## Metamethods
 
-### integer __index(Vec3i, integer) {#integer-index-Vec3i-integer}
+### Vec3i __add(Vec3i a, Vec3i b) {#Vec3i-add-Vec3i-a-Vec3i-b}
 
-### nil __newindex(Vec3i, integer, integer) {#nil-newindex-Vec3i-integer-integer}
+### Vec3i __add(integer a, Vec3i b) {#Vec3i-add-integer-a-Vec3i-b}
 
-### Vec3i __add(Vec3i, Vec3i) {#Vec3i-add-Vec3i-Vec3i}
+### Vec3i __add(Vec3i a, integer b) {#Vec3i-add-Vec3i-a-integer-b}
 
-### Vec3 __add(Vec3i, Vec3) {#Vec3-add-Vec3i-Vec3}
+### Vec3i __sub(Vec3i a, Vec3i b) {#Vec3i-sub-Vec3i-a-Vec3i-b}
 
-### Vec3i __add(Vec3i, integer) {#Vec3i-add-Vec3i-integer}
+### Vec3i __sub(integer a, Vec3i b) {#Vec3i-sub-integer-a-Vec3i-b}
 
-### Vec3i __add(integer, Vec3i) {#Vec3i-add-integer-Vec3i}
+### Vec3i __sub(Vec3i a, integer b) {#Vec3i-sub-Vec3i-a-integer-b}
 
-### Vec3i __sub(Vec3i, Vec3i) {#Vec3i-sub-Vec3i-Vec3i}
+### Vec3i __mul(Vec3i a, Vec3i b) {#Vec3i-mul-Vec3i-a-Vec3i-b}
 
-### Vec3 __sub(Vec3i, Vec3) {#Vec3-sub-Vec3i-Vec3}
+### Vec3i __mul(integer a, Vec3i b) {#Vec3i-mul-integer-a-Vec3i-b}
 
-### Vec3i __sub(Vec3i, integer) {#Vec3i-sub-Vec3i-integer}
+### Vec3i __mul(Vec3i a, integer b) {#Vec3i-mul-Vec3i-a-integer-b}
 
-### Vec3i __sub(integer, Vec3i) {#Vec3i-sub-integer-Vec3i}
+### Vec3i __div(Vec3i a, Vec3i b) {#Vec3i-div-Vec3i-a-Vec3i-b}
 
-### Vec3i __mul(Vec3i, Vec3i) {#Vec3i-mul-Vec3i-Vec3i}
+### Vec3i __div(integer a, Vec3i b) {#Vec3i-div-integer-a-Vec3i-b}
 
-### Vec3 __mul(Vec3i, Vec3) {#Vec3-mul-Vec3i-Vec3}
+### Vec3i __div(Vec3i a, integer b) {#Vec3i-div-Vec3i-a-integer-b}
 
-### Vec3i __mul(Vec3i, integer) {#Vec3i-mul-Vec3i-integer}
+### Vec3i __pow(Vec3i a, Vec3i b) {#Vec3i-pow-Vec3i-a-Vec3i-b}
 
-### Vec3i __mul(integer, Vec3i) {#Vec3i-mul-integer-Vec3i}
+### Vec3i __pow(integer a, Vec3i b) {#Vec3i-pow-integer-a-Vec3i-b}
 
-### Vec3i __div(Vec3i, Vec3i) {#Vec3i-div-Vec3i-Vec3i}
+### Vec3i __pow(Vec3i a, integer b) {#Vec3i-pow-Vec3i-a-integer-b}
 
-### Vec3 __div(Vec3i, Vec3) {#Vec3-div-Vec3i-Vec3}
+### Vec3i __mod(Vec3i a, Vec3i b) {#Vec3i-mod-Vec3i-a-Vec3i-b}
 
-### Vec3i __div(Vec3i, integer) {#Vec3i-div-Vec3i-integer}
+### Vec3i __mod(integer a, Vec3i b) {#Vec3i-mod-integer-a-Vec3i-b}
 
-### Vec3i __div(integer, Vec3i) {#Vec3i-div-integer-Vec3i}
+### Vec3i __mod(Vec3i a, integer b) {#Vec3i-mod-Vec3i-a-integer-b}
 
-### Vec3i __mod(Vec3i, Vec3i) {#Vec3i-mod-Vec3i-Vec3i}
+### Vec3i __band(Vec3i a, Vec3i b) {#Vec3i-band-Vec3i-a-Vec3i-b}
 
-### Vec3 __mod(Vec3i, Vec3) {#Vec3-mod-Vec3i-Vec3}
+### Vec3i __band(Vec3i a, integer b) {#Vec3i-band-Vec3i-a-integer-b}
 
-### Vec3i __mod(Vec3i, integer) {#Vec3i-mod-Vec3i-integer}
+### Vec3i __band(integer a, Vec3i b) {#Vec3i-band-integer-a-Vec3i-b}
 
-### Vec3i __mod(integer, Vec3i) {#Vec3i-mod-integer-Vec3i}
+### Vec3i __bor(Vec3i a, Vec3i b) {#Vec3i-bor-Vec3i-a-Vec3i-b}
 
-### Vec3i __pow(Vec3i, Vec3i) {#Vec3i-pow-Vec3i-Vec3i}
+### Vec3i __bor(Vec3i a, integer b) {#Vec3i-bor-Vec3i-a-integer-b}
 
-### Vec3 __pow(Vec3i, Vec3) {#Vec3-pow-Vec3i-Vec3}
+### Vec3i __bor(integer a, Vec3i b) {#Vec3i-bor-integer-a-Vec3i-b}
 
-### Vec3i __pow(Vec3i, integer) {#Vec3i-pow-Vec3i-integer}
+### Vec3i __bxor(Vec3i a, Vec3i b) {#Vec3i-bxor-Vec3i-a-Vec3i-b}
 
-### Vec3i __pow(integer, Vec3i) {#Vec3i-pow-integer-Vec3i}
+### Vec3i __bxor(Vec3i a, integer b) {#Vec3i-bxor-Vec3i-a-integer-b}
 
-### Vec3i __unm(Vec3i) {#Vec3i-unm-Vec3i}
+### Vec3i __bxor(integer a, Vec3i b) {#Vec3i-bxor-integer-a-Vec3i-b}
 
-### boolean __eq(Vec3i, Vec3i) {#boolean-eq-Vec3i-Vec3i}
+### Vec3i __bnot(Vec3i a) {#Vec3i-bnot-Vec3i-a}
 
-### boolean __eq(Vec3i, Vec3) {#boolean-eq-Vec3i-Vec3}
+### Vec3i __shl(Vec3i a, Vec3i b) {#Vec3i-shl-Vec3i-a-Vec3i-b}
 
-## Methods
+### Vec3i __shl(Vec3i a, integer b) {#Vec3i-shl-Vec3i-a-integer-b}
+
+### Vec3i __shl(integer a, Vec3i b) {#Vec3i-shl-integer-a-Vec3i-b}
+
+### Vec3i __shr(Vec3i a, Vec3i b) {#Vec3i-shr-Vec3i-a-Vec3i-b}
+
+### Vec3i __shr(Vec3i a, integer b) {#Vec3i-shr-Vec3i-a-integer-b}
+
+### Vec3i __shr(integer a, Vec3i b) {#Vec3i-shr-integer-a-Vec3i-b}
+
+### Vec3i __unm(Vec3i a) {#Vec3i-unm-Vec3i-a}
+
+### boolean __eq(Vec3i a, Vec3i b) {#boolean-eq-Vec3i-a-Vec3i-b}
+
+### integer __index(Vec3i v, integer i) {#integer-index-Vec3i-v-integer-i}
+
+### nil __newindex(Vec3i v, integer i, integer value) {#nil-newindex-Vec3i-v-integer-i-integer-value}
+
+### string __tostring(Vec3i a) {#string-tostring-Vec3i-a}
 
 ### integer Len() {#integer-Len}
-
-### integer LenSqr() {#integer-LenSqr}
 
 ### integer Length() {#integer-Length}
 
@@ -125,53 +107,17 @@ id: Vec3i
 
 ### boolean IsZero() {#boolean-IsZero}
 
+### Vec3i Copy() {#Vec3i-Copy}
+
 ### Vec3i GetAbs() {#Vec3i-GetAbs}
 
-### nil Clamp(Vec3i, integer, integer) {#nil-Clamp-Vec3i-integer-integer}
+### integer Min() {#integer-Min}
 
-### nil Clamp(Vec3i, Vec3i, Vec3i) {#nil-Clamp-Vec3i-Vec3i-Vec3i}
+### integer Max() {#integer-Max}
 
-### Vec3i GetClamped(Vec3i, integer, integer) {#Vec3i-GetClamped-Vec3i-integer-integer}
+### nil Clamp(number|Vec3i min, number|Vec3i max) {#nil-Clamp-numberVec3i-min-numberVec3i-max}
 
-### Vec3i GetClamped(Vec3i, Vec3i, Vec3i) {#Vec3i-GetClamped-Vec3i-Vec3i-Vec3i}
-
-### integer Dot(Vec3i, Vec3i) {#integer-Dot-Vec3i-Vec3i}
-
-### number Dot(Vec3i, Vec3) {#number-Dot-Vec3i-Vec3}
-
-### Vec3i __band(Vec3i, Vec3i) {#Vec3i-band-Vec3i-Vec3i}
-
-### Vec3i __band(integer, Vec3i) {#Vec3i-band-integer-Vec3i}
-
-### Vec3i __band(Vec3i, integer) {#Vec3i-band-Vec3i-integer}
-
-### Vec3i __bor(Vec3i, Vec3i) {#Vec3i-bor-Vec3i-Vec3i}
-
-### Vec3i __bor(integer, Vec3i) {#Vec3i-bor-integer-Vec3i}
-
-### Vec3i __bor(Vec3i, integer) {#Vec3i-bor-Vec3i-integer}
-
-### Vec3i __bxor(Vec3i, Vec3i) {#Vec3i-bxor-Vec3i-Vec3i}
-
-### Vec3i __bxor(integer, Vec3i) {#Vec3i-bxor-integer-Vec3i}
-
-### Vec3i __bxor(Vec3i, integer) {#Vec3i-bxor-Vec3i-integer}
-
-### Vec3i __bnot(Vec3i) {#Vec3i-bnot-Vec3i}
-
-### Vec3i __shl(Vec3i, Vec3i) {#Vec3i-shl-Vec3i-Vec3i}
-
-### Vec3i __shl(integer, Vec3i) {#Vec3i-shl-integer-Vec3i}
-
-### Vec3i __shl(Vec3i, integer) {#Vec3i-shl-Vec3i-integer}
-
-### Vec3i __shr(Vec3i, Vec3i) {#Vec3i-shr-Vec3i-Vec3i}
-
-### Vec3i __shr(integer, Vec3i) {#Vec3i-shr-integer-Vec3i}
-
-### Vec3i __shr(Vec3i, integer) {#Vec3i-shr-Vec3i-integer}
-
-### string __tostring(Vec3i) {#string-tostring-Vec3i}
+### integer Dot(Vec3i|Vec3 vec) {#integer-Dot-Vec3iVec3-vec}
 
 ## Properties
 
@@ -180,18 +126,4 @@ id: Vec3i
 ### integer y {#integer-y}
 
 ### integer z {#integer-z}
-
-### Vec3i zero {#Vec3i-zero}
-
-### Vec3i up {#Vec3i-up}
-
-### Vec3i right {#Vec3i-right}
-
-### Vec3i forward {#Vec3i-forward}
-
-### Vec3i down {#Vec3i-down}
-
-### Vec3i left {#Vec3i-left}
-
-### Vec3i back {#Vec3i-back}
 

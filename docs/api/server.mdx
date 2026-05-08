@@ -45,15 +45,9 @@ Common scenes
 
 ### Object InsertPrefab(integer id, boolean deepCopy) {#Object-InsertPrefab-integer-id-boolean-deepCopy}
 
-### Object InsertPrefab(string name) {#Object-InsertPrefab-string-name}
+### Object InsertPrefab(string name, string? newName, boolean? setSave, boolean? deepCopy) {#Object-InsertPrefab-string-name-string-newName-boolean-setSave-boolean-deepCopy}
 
 ### Object InsertPrefab(string name, boolean setSave) {#Object-InsertPrefab-string-name-boolean-setSave}
-
-### Object InsertPrefab(string name, string newName) {#Object-InsertPrefab-string-name-string-newName}
-
-### Object InsertPrefab(string name, string newName, boolean setSave) {#Object-InsertPrefab-string-name-string-newName-boolean-setSave}
-
-### Object InsertPrefab(string name, string newName, boolean setSave, boolean deepCopy) {#Object-InsertPrefab-string-name-string-newName-boolean-setSave-boolean-deepCopy}
 
 ### nil MakePrefab(string name) {#nil-MakePrefab-string-name}
 
@@ -66,6 +60,8 @@ Common scenes
 ### nil SaveSceneHierarchy() {#nil-SaveSceneHierarchy}
 
 ### nil ReloadScene() {#nil-ReloadScene}
+
+### nil ResetSceneToInitState(boolean? reloadTerrain) {#nil-ResetSceneToInitState-boolean-reloadTerrain}
 
 ### nil BackupMontage() {#nil-BackupMontage}
 
@@ -95,21 +91,17 @@ Common scenes
 
 ### integer GetMaxConnections() {#integer-GetMaxConnections}
 
-### nil HttpPost(string url, table headers, string data, function onResponse) {#nil-HttpPost-string-url-table-headers-string-data-function-onResponse}
+### nil HttpPost(string url, table headers, string data, fun onResponse) {#nil-HttpPost-string-url-table-headers-string-data-fun-onResponse}
 
-### nil HttpGet(string url, table headers, function onResponse) {#nil-HttpGet-string-url-table-headers-function-onResponse}
+### nil HttpGet(string url, table headers, fun onResponse) {#nil-HttpGet-string-url-table-headers-fun-onResponse}
 
-### nil HttpDownload(string url, table headers, function onResponse) {#nil-HttpDownload-string-url-table-headers-function-onResponse}
+### nil HttpDownload(string url, table headers, fun onResponse) {#nil-HttpDownload-string-url-table-headers-fun-onResponse}
 
 ### integer GetPing(integer clientID) {#integer-GetPing-integer-clientID}
 
 ### boolean MoveFileToMontageVoxelsFolder(File fileLua, string subPath) {#boolean-MoveFileToMontageVoxelsFolder-File-fileLua-string-subPath}
 
-### nil MakeUrlForFile(File fileLua, function eventUpdate, function eventFinish) {#nil-MakeUrlForFile-File-fileLua-function-eventUpdate-function-eventFinish}
-
-### string GetLogTime(string logName) {#string-GetLogTime-string-logName}
-
-### table GetLogTimers(string logName) {#table-GetLogTimers-string-logName}
+### nil MakeUrlForFile(File fileLua, fun eventUpdate, fun eventFinish) {#nil-MakeUrlForFile-File-fileLua-fun-eventUpdate-fun-eventFinish}
 
 ### number GetLogValue(string logName) {#number-GetLogValue-string-logName}
 
@@ -131,9 +123,9 @@ Common scenes
 
 ### nil AnalyticsClient(integer clientID, string name, table props) {#nil-AnalyticsClient-integer-clientID-string-name-table-props}
 
-### integer GetCollectionPreferredLoad(integer collectionIndex) {#integer-GetCollectionPreferredLoad-string-collectionName}
+### integer GetCollectionPreferredLoad(number collectionId) {#integer-GetCollectionPreferredLoad-number-collectionId}
 
-### nil SetCollectionPreferredLoad(integer collectionIndex, integer preferredLoad) {#nil-SetCollectionPreferredLoad-string-collectionName-integer-preferredLoad}
+### nil SetCollectionPreferredLoad(number collectionId, integer preferredLoad) {#nil-SetCollectionPreferredLoad-number-collectionId-integer-preferredLoad}
 
 ### nil GenTestVoxelScene() {#nil-GenTestVoxelScene}
 
@@ -143,23 +135,27 @@ Common scenes
 
 ### nil MakeVoxelScene(integer maxZ, integer maxY, integer maxX, integer patternSize) {#nil-MakeVoxelScene-integer-maxZ-integer-maxY-integer-maxX-integer-patternSize}
 
-### nil RebuildLODsBrightnessMethod() {#nil-RebuildLODsBrightnessMethod}
+### nil RebuildLODsBrightnessMethod(Vec3i? minPos, Vec3i? maxPos) {#nil-RebuildLODsBrightnessMethod-Vec3i-minPos-Vec3i-maxPos}
 
-### nil RebuildLODsBrightnessMethod(Vec3i minPos, Vec3i maxPos) {#nil-RebuildLODsBrightnessMethod-Vec3i-minPos-Vec3i-maxPos}
+### boolean RebuildLODsGradientMethod(Vec3i? minPos, Vec3i? maxPos) {#boolean-RebuildLODsGradientMethod-Vec3i-minPos-Vec3i-maxPos}
 
-### boolean RebuildLODsGradientMethod() {#boolean-RebuildLODsGradientMethod}
+### boolean ShowAllNormalsPerVoxel(integer lodI) {#boolean-ShowAllNormalsPerVoxel-integer-lodI}
 
-### boolean RebuildLODsGradientMethod(Vec3i minPos, Vec3i maxPos) {#boolean-RebuildLODsGradientMethod-Vec3i-minPos-Vec3i-maxPos}
-
-### boolean ShowAllNormalsPerVoxel(integer lodI) {#nil-ShowAllNormalsPerVoxel-integer-lodI}
-
-### boolean ShowAllNormalsPerBT(integer lodI) {#nil-ShowAllNormalsPerBT-integer-lodI}
+### boolean ShowAllNormalsPerBT(integer lodI) {#boolean-ShowAllNormalsPerBT-integer-lodI}
 
 ### nil PBRTranscodeToPBR0Ver1() {#nil-PBRTranscodeToPBR0Ver1}
+
+### nil GenLuaApi(string api) {#nil-GenLuaApi-string-api}
+
+### nil TakeScreenshot() {#nil-TakeScreenshot}
 
 ## Properties
 
 ### integer clientID {#integer-clientID}
+
+### boolean editMode {#boolean-editMode}
+
+### boolean modeChangeReloadGeom {#boolean-modeChangeReloadGeom}
 
 ### boolean EditMode {#boolean-EditMode}
 

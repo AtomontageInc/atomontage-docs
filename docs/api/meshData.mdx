@@ -7,33 +7,29 @@ id: MeshData
 
 ## Metamethods
 
-### boolean __eq(MeshData, MeshData) {#boolean-eq-MeshData-MeshData}
+### boolean __eq(MeshData a, MeshData b) {#boolean-eq-MeshData-a-MeshData-b}
 
 ## Methods
 
-### nil ClearShape() {#nil-ClearShape}
+### nil ClearShape(PrimitiveTopology? topology) {#nil-ClearShape-PrimitiveTopology-topology}
 
-### nil ClearShape(PrimitiveTopology) {#nil-ClearShape-PrimitiveTopology}
+### integer AddVertex(Vec3 pos, Vec2? uv, Color? color) {#integer-AddVertex-Vec3-pos-Vec2-uv-Color-color}
 
-### integer AddVertex(Vec3) {#integer-AddVertex-Vec3}
+### integer AddVertex(Vec3 pos, Color color) {#integer-AddVertex-Vec3-pos-Color-color}
 
-### integer AddVertex(Vec3, Vec4) {#integer-AddVertex-Vec3-Vec4}
+### nil AddIndex(integer a, integer? b, integer? c) {#nil-AddIndex-integer-a-integer-b-integer-c}
 
-### integer AddVertex(Vec3, Vec2, Vec4) {#integer-AddVertex-Vec3-Vec2-Vec4}
-
-### integer AddVertex(Vec3, Vec2) {#integer-AddVertex-Vec3-Vec2}
-
-### nil AddIndex(integer) {#nil-AddIndex-integer}
-
-### nil AddIndex(integer, integer, integer) {#nil-AddIndex-integer-integer-integer}
-
-### nil AddIndex(integer, integer) {#nil-AddIndex-integer-integer}
-
-### nil AddShape(Shape, Vec4) {#nil-AddShape-Shape-Vec4}
+### nil AddShape(Shape shape, Color color) {#nil-AddShape-Shape-shape-Color-color}
 
 ## Properties
 
+### boolean active {#boolean-active}
+
+### boolean activeInHierarchy {#boolean-activeInHierarchy}
+
 ### Object object {#Object-object}
+
+### Object obj {#Object-obj}
 
 ### boolean isDestroyed {#boolean-isDestroyed}
 

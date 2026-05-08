@@ -22,15 +22,13 @@ Returns [Hit](Hit).
 
 ### Hit[] Raycast(boolean ignoreTmp, boolean ignoreCommon, boolean precise) {#Hit-Raycast-boolean-ignoreTmp-boolean-ignoreCommon-boolean-precise}
 
-### Hit[] Raycast(Vec3 pos, Vec3 dir) {#Hit-Raycast-Vec3-pos-Vec3-dir}
+### Hit[] Raycast(Vec3 pos, Vec3 dir, boolean? ignoreTmp, boolean? ignoreCommon, boolean? precise) {#Hit-Raycast-Vec3-pos-Vec3-dir-boolean-ignoreTmp-boolean-ignoreCommon-boolean-precise}
 
-### Hit[] Raycast(Vec3 pos, Vec3 dir, boolean ignoreTmp, boolean ignoreCommon, boolean precise) {#Hit-Raycast-Vec3-pos-Vec3-dir-boolean-ignoreTmp-boolean-ignoreCommon-boolean-precise}
+### table RaycastTo(Vec3 startPos, Vec3 endPos, boolean? readColor, boolean? readNormal, boolean? readMaterial) {#table-RaycastTo-Vec3-startPos-Vec3-endPos-boolean-readColor-boolean-readNormal-boolean-readMaterial}
 
-### Overlap[] GetOverlap() {#Overlap-GetOverlap}
+### Overlap[] GetOverlap(Shape? shape) {#Overlap-GetOverlap-Shape-shape}
 Checks collision between shape and geometry passed by filter.
 Returns [Overlap](Overlap).
-
-### Overlap[] GetOverlap(Shape shape) {#Overlap-GetOverlap-Shape-shape}
 
 ## Properties
 

@@ -7,99 +7,69 @@ id: Mat4
 
 ## Constructors
 
-### Mat4() {#Mat4}
+### Mat4 Mat4(number? scalar) {#Mat4-Mat4-number-scalar}
 
-### Mat4(number) {#Mat4-number}
+### Mat4 Mat4(number x1, number x2, number x3, number x4, number y1, number y2, number y3, number y4, number z1, number z2, number z3, number z4, number w1, number w2, number w3, number w4) {#Mat4-Mat4-number-x1-number-x2-number-x3-number-x4-number-y1-number-y2-number-y3-number-y4-number-z1-number-z2-number-z3-number-z4-number-w1-number-w2-number-w3-number-w4}
 
-### Mat4(number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number) {#Mat4-number-number-number-number-number-number-number-number-number-number-number-number-number-number-number-number}
+### Mat4 Mat4(Vec4 row1, Vec4 row2, Vec4 row3, Vec4 row4) {#Mat4-Mat4-Vec4-row1-Vec4-row2-Vec4-row3-Vec4-row4}
 
-### Mat4(Vec4, Vec4, Vec4, Vec4) {#Mat4-Vec4-Vec4-Vec4-Vec4}
+### Mat4 Mat4(Mat3 mat) {#Mat4-Mat4-Mat3-mat}
 
-### Mat4(Vec4, Vec4, Vec4, Vec4i) {#Mat4-Vec4-Vec4-Vec4-Vec4i}
+### Mat4 Mat4(Mat4 mat4) {#Mat4-Mat4-Mat4-mat4}
 
-### Mat4(Vec4, Vec4, Vec4i, Vec4) {#Mat4-Vec4-Vec4-Vec4i-Vec4}
-
-### Mat4(Vec4, Vec4, Vec4i, Vec4i) {#Mat4-Vec4-Vec4-Vec4i-Vec4i}
-
-### Mat4(Vec4, Vec4i, Vec4, Vec4) {#Mat4-Vec4-Vec4i-Vec4-Vec4}
-
-### Mat4(Vec4, Vec4i, Vec4, Vec4i) {#Mat4-Vec4-Vec4i-Vec4-Vec4i}
-
-### Mat4(Vec4, Vec4i, Vec4i, Vec4) {#Mat4-Vec4-Vec4i-Vec4i-Vec4}
-
-### Mat4(Vec4, Vec4i, Vec4i, Vec4i) {#Mat4-Vec4-Vec4i-Vec4i-Vec4i}
-
-### Mat4(Vec4i, Vec4, Vec4, Vec4) {#Mat4-Vec4i-Vec4-Vec4-Vec4}
-
-### Mat4(Vec4i, Vec4, Vec4, Vec4i) {#Mat4-Vec4i-Vec4-Vec4-Vec4i}
-
-### Mat4(Vec4i, Vec4, Vec4i, Vec4) {#Mat4-Vec4i-Vec4-Vec4i-Vec4}
-
-### Mat4(Vec4i, Vec4, Vec4i, Vec4i) {#Mat4-Vec4i-Vec4-Vec4i-Vec4i}
-
-### Mat4(Vec4i, Vec4i, Vec4, Vec4) {#Mat4-Vec4i-Vec4i-Vec4-Vec4}
-
-### Mat4(Vec4i, Vec4i, Vec4, Vec4i) {#Mat4-Vec4i-Vec4i-Vec4-Vec4i}
-
-### Mat4(Vec4i, Vec4i, Vec4i, Vec4) {#Mat4-Vec4i-Vec4i-Vec4i-Vec4}
-
-### Mat4(Vec4i, Vec4i, Vec4i, Vec4i) {#Mat4-Vec4i-Vec4i-Vec4i-Vec4i}
-
-### Mat4(Mat3) {#Mat4-Mat3}
-
-### Mat4(Mat4) {#Mat4-Mat4}
-
-### Mat4(Quat) {#Mat4-Quat}
+### Mat4 Mat4(Quat quat) {#Mat4-Mat4-Quat-quat}
 
 ## Metamethods
 
-### Vec4 __index(Mat4, integer) {#Vec4-index-Mat4-integer}
+### Mat4 __add(Mat4 a, Mat4 b) {#Mat4-add-Mat4-a-Mat4-b}
 
-### nil __newindex(Mat4, integer, Vec4) {#nil-newindex-Mat4-integer-Vec4}
+### Mat4 __add(number a, Mat4 b) {#Mat4-add-number-a-Mat4-b}
 
-### Mat4 __add(Mat4, Mat4) {#Mat4-add-Mat4-Mat4}
+### Mat4 __add(Mat4 a, number b) {#Mat4-add-Mat4-a-number-b}
 
-### Mat4 __add(Mat4, number) {#Mat4-add-Mat4-number}
+### Mat4 __sub(Mat4 a, Mat4 b) {#Mat4-sub-Mat4-a-Mat4-b}
 
-### Mat4 __add(number, Mat4) {#Mat4-add-number-Mat4}
+### Mat4 __sub(number a, Mat4 b) {#Mat4-sub-number-a-Mat4-b}
 
-### Mat4 __sub(Mat4, Mat4) {#Mat4-sub-Mat4-Mat4}
+### Mat4 __sub(Mat4 a, number b) {#Mat4-sub-Mat4-a-number-b}
 
-### Mat4 __sub(Mat4, number) {#Mat4-sub-Mat4-number}
+### Mat4 __mul(Mat4 a, Mat4 b) {#Mat4-mul-Mat4-a-Mat4-b}
 
-### Mat4 __sub(number, Mat4) {#Mat4-sub-number-Mat4}
+### Mat4 __mul(number a, Mat4 b) {#Mat4-mul-number-a-Mat4-b}
 
-### Mat4 __mul(Mat4, Mat4) {#Mat4-mul-Mat4-Mat4}
+### Mat4 __mul(Mat4 a, number b) {#Mat4-mul-Mat4-a-number-b}
 
-### Mat4 __mul(Mat4, number) {#Mat4-mul-Mat4-number}
+### Mat4 __div(Mat4 a, Mat4 b) {#Mat4-div-Mat4-a-Mat4-b}
 
-### Mat4 __mul(number, Mat4) {#Mat4-mul-number-Mat4}
+### Mat4 __div(number a, Mat4 b) {#Mat4-div-number-a-Mat4-b}
 
-### Mat4 __div(Mat4, Mat4) {#Mat4-div-Mat4-Mat4}
+### Mat4 __div(Mat4 a, number b) {#Mat4-div-Mat4-a-number-b}
 
-### Mat4 __div(Mat4, number) {#Mat4-div-Mat4-number}
+### Vec4 __index(integer index) {#Vec4-index-integer-index}
 
-### Mat4 __div(number, Mat4) {#Mat4-div-number-Mat4}
+### nil __newindex(integer index, Vec4 value) {#nil-newindex-integer-index-Vec4-value}
 
-### Vec4 __div(Vec4, Mat4) {#Vec4-div-Vec4-Mat4}
+### Mat4 __unm() {#Mat4-unm}
 
-### Mat4 __unm(Mat4) {#Mat4-unm-Mat4}
+### boolean __eq(Mat4 a, Mat4 b) {#boolean-eq-Mat4-a-Mat4-b}
 
-### boolean __eq(Mat4, Mat4) {#boolean-eq-Mat4-Mat4}
+### string __tostring() {#string-tostring}
 
 ## Methods
 
 ### number GetDeterminant() {#number-GetDeterminant}
 
-### Mat4 Transpose() {#Mat4-Transpose}
+### nil Transpose() {#nil-Transpose}
 
 ### Mat4 GetTransposed() {#Mat4-GetTransposed}
 
-### Mat4 Invert() {#Mat4-Invert}
+### nil Invert() {#nil-Invert}
 
 ### Mat4 GetInverted() {#Mat4-GetInverted}
 
-### boolean IsIdentity(number) {#boolean-IsIdentity-number}
+### Mat4 Copy() {#Mat4-Copy}
+
+### boolean IsIdentity() {#boolean-IsIdentity}
 
 ### boolean IsZero() {#boolean-IsZero}
 
@@ -107,43 +77,43 @@ id: Mat4
 
 ### boolean IsAnyNaN() {#boolean-IsAnyNaN}
 
-### Mat4 Translation(number, number, number) {#Mat4-Translation-number-number-number}
+### Mat4 Translation(number x, number y, number z) {#Mat4-Translation-number-x-number-y-number-z}
 
-### Mat4 Translation(Vec3) {#Mat4-Translation-Vec3}
+### Mat4 Translation(Vec3 vec) {#Mat4-Translation-Vec3-vec}
 
-### Mat4 RotationXYZ(number, number, number) {#Mat4-RotationXYZ-number-number-number}
+### Mat4 RotationXYZ(number x, number y, number z) {#Mat4-RotationXYZ-number-x-number-y-number-z}
 
-### Mat4 RotationXYZ(Vec3) {#Mat4-RotationXYZ-Vec3}
+### Mat4 RotationXYZ(Vec3 angles) {#Mat4-RotationXYZ-Vec3-angles}
 
-### Mat4 RotationYawPitchRoll(number, number, number) {#Mat4-RotationYawPitchRoll-number-number-number}
+### Mat4 RotationYawPitchRoll(number angleYaw, number anglePitch, number angleRoll) {#Mat4-RotationYawPitchRoll-number-angleYaw-number-anglePitch-number-angleRoll}
 
-### Mat4 RotationYawPitchRoll(Vec3) {#Mat4-RotationYawPitchRoll-Vec3}
+### Mat4 RotationYawPitchRoll(Vec3 angles) {#Mat4-RotationYawPitchRoll-Vec3-angles}
 
-### Mat4 Scaling(number, number, number) {#Mat4-Scaling-number-number-number}
+### Mat4 Scaling(number x, number y, number z) {#Mat4-Scaling-number-x-number-y-number-z}
 
-### Mat4 Scaling(Vec3) {#Mat4-Scaling-Vec3}
+### Mat4 Scaling(Vec3 scale) {#Mat4-Scaling-Vec3-scale}
 
-### Mat4 LookAt(Vec3, Vec3, Vec3) {#Mat4-LookAt-Vec3-Vec3-Vec3}
+### Mat4 LookAt(Vec3 eyePos, Vec3 targetPos, Vec3 up) {#Mat4-LookAt-Vec3-eyePos-Vec3-targetPos-Vec3-up}
 
-### Mat4 Perspective(number, number, number, number) {#Mat4-Perspective-number-number-number-number}
+### Mat4 Perspective(number fovY, number aspect, number znear, number zfar) {#Mat4-Perspective-number-fovY-number-aspect-number-znear-number-zfar}
 
-### Mat4 Ortho(number, number, number, number, number, number) {#Mat4-Ortho-number-number-number-number-number-number}
+### Mat4 Ortho(number left, number right, number bottom, number top, number zNear, number zFar) {#Mat4-Ortho-number-left-number-right-number-bottom-number-top-number-zNear-number-zFar}
 
 ## Properties
 
-### Vec3 xaxis {#Vec3-xaxis}
+### Vec4 xaxis {#Vec4-xaxis}
 
-### Vec3 yaxis {#Vec3-yaxis}
+### Vec4 yaxis {#Vec4-yaxis}
 
-### Vec3 zaxis {#Vec3-zaxis}
+### Vec4 zaxis {#Vec4-zaxis}
 
-### Vec3 translation {#Vec3-translation}
+### Vec4 translation {#Vec4-translation}
 
-### Vec3 row1 {#Vec3-row1}
+### Vec4 row1 {#Vec4-row1}
 
-### Vec3 row2 {#Vec3-row2}
+### Vec4 row2 {#Vec4-row2}
 
-### Vec3 row3 {#Vec3-row3}
+### Vec4 row3 {#Vec4-row3}
 
-### Vec3 row4 {#Vec3-row4}
+### Vec4 row4 {#Vec4-row4}
 

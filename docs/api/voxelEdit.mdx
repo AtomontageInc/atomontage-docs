@@ -146,6 +146,15 @@ parameters specify "cone" - two positions and end radius
 
 ## Properties
 
+### fun(progress:number) OnProgress {#fun-progressnumber-OnProgress}
+callback function. progress from 0-1. May not be called every frame. Is called after script updates 
+
+### fun(info:RemoveCountInfo) OnFinished {#fun-infoRemoveCountInfo-OnFinished}
+callback function. onFinished is called after onProgress if it was last part
+
+### fun() OnError {#fun-OnError}
+callback function
+
 ### boolean blendEnable {#boolean-blendEnable}
 
 ### BlendMode blendMode {#BlendMode-blendMode}
@@ -155,7 +164,7 @@ Various blend modes which you may know from Photoshop. See a list of explanation
 
 ### number blendRadiusRatio {#number-blendRadiusRatio}
 
-### Vec3 color {#Vec3-color}
+### Color color {#Color-color}
 
 ### Filter filter {#Filter-filter}
 
@@ -199,11 +208,11 @@ if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least
 
 ### string material {#string-material}
 
-### table removeList {#table-removeList}
+### table<string,number> removeList {#tablestringnumber-removeList}
 
-### table carveList {#table-carveList}
+### table<string,number> carveList {#tablestringnumber-carveList}
 
-### table removeCountList {#table-removeCountList}
+### string[] removeCountList {#string-removeCountList}
 
 ### boolean removeStats {#boolean-removeStats}
 
@@ -234,10 +243,9 @@ if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least
 
 ### number imageNormalBlendPower {#number-imageNormalBlendPower}
 
-### fun(progress:number) OnProgress {#fun-progressnumber-OnProgress}
-callback function. progress from 0-1. May not be called every frame. Is called after script updates 
+### fun(progress:number) onProgress {#fun-progressnumber-onProgress}
 
-### fun(info:RemoveCountInfo) OnFinished {#fun-infoRemoveCountInfo-OnFinished}
-callback function. onFinished is called after onProgress if it was last part
-### fun() OnError {#fun-OnError}
-callback function
+### fun(info:RemoveCountInfo) onFinished {#fun-infoRemoveCountInfo-onFinished}
+
+### fun() onError {#fun-onError}
+

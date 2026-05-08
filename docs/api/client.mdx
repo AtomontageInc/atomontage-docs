@@ -13,7 +13,7 @@ This class is only available on client
 
 ### integer GetID() {#integer-GetID}
 
-### string UIItemUpdate(integer itemId, UIItem uiItem, any value) {#nil-UIItemUpdate-integer-itemId-UIItem-uiItem-any-value}
+### string UIItemUpdate(integer itemId, UIItem uiItem, any value) {#string-UIItemUpdate-integer-itemId-UIItem-uiItem-any-value}
 
 ### nil OpenKeyboardShortcutInput(string keyActionID) {#nil-OpenKeyboardShortcutInput-string-keyActionID}
 
@@ -55,7 +55,7 @@ This class is only available on client
 
 ### nil SetUIPose(Quat rot, Vec3 pose) {#nil-SetUIPose-Quat-rot-Vec3-pose}
 
-### Quat rot, Vec3 pos GetUIPose() {#Quat-rot-Vec3-pos-GetUIPose-string-uiName}
+### Quat rot, Vec3 pos GetUIPose() {#Quat-rot-Vec3-pos-GetUIPose}
 
 ### Script GetScript(string scriptName) {#Script-GetScript-string-scriptName}
 
@@ -72,6 +72,12 @@ This class is only available on client
 ### string GetUILayout() {#string-GetUILayout}
 
 ### string GetMontageURL() {#string-GetMontageURL}
+
+### nil SetMontageURL(string url) {#nil-SetMontageURL-string-url}
+
+### nil LoadMontageByURL() {#nil-LoadMontageByURL}
+
+### nil CancelLoadMontageByURL() {#nil-CancelLoadMontageByURL}
 
 ### string GetMontageURLBase() {#string-GetMontageURLBase}
 
@@ -131,6 +137,12 @@ Time for a network message to travel from client to server and back
 ### integer GetLogStrValuesCount() {#integer-GetLogStrValuesCount}
 
 ### table GetMainDispatcherStats() {#table-GetMainDispatcherStats}
+
+### table GetRenderStats() {#table-GetRenderStats}
+
+### boolean GetRenderStatsEnabled() {#boolean-GetRenderStatsEnabled}
+
+### nil SetRenderStatsEnabled(boolean enable) {#nil-SetRenderStatsEnabled-boolean-enable}
 
 ### number GetFPS() {#number-GetFPS}
 
@@ -333,6 +345,10 @@ Resume all paused sounds and music
 ### ClientMode mode {#ClientMode-mode}
 
 ### boolean isMaker {#boolean-isMaker}
+
+### string platform {#string-platform}
+
+### string sysInfo {#string-sysInfo}
 
 ### boolean editMode {#boolean-editMode}
 

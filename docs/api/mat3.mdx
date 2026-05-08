@@ -7,87 +7,77 @@ id: Mat3
 
 ## Constructors
 
-### Mat3() {#Mat3}
+### Mat3 Mat3(number? scalar) {#Mat3-Mat3-number-scalar}
 
-### Mat3(number) {#Mat3-number}
+### Mat3 Mat3(number x1, number x2, number x3, number y1, number y2, number y3, number z1, number z2, number z3) {#Mat3-Mat3-number-x1-number-x2-number-x3-number-y1-number-y2-number-y3-number-z1-number-z2-number-z3}
 
-### Mat3(number, number, number, number, number, number, number, number, number) {#Mat3-number-number-number-number-number-number-number-number-number}
+### Mat3 Mat3(Vec3 row1, Vec3 row2, Vec3 row3) {#Mat3-Mat3-Vec3-row1-Vec3-row2-Vec3-row3}
 
-### Mat3(Vec3, Vec3, Vec3) {#Mat3-Vec3-Vec3-Vec3}
+### Mat3 Mat3(Vec3i row1, Vec3i row2, Vec3i row3) {#Mat3-Mat3-Vec3i-row1-Vec3i-row2-Vec3i-row3}
 
-### Mat3(Vec3, Vec3, Vec3i) {#Mat3-Vec3-Vec3-Vec3i}
+### Mat3 Mat3(Mat3 mat) {#Mat3-Mat3-Mat3-mat}
 
-### Mat3(Vec3, Vec3i, Vec3) {#Mat3-Vec3-Vec3i-Vec3}
+### Mat3 Mat3(Mat4 mat4) {#Mat3-Mat3-Mat4-mat4}
 
-### Mat3(Vec3, Vec3i, Vec3i) {#Mat3-Vec3-Vec3i-Vec3i}
-
-### Mat3(Vec3i, Vec3, Vec3) {#Mat3-Vec3i-Vec3-Vec3}
-
-### Mat3(Vec3i, Vec3, Vec3i) {#Mat3-Vec3i-Vec3-Vec3i}
-
-### Mat3(Vec3i, Vec3i, Vec3) {#Mat3-Vec3i-Vec3i-Vec3}
-
-### Mat3(Vec3i, Vec3i, Vec3i) {#Mat3-Vec3i-Vec3i-Vec3i}
-
-### Mat3(Mat3) {#Mat3-Mat3}
-
-### Mat3(Mat4) {#Mat3-Mat4}
-
-### Mat3(Quat) {#Mat3-Quat}
+### Mat3 Mat3(Quat quat) {#Mat3-Mat3-Quat-quat}
 
 ## Metamethods
 
-### Vec3 __index(Mat3, integer) {#Vec3-index-Mat3-integer}
+### Mat3 __add(Mat3 a, Mat3 b) {#Mat3-add-Mat3-a-Mat3-b}
 
-### nil __newindex(Mat3, integer, Vec3) {#nil-newindex-Mat3-integer-Vec3}
+### Mat3 __add(number a, Mat3 b) {#Mat3-add-number-a-Mat3-b}
 
-### Mat3 __add(Mat3, Mat3) {#Mat3-add-Mat3-Mat3}
+### Mat3 __add(Mat3 a, number b) {#Mat3-add-Mat3-a-number-b}
 
-### Mat3 __add(Mat3, number) {#Mat3-add-Mat3-number}
+### Mat3 __sub(Mat3 a, Mat3 b) {#Mat3-sub-Mat3-a-Mat3-b}
 
-### Mat3 __add(number, Mat3) {#Mat3-add-number-Mat3}
+### Mat3 __sub(number a, Mat3 b) {#Mat3-sub-number-a-Mat3-b}
 
-### Mat3 __sub(Mat3, Mat3) {#Mat3-sub-Mat3-Mat3}
+### Mat3 __sub(Mat3 a, number b) {#Mat3-sub-Mat3-a-number-b}
 
-### Mat3 __sub(Mat3, number) {#Mat3-sub-Mat3-number}
+### Mat3 __mul(Mat3 a, Mat3 b) {#Mat3-mul-Mat3-a-Mat3-b}
 
-### Mat3 __sub(number, Mat3) {#Mat3-sub-number-Mat3}
+### Vec3 __mul(Vec3 a, Mat3 b) {#Vec3-mul-Vec3-a-Mat3-b}
 
-### Mat3 __mul(Mat3, Mat3) {#Mat3-mul-Mat3-Mat3}
+### Mat3 __mul(number a, Mat3 b) {#Mat3-mul-number-a-Mat3-b}
 
-### Mat3 __mul(Mat3, number) {#Mat3-mul-Mat3-number}
+### Mat3 __mul(Mat3 a, number b) {#Mat3-mul-Mat3-a-number-b}
 
-### Mat3 __mul(number, Mat3) {#Mat3-mul-number-Mat3}
+### Mat3 __div(Mat3 a, Mat3 b) {#Mat3-div-Mat3-a-Mat3-b}
 
-### Vec3 __mul(Vec3, Mat3) {#Vec3-mul-Vec3-Mat3}
+### Vec3 __div(Vec3 a, Mat3 b) {#Vec3-div-Vec3-a-Mat3-b}
 
-### Mat3 __div(Mat3, Mat3) {#Mat3-div-Mat3-Mat3}
+### Mat3 __div(number a, Mat3 b) {#Mat3-div-number-a-Mat3-b}
 
-### Mat3 __div(Mat3, number) {#Mat3-div-Mat3-number}
+### Mat3 __div(Mat3 a, number b) {#Mat3-div-Mat3-a-number-b}
 
-### Mat3 __div(number, Mat3) {#Mat3-div-number-Mat3}
+### Mat3 __unm() {#Mat3-unm}
 
-### Vec3 __div(Vec3, Mat3) {#Vec3-div-Vec3-Mat3}
+### boolean __eq(Mat3 a, Mat3 b) {#boolean-eq-Mat3-a-Mat3-b}
 
-### Mat3 __unm(Mat3) {#Mat3-unm-Mat3}
+### Vec3 __index(integer key) {#Vec3-index-integer-key}
 
-### boolean __eq(Mat3, Mat3) {#boolean-eq-Mat3-Mat3}
+### nil __newindex(integer key, Vec3 value) {#nil-newindex-integer-key-Vec3-value}
+
+### string __tostring() {#string-tostring}
 
 ## Methods
 
 ### number GetDeterminant() {#number-GetDeterminant}
 
-### Mat3 Transpose() {#Mat3-Transpose}
+### nil Transpose() {#nil-Transpose}
 
 ### Mat3 GetTransposed() {#Mat3-GetTransposed}
 
-### Mat3 Invert() {#Mat3-Invert}
+### nil Invert() {#nil-Invert}
 
 ### Mat3 GetInverted() {#Mat3-GetInverted}
 
-### boolean IsIdentity(number) {#boolean-IsIdentity-number}
+### boolean IsIdentity() {#boolean-IsIdentity}
 
 ### boolean IsZero() {#boolean-IsZero}
+
+### Mat3 Copy() {#Mat3-Copy}
 
 ### boolean IsSingular() {#boolean-IsSingular}
 

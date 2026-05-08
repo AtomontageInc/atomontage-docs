@@ -7,11 +7,15 @@ id: Transform
 
 Holds position, rotation, and scale 
 
+## Methods
+
+### nil LookAt(Vec3 pos) {#nil-LookAt-Vec3-pos}
+
+### nil LookAt(Vec3 pos, Vec3 up) {#nil-LookAt-Vec3-pos-Vec3-up}
+
 ## Metamethods
 
 ### boolean __eq(Transform a, Transform b) {#boolean-eq-Transform-a-Transform-b}
-
-## Methods
 
 ### Vec3 LocalToWorld(Vec3 v) {#Vec3-LocalToWorld-Vec3-v}
 Transforms a local position to world space, allowing you to convert coordinates relative to an object into global coordinates.
@@ -24,13 +28,23 @@ Converts a world position to local space, making it useful for determining an ob
 
 ### Vec3 WorldToLocalVec(Vec3 v) {#Vec3-WorldToLocalVec-Vec3-v}
 
-### nil LookAt(Vec3 pos) {#nil-LookAt-Vec3-pos}
+### nil LookAt(Vec3 pos, Vec3? up) {#nil-LookAt-Vec3-pos-Vec3-up}
 Adjusts the object's rotation to look at a specified point in the world, aligning it with the target position.
 
-### nil LookAt(Vec3 pos, Vec3 up) {#nil-LookAt-Vec3-pos-Vec3-up}
-A more customizable version of LookAt, allowing you to specify both the target point and an up direction for the object's orientation.
 
 ## Properties
+
+### boolean active {#boolean-active}
+
+### boolean activeInHierarchy {#boolean-activeInHierarchy}
+
+### Object object {#Object-object}
+
+### Object obj {#Object-obj}
+
+### boolean isDestroyed {#boolean-isDestroyed}
+
+### string type {#string-type}
 
 ### boolean Active {#boolean-Active}
 
@@ -67,6 +81,8 @@ The global (world) rotation of the object represented as Euler angles.
 
 ### number scale {#number-scale}
 The global (world) scale of the object.
+
+### number fingerprint {#number-fingerprint}
 
 ### Vec3 right {#Vec3-right}
 The right direction vector of the object in world space.

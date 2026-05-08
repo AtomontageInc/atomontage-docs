@@ -5,23 +5,17 @@ id: Material
 `Client`
 `Server`
 
-## Constructors
-
-### Material(string) {#Material-string}
-
 ## Methods
 
-### boolean HasProperty(Material, string) {#boolean-HasProperty-Material-string}
+### boolean HasProperty(string name) {#boolean-HasProperty-string-name}
 
-### Vec3 GetPropertyVec3(Material, string) {#Vec3-GetPropertyVec3-Material-string}
+### Vec3 GetPropertyVec3(string name) {#Vec3-GetPropertyVec3-string-name}
 
-### Vec4 GetPropertyVec4(Material, string) {#Vec4-GetPropertyVec4-Material-string}
+### nil SetPropertyVec3(string name, Vec3 vec) {#nil-SetPropertyVec3-string-name-Vec3-vec}
 
-### nil SetProperty(Material, string, Vec3) {#nil-SetProperty-Material-string-Vec3}
+### Vec4 GetPropertyVec4(string name) {#Vec4-GetPropertyVec4-string-name}
 
-### nil SetProperty(Material, string, Vec4) {#nil-SetProperty-Material-string-Vec4}
+### nil SetPropertyVec4(string name, Vec4 vec) {#nil-SetPropertyVec4-string-name-Vec4-vec}
 
-## Properties
-
-### Effect Effect {#Effect-Effect}
+### nil SetProperty(string name, Vec3|Vec4 vec) {#nil-SetProperty-string-name-Vec3Vec4-vec}
 

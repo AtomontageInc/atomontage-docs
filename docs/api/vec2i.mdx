@@ -5,157 +5,111 @@ id: Vec2i
 `Client`
 `Server`
 
-## Constructors
+## Methods
 
-### Vec2i() {#Vec2i}
+### nil Vec2i(number? xy) {#nil-Vec2i-number-xy}
 
-### Vec2i(integer) {#Vec2i-integer}
+### nil Vec2i(number x, number y) {#nil-Vec2i-number-x-number-y}
 
-### Vec2i(number) {#Vec2i-number}
+### nil Vec2i(Vec2|Vec2i v) {#nil-Vec2i-Vec2Vec2i-v}
 
-### Vec2i(integer, integer) {#Vec2i-integer-integer}
+### nil Vec2i(Vec3|Vec3i v) {#nil-Vec2i-Vec3Vec3i-v}
 
-### Vec2i(integer, number) {#Vec2i-integer-number}
-
-### Vec2i(number, integer) {#Vec2i-number-integer}
-
-### Vec2i(number, number) {#Vec2i-number-number}
-
-### Vec2i(Vec2i) {#Vec2i-Vec2i}
-
-### Vec2i(Vec2) {#Vec2i-Vec2}
-
-### Vec2i(Vec3i) {#Vec2i-Vec3i}
-
-### Vec2i(Vec3) {#Vec2i-Vec3}
-
-### Vec2i(Vec4i) {#Vec2i-Vec4i}
-
-### Vec2i(Vec4) {#Vec2i-Vec4}
+### nil Vec2i(Vec4|Vec4i v) {#nil-Vec2i-Vec4Vec4i-v}
 
 ## Metamethods
 
-### integer __index(Vec2i, integer) {#integer-index-Vec2i-integer}
+### Vec2i __add(Vec2i a, Vec2i b) {#Vec2i-add-Vec2i-a-Vec2i-b}
 
-### nil __newindex(Vec2i, integer, integer) {#nil-newindex-Vec2i-integer-integer}
+### Vec2i __add(number a, Vec2i b) {#Vec2i-add-number-a-Vec2i-b}
 
-### Vec2i __add(Vec2i, Vec2i) {#Vec2i-add-Vec2i-Vec2i}
+### Vec2i __add(Vec2i a, number b) {#Vec2i-add-Vec2i-a-number-b}
 
-### Vec2 __add(Vec2i, Vec2) {#Vec2-add-Vec2i-Vec2}
+### Vec2i __add(Vec2i a, Vec2 b) {#Vec2i-add-Vec2i-a-Vec2-b}
 
-### Vec2i __add(Vec2i, integer) {#Vec2i-add-Vec2i-integer}
+### Vec2i __sub(Vec2i a, Vec2i b) {#Vec2i-sub-Vec2i-a-Vec2i-b}
 
-### Vec2i __add(integer, Vec2i) {#Vec2i-add-integer-Vec2i}
+### Vec2i __sub(number a, Vec2i b) {#Vec2i-sub-number-a-Vec2i-b}
 
-### Vec2i __sub(Vec2i, Vec2i) {#Vec2i-sub-Vec2i-Vec2i}
+### Vec2i __sub(Vec2i a, number b) {#Vec2i-sub-Vec2i-a-number-b}
 
-### Vec2 __sub(Vec2i, Vec2) {#Vec2-sub-Vec2i-Vec2}
+### Vec2i __sub(Vec2i a, Vec2 b) {#Vec2i-sub-Vec2i-a-Vec2-b}
 
-### Vec2i __sub(Vec2i, integer) {#Vec2i-sub-Vec2i-integer}
+### Vec2i __mul(Vec2i a, Vec2i b) {#Vec2i-mul-Vec2i-a-Vec2i-b}
 
-### Vec2i __sub(integer, Vec2i) {#Vec2i-sub-integer-Vec2i}
+### Vec2i __mul(number a, Vec2i b) {#Vec2i-mul-number-a-Vec2i-b}
 
-### Vec2i __mul(Vec2i, Vec2i) {#Vec2i-mul-Vec2i-Vec2i}
+### Vec2i __mul(Vec2i a, number b) {#Vec2i-mul-Vec2i-a-number-b}
 
-### Vec2 __mul(Vec2i, Vec2) {#Vec2-mul-Vec2i-Vec2}
+### Vec2i __mul(Vec2i a, Vec2 b) {#Vec2i-mul-Vec2i-a-Vec2-b}
 
-### Vec2i __mul(Vec2i, integer) {#Vec2i-mul-Vec2i-integer}
+### Vec2i __div(Vec2i a, Vec2i b) {#Vec2i-div-Vec2i-a-Vec2i-b}
 
-### Vec2i __mul(integer, Vec2i) {#Vec2i-mul-integer-Vec2i}
+### Vec2i __div(number a, Vec2i b) {#Vec2i-div-number-a-Vec2i-b}
 
-### Vec2i __div(Vec2i, Vec2i) {#Vec2i-div-Vec2i-Vec2i}
+### Vec2i __div(Vec2i a, number b) {#Vec2i-div-Vec2i-a-number-b}
 
-### Vec2 __div(Vec2i, Vec2) {#Vec2-div-Vec2i-Vec2}
+### Vec2i __div(Vec2i a, Vec2 b) {#Vec2i-div-Vec2i-a-Vec2-b}
 
-### Vec2i __div(Vec2i, integer) {#Vec2i-div-Vec2i-integer}
+### Vec2i __unm(Vec2i a) {#Vec2i-unm-Vec2i-a}
 
-### Vec2i __div(integer, Vec2i) {#Vec2i-div-integer-Vec2i}
+### boolean __eq(Vec2i a, Vec2i b) {#boolean-eq-Vec2i-a-Vec2i-b}
 
-### Vec2i __mod(Vec2i, Vec2i) {#Vec2i-mod-Vec2i-Vec2i}
+### Vec2i __band(Vec2i a, Vec2i b) {#Vec2i-band-Vec2i-a-Vec2i-b}
 
-### Vec2 __mod(Vec2i, Vec2) {#Vec2-mod-Vec2i-Vec2}
+### Vec2i __band(Vec2i a, integer b) {#Vec2i-band-Vec2i-a-integer-b}
 
-### Vec2i __mod(Vec2i, integer) {#Vec2i-mod-Vec2i-integer}
+### Vec2i __band(integer a, Vec2i b) {#Vec2i-band-integer-a-Vec2i-b}
 
-### Vec2i __mod(integer, Vec2i) {#Vec2i-mod-integer-Vec2i}
+### Vec2i __bor(Vec2i a, Vec2i b) {#Vec2i-bor-Vec2i-a-Vec2i-b}
 
-### Vec2i __pow(Vec2i, Vec2i) {#Vec2i-pow-Vec2i-Vec2i}
+### Vec2i __bor(Vec2i a, integer b) {#Vec2i-bor-Vec2i-a-integer-b}
 
-### Vec2 __pow(Vec2i, Vec2) {#Vec2-pow-Vec2i-Vec2}
+### Vec2i __bor(integer a, Vec2i b) {#Vec2i-bor-integer-a-Vec2i-b}
 
-### Vec2i __pow(Vec2i, integer) {#Vec2i-pow-Vec2i-integer}
+### Vec2i __bxor(Vec2i a, Vec2i b) {#Vec2i-bxor-Vec2i-a-Vec2i-b}
 
-### Vec2i __pow(integer, Vec2i) {#Vec2i-pow-integer-Vec2i}
+### Vec2i __bxor(Vec2i a, integer b) {#Vec2i-bxor-Vec2i-a-integer-b}
 
-### Vec2i __unm(Vec2i) {#Vec2i-unm-Vec2i}
+### Vec2i __bxor(integer a, Vec2i b) {#Vec2i-bxor-integer-a-Vec2i-b}
 
-### boolean __eq(Vec2i, Vec2i) {#boolean-eq-Vec2i-Vec2i}
+### Vec2i __bnot(Vec2i a) {#Vec2i-bnot-Vec2i-a}
 
-### boolean __eq(Vec2i, Vec2) {#boolean-eq-Vec2i-Vec2}
+### Vec2i __shl(Vec2i a, Vec2i b) {#Vec2i-shl-Vec2i-a-Vec2i-b}
 
-## Methods
+### Vec2i __shl(Vec2i a, integer b) {#Vec2i-shl-Vec2i-a-integer-b}
 
-### integer Len() {#integer-Len}
+### Vec2i __shl(integer a, Vec2i b) {#Vec2i-shl-integer-a-Vec2i-b}
 
-### integer Length() {#integer-Length}
+### Vec2i __shr(Vec2i a, Vec2i b) {#Vec2i-shr-Vec2i-a-Vec2i-b}
 
-### integer SqrLength() {#integer-SqrLength}
+### Vec2i __shr(Vec2i a, integer b) {#Vec2i-shr-Vec2i-a-integer-b}
+
+### Vec2i __shr(integer a, Vec2i b) {#Vec2i-shr-integer-a-Vec2i-b}
+
+### string __tostring(Vec2i a) {#string-tostring-Vec2i-a}
+
+### number Len() {#number-Len}
+
+### number Length() {#number-Length}
+
+### number SqrLength() {#number-SqrLength}
+
+### Vec2i Copy() {#Vec2i-Copy}
 
 ### boolean IsZero() {#boolean-IsZero}
 
 ### Vec2i GetAbs() {#Vec2i-GetAbs}
 
-### nil Clamp(Vec2i, integer, integer) {#nil-Clamp-Vec2i-integer-integer}
+### nil Clamp(number|Vec2i minValue, number|Vec2i maxValue) {#nil-Clamp-numberVec2i-minValue-numberVec2i-maxValue}
 
-### nil Clamp(Vec2i, Vec2i, Vec2i) {#nil-Clamp-Vec2i-Vec2i-Vec2i}
-
-### Vec2i GetClamped(Vec2i, integer, integer) {#Vec2i-GetClamped-Vec2i-integer-integer}
-
-### Vec2i GetClamped(Vec2i, Vec2i, Vec2i) {#Vec2i-GetClamped-Vec2i-Vec2i-Vec2i}
-
-### integer Dot(Vec2i, Vec2i) {#integer-Dot-Vec2i-Vec2i}
-
-### number Dot(Vec2i, Vec2) {#number-Dot-Vec2i-Vec2}
-
-### Vec2i __band(Vec2i, Vec2i) {#Vec2i-band-Vec2i-Vec2i}
-
-### Vec2i __band(integer, Vec2i) {#Vec2i-band-integer-Vec2i}
-
-### Vec2i __band(Vec2i, integer) {#Vec2i-band-Vec2i-integer}
-
-### Vec2i __bor(Vec2i, Vec2i) {#Vec2i-bor-Vec2i-Vec2i}
-
-### Vec2i __bor(integer, Vec2i) {#Vec2i-bor-integer-Vec2i}
-
-### Vec2i __bor(Vec2i, integer) {#Vec2i-bor-Vec2i-integer}
-
-### Vec2i __bxor(Vec2i, Vec2i) {#Vec2i-bxor-Vec2i-Vec2i}
-
-### Vec2i __bxor(integer, Vec2i) {#Vec2i-bxor-integer-Vec2i}
-
-### Vec2i __bxor(Vec2i, integer) {#Vec2i-bxor-Vec2i-integer}
-
-### Vec2i __bnot(Vec2i) {#Vec2i-bnot-Vec2i}
-
-### Vec2i __shl(Vec2i, Vec2i) {#Vec2i-shl-Vec2i-Vec2i}
-
-### Vec2i __shl(integer, Vec2i) {#Vec2i-shl-integer-Vec2i}
-
-### Vec2i __shl(Vec2i, integer) {#Vec2i-shl-Vec2i-integer}
-
-### Vec2i __shr(Vec2i, Vec2i) {#Vec2i-shr-Vec2i-Vec2i}
-
-### Vec2i __shr(integer, Vec2i) {#Vec2i-shr-integer-Vec2i}
-
-### Vec2i __shr(Vec2i, integer) {#Vec2i-shr-Vec2i-integer}
-
-### string __tostring(Vec2i) {#string-tostring-Vec2i}
+### number Dot(Vec2i|Vec2 v) {#number-Dot-Vec2iVec2-v}
 
 ## Properties
 
-### integer x {#integer-x}
+### number x {#number-x}
 
-### integer y {#integer-y}
+### number y {#number-y}
 
 ### Vec2i zero {#Vec2i-zero}
 

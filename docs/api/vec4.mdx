@@ -7,185 +7,75 @@ id: Vec4
 
 ## Constructors
 
-### Vec4() {#Vec4}
+### Vec4 Vec4(number? value) {#Vec4-Vec4-number-value}
 
-### Vec4(number) {#Vec4-number}
+### Vec4 Vec4(Vec4 v) {#Vec4-Vec4-Vec4-v}
 
-### Vec4(integer) {#Vec4-integer}
+### Vec4 Vec4(number x, number y, number z, number w) {#Vec4-Vec4-number-x-number-y-number-z-number-w}
 
-### Vec4(number, number, number, number) {#Vec4-number-number-number-number}
+### Vec4 Vec4(Vec3 xyz, number w) {#Vec4-Vec4-Vec3-xyz-number-w}
 
-### Vec4(number, number, number, integer) {#Vec4-number-number-number-integer}
+### Vec4 Vec4(number x, Vec3 yzw) {#Vec4-Vec4-number-x-Vec3-yzw}
 
-### Vec4(number, number, integer, number) {#Vec4-number-number-integer-number}
+### Vec4 Vec4(Vec2 xy, number z, number w) {#Vec4-Vec4-Vec2-xy-number-z-number-w}
 
-### Vec4(number, number, integer, integer) {#Vec4-number-number-integer-integer}
+### Vec4 Vec4(number x, Vec2 yz, number w) {#Vec4-Vec4-number-x-Vec2-yz-number-w}
 
-### Vec4(number, integer, number, number) {#Vec4-number-integer-number-number}
+### Vec4 Vec4(number x, number y, Vec2 zw) {#Vec4-Vec4-number-x-number-y-Vec2-zw}
 
-### Vec4(number, integer, number, integer) {#Vec4-number-integer-number-integer}
-
-### Vec4(number, integer, integer, number) {#Vec4-number-integer-integer-number}
-
-### Vec4(number, integer, integer, integer) {#Vec4-number-integer-integer-integer}
-
-### Vec4(integer, number, number, number) {#Vec4-integer-number-number-number}
-
-### Vec4(integer, number, number, integer) {#Vec4-integer-number-number-integer}
-
-### Vec4(integer, number, integer, number) {#Vec4-integer-number-integer-number}
-
-### Vec4(integer, number, integer, integer) {#Vec4-integer-number-integer-integer}
-
-### Vec4(integer, integer, number, number) {#Vec4-integer-integer-number-number}
-
-### Vec4(integer, integer, number, integer) {#Vec4-integer-integer-number-integer}
-
-### Vec4(integer, integer, integer, number) {#Vec4-integer-integer-integer-number}
-
-### Vec4(integer, integer, integer, integer) {#Vec4-integer-integer-integer-integer}
-
-### Vec4(Vec2, number, number) {#Vec4-Vec2-number-number}
-
-### Vec4(Vec2, number, integer) {#Vec4-Vec2-number-integer}
-
-### Vec4(Vec2, integer, number) {#Vec4-Vec2-integer-number}
-
-### Vec4(Vec2, integer, integer) {#Vec4-Vec2-integer-integer}
-
-### Vec4(Vec2i, number, number) {#Vec4-Vec2i-number-number}
-
-### Vec4(Vec2i, number, integer) {#Vec4-Vec2i-number-integer}
-
-### Vec4(Vec2i, integer, number) {#Vec4-Vec2i-integer-number}
-
-### Vec4(Vec2i, integer, integer) {#Vec4-Vec2i-integer-integer}
-
-### Vec4(number, Vec2, number) {#Vec4-number-Vec2-number}
-
-### Vec4(number, Vec2, integer) {#Vec4-number-Vec2-integer}
-
-### Vec4(number, Vec2i, number) {#Vec4-number-Vec2i-number}
-
-### Vec4(number, Vec2i, integer) {#Vec4-number-Vec2i-integer}
-
-### Vec4(integer, Vec2, number) {#Vec4-integer-Vec2-number}
-
-### Vec4(integer, Vec2, integer) {#Vec4-integer-Vec2-integer}
-
-### Vec4(integer, Vec2i, number) {#Vec4-integer-Vec2i-number}
-
-### Vec4(integer, Vec2i, integer) {#Vec4-integer-Vec2i-integer}
-
-### Vec4(number, number, Vec2) {#Vec4-number-number-Vec2}
-
-### Vec4(number, number, Vec2i) {#Vec4-number-number-Vec2i}
-
-### Vec4(number, integer, Vec2) {#Vec4-number-integer-Vec2}
-
-### Vec4(number, integer, Vec2i) {#Vec4-number-integer-Vec2i}
-
-### Vec4(integer, number, Vec2) {#Vec4-integer-number-Vec2}
-
-### Vec4(integer, number, Vec2i) {#Vec4-integer-number-Vec2i}
-
-### Vec4(integer, integer, Vec2) {#Vec4-integer-integer-Vec2}
-
-### Vec4(integer, integer, Vec2i) {#Vec4-integer-integer-Vec2i}
-
-### Vec4(Vec2, Vec2) {#Vec4-Vec2-Vec2}
-
-### Vec4(Vec2, Vec2i) {#Vec4-Vec2-Vec2i}
-
-### Vec4(Vec2i, Vec2) {#Vec4-Vec2i-Vec2}
-
-### Vec4(Vec2i, Vec2i) {#Vec4-Vec2i-Vec2i}
-
-### Vec4(Vec3, number) {#Vec4-Vec3-number}
-
-### Vec4(Vec3, integer) {#Vec4-Vec3-integer}
-
-### Vec4(Vec3i, number) {#Vec4-Vec3i-number}
-
-### Vec4(Vec3i, integer) {#Vec4-Vec3i-integer}
-
-### Vec4(number, Vec3) {#Vec4-number-Vec3}
-
-### Vec4(number, Vec3i) {#Vec4-number-Vec3i}
-
-### Vec4(integer, Vec3) {#Vec4-integer-Vec3}
-
-### Vec4(integer, Vec3i) {#Vec4-integer-Vec3i}
-
-### Vec4(Vec4) {#Vec4-Vec4}
-
-### Vec4(Vec4i) {#Vec4-Vec4i}
+### Vec4 Vec4(Vec2 xy, Vec2 zw) {#Vec4-Vec4-Vec2-xy-Vec2-zw}
 
 ## Metamethods
 
-### number __index(Vec4, integer) {#number-index-Vec4-integer}
+### Vec4 __add(Vec4 a, Vec4 b) {#Vec4-add-Vec4-a-Vec4-b}
 
-### nil __newindex(Vec4, integer, number) {#nil-newindex-Vec4-integer-number}
+### Vec4 __add(number a, Vec4 b) {#Vec4-add-number-a-Vec4-b}
 
-### Vec4 __add(Vec4, Vec4) {#Vec4-add-Vec4-Vec4}
+### Vec4 __add(Vec4 a, number b) {#Vec4-add-Vec4-a-number-b}
 
-### Vec4 __add(Vec4, Vec4i) {#Vec4-add-Vec4-Vec4i}
+### Vec4 __sub(Vec4 a, Vec4 b) {#Vec4-sub-Vec4-a-Vec4-b}
 
-### Vec4 __add(Vec4, number) {#Vec4-add-Vec4-number}
+### Vec4 __sub(number a, Vec4 b) {#Vec4-sub-number-a-Vec4-b}
 
-### Vec4 __add(number, Vec4) {#Vec4-add-number-Vec4}
+### Vec4 __sub(Vec4 a, number b) {#Vec4-sub-Vec4-a-number-b}
 
-### Vec4 __sub(Vec4, Vec4) {#Vec4-sub-Vec4-Vec4}
+### Vec4 __mul(Vec4 a, Vec4 b) {#Vec4-mul-Vec4-a-Vec4-b}
 
-### Vec4 __sub(Vec4, Vec4i) {#Vec4-sub-Vec4-Vec4i}
+### Vec4 __mul(number a, Vec4 b) {#Vec4-mul-number-a-Vec4-b}
 
-### Vec4 __sub(Vec4, number) {#Vec4-sub-Vec4-number}
+### Vec4 __mul(Vec4 a, number b) {#Vec4-mul-Vec4-a-number-b}
 
-### Vec4 __sub(number, Vec4) {#Vec4-sub-number-Vec4}
+### Vec4 __div(Vec4 a, Vec4 b) {#Vec4-div-Vec4-a-Vec4-b}
 
-### Vec4 __mul(Vec4, Vec4) {#Vec4-mul-Vec4-Vec4}
+### Vec4 __div(number a, Vec4 b) {#Vec4-div-number-a-Vec4-b}
 
-### Vec4 __mul(Vec4, Vec4i) {#Vec4-mul-Vec4-Vec4i}
+### Vec4 __div(Vec4 a, number b) {#Vec4-div-Vec4-a-number-b}
 
-### Vec4 __mul(Vec4, Mat4) {#Vec4-mul-Vec4-Mat4}
+### Vec4 __mod(Vec4 a, Vec4 b) {#Vec4-mod-Vec4-a-Vec4-b}
 
-### Vec4 __mul(Vec4, number) {#Vec4-mul-Vec4-number}
+### Vec4 __mod(number a, Vec4 b) {#Vec4-mod-number-a-Vec4-b}
 
-### Vec4 __mul(number, Vec4) {#Vec4-mul-number-Vec4}
+### Vec4 __mod(Vec4 a, number b) {#Vec4-mod-Vec4-a-number-b}
 
-### Vec4 __div(Vec4, Vec4) {#Vec4-div-Vec4-Vec4}
+### Vec4 __pow(Vec4 a, Vec4 b) {#Vec4-pow-Vec4-a-Vec4-b}
 
-### Vec4 __div(Vec4, Vec4i) {#Vec4-div-Vec4-Vec4i}
+### Vec4 __pow(number a, Vec4 b) {#Vec4-pow-number-a-Vec4-b}
 
-### Vec4 __div(Vec4, number) {#Vec4-div-Vec4-number}
+### Vec4 __pow(Vec4 a, number b) {#Vec4-pow-Vec4-a-number-b}
 
-### Vec4 __div(number, Vec4) {#Vec4-div-number-Vec4}
+### Vec4 __unm(Vec4 a) {#Vec4-unm-Vec4-a}
 
-### Vec4 __mod(Vec4, Vec4) {#Vec4-mod-Vec4-Vec4}
+### boolean __eq(Vec4 a, Vec4 b) {#boolean-eq-Vec4-a-Vec4-b}
 
-### Vec4 __mod(Vec4, Vec4i) {#Vec4-mod-Vec4-Vec4i}
+### string __tostring(Vec4 a) {#string-tostring-Vec4-a}
 
-### Vec4 __mod(Vec4, number) {#Vec4-mod-Vec4-number}
+### number __index(Vec4 v, integer i) {#number-index-Vec4-v-integer-i}
 
-### Vec4 __mod(number, Vec4) {#Vec4-mod-number-Vec4}
-
-### Vec4 __pow(Vec4, Vec4) {#Vec4-pow-Vec4-Vec4}
-
-### Vec4 __pow(Vec4, Vec4i) {#Vec4-pow-Vec4-Vec4i}
-
-### Vec4 __pow(Vec4, number) {#Vec4-pow-Vec4-number}
-
-### Vec4 __pow(number, Vec4) {#Vec4-pow-number-Vec4}
-
-### Vec4 __unm(Vec4) {#Vec4-unm-Vec4}
-
-### boolean __eq(Vec4, Vec4) {#boolean-eq-Vec4-Vec4}
-
-### boolean __eq(Vec4, Vec4i) {#boolean-eq-Vec4-Vec4i}
+### nil __newindex(Vec4 v, integer i, number value) {#nil-newindex-Vec4-v-integer-i-number-value}
 
 ## Methods
 
-### number Len() {#number-Len}
+### nil Set(number x, number y, number z, number w) {#nil-Set-number-x-number-y-number-z-number-w}
 
 ### number Length() {#number-Length}
 
@@ -195,41 +85,13 @@ id: Vec4
 
 ### Vec4 GetAbs() {#Vec4-GetAbs}
 
-### nil Clamp(Vec4, number, number) {#nil-Clamp-Vec4-number-number}
+### Vec4 Copy() {#Vec4-Copy}
 
-### nil Clamp(Vec4, Vec4, Vec4) {#nil-Clamp-Vec4-Vec4-Vec4}
+### nil Clamp(number|Vec4 minValue, number|Vec4 maxValue) {#nil-Clamp-numberVec4-minValue-numberVec4-maxValue}
 
-### Vec4 GetClamped(Vec4, number, number) {#Vec4-GetClamped-Vec4-number-number}
+### number Dot(Vec4 other) {#number-Dot-Vec4-other}
 
-### Vec4 GetClamped(Vec4, Vec4, Vec4) {#Vec4-GetClamped-Vec4-Vec4-Vec4}
-
-### number Dot(Vec4, Vec4) {#number-Dot-Vec4-Vec4}
-
-### number Dot(Vec4, Vec4i) {#number-Dot-Vec4-Vec4i}
-
-### boolean IsAnyNaN() {#boolean-IsAnyNaN}
-
-### Vec4 Lerp(Vec4, Vec4, number) {#Vec4-Lerp-Vec4-Vec4-number}
-
-### Vec4 Normalize() {#Vec4-Normalize}
-
-### Vec4 GetNormalized() {#Vec4-GetNormalized}
-
-### nil Ceil(Vec4) {#nil-Ceil-Vec4}
-
-### Vec4 GetCeiled(Vec4) {#Vec4-GetCeiled-Vec4}
-
-### nil Floor(Vec4) {#nil-Floor-Vec4}
-
-### Vec4 GetFloored(Vec4) {#Vec4-GetFloored-Vec4}
-
-### nil Round(Vec4) {#nil-Round-Vec4}
-
-### Vec4 GetRounded(Vec4) {#Vec4-GetRounded-Vec4}
-
-### number DistanceTo(Vec4) {#number-DistanceTo-Vec4}
-
-### string __tostring(Vec4) {#string-tostring-Vec4}
+### Vec4 MakePlane(Vec3 pos, Vec3 dir) {#Vec4-MakePlane-Vec3-pos-Vec3-dir}
 
 ## Properties
 

@@ -8,11 +8,14 @@ id: Object
 The object visible in the hierarchy. Every object has a transform and can have additional components attached to it.
 
 
+## Methods
+
+### number GetTotalVolume(string stopIfChildObjHasScript) {#number-GetTotalVolume-string-stopIfChildObjHasScript}
+Volume of all the VoxelData components in the object and all its children
+
 ## Metamethods
 
 ### boolean __eq(Object a, Object b) {#boolean-eq-Object-a-Object-b}
-
-## Methods
 
 ### Vec3 LocalToWorld(Vec3 point) {#Vec3-LocalToWorld-Vec3-point}
 
@@ -27,7 +30,7 @@ The object visible in the hierarchy. Every object has a transform and can have a
 ### Object? GetChild(string name) {#Object-GetChild-string-name}
 Get child object by name
 
-### Script AddScript(string fileName, boolean sync) {#Script-AddScript-string-fileName-boolean-sync}
+### Script AddScript(string fileName, boolean? sync) {#Script-AddScript-string-fileName-boolean-sync}
 
 ### MeshData AddMeshData() {#MeshData-AddMeshData}
 
@@ -67,8 +70,7 @@ Find attached script component lua table by name
 
 ### boolean HasScript(string name) {#boolean-HasScript-string-name}
 
-### number GetTotalVolume(string stopIfChildObjHasScript) {#number-GetTotalVolume-string-stopIfChildObjHasScript}
-Volume of all the VoxelData components in the object and all its children
+### number GetVolumeWithChildren(string stopIfChildObjHasScript) {#number-GetVolumeWithChildren-string-stopIfChildObjHasScript}
 
 ### string GetNetworkFlow() {#string-GetNetworkFlow}
 
@@ -133,15 +135,11 @@ This is id is unique across clients and server
 
 ### Object[] children {#Object-children}
 
-### integer childCount {#integer-childCount}
-
 ### integer siblingIndex {#integer-siblingIndex}
 
 ### boolean isPrefabObject {#boolean-isPrefabObject}
 
 ### Component[] components {#Component-components}
-
-### integer componentsCount {#integer-componentsCount}
 
 ### VoxelData? voxelData {#VoxelData-voxelData}
 
@@ -151,31 +149,11 @@ This is id is unique across clients and server
 
 ### Vec3 Pos {#Vec3-Pos}
 
-### number PosX {#number-PosX}
-
 ### number PosY {#number-PosY}
-
-### number PosZ {#number-PosZ}
 
 ### Quat Rot {#Quat-Rot}
 
-### Vec3 EulerRot {#Vec3-EulerRot}
-
 ### number Scale {#number-Scale}
-
-### Vec3 LocalPos {#Vec3-LocalPos}
-
-### Quat LocalRot {#Quat-LocalRot}
-
-### Vec3 LocalEulerRot {#Vec3-LocalEulerRot}
-
-### number LocalScale {#number-LocalScale}
-
-### Vec3 Right {#Vec3-Right}
-
-### Vec3 Up {#Vec3-Up}
-
-### Vec3 Forward {#Vec3-Forward}
 
 ### string Name {#string-Name}
 
@@ -185,25 +163,15 @@ This is id is unique across clients and server
 
 ### boolean Save {#boolean-Save}
 
-### Transform Transform {#Transform-Transform}
-
 ### boolean IsDestroyed {#boolean-IsDestroyed}
-
-### string Id {#string-Id}
 
 ### Object? Parent {#Object-Parent}
 
 ### Object[] Children {#Object-Children}
 
-### integer ChildCount {#integer-ChildCount}
-
 ### integer SiblingIndex {#integer-SiblingIndex}
 
-### boolean IsPrefabObject {#boolean-IsPrefabObject}
-
 ### Component[] Components {#Component-Components}
-
-### integer ComponentsCount {#integer-ComponentsCount}
 
 ### VoxelData? VoxelData {#VoxelData-VoxelData}
 

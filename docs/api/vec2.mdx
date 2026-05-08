@@ -7,91 +7,73 @@ id: Vec2
 
 ## Constructors
 
-### Vec2() {#Vec2}
+### Vec2 Vec2(number? xy) {#Vec2-Vec2-number-xy}
 
-### Vec2(number) {#Vec2-number}
+### Vec2 Vec2(number x, number y) {#Vec2-Vec2-number-x-number-y}
 
-### Vec2(integer) {#Vec2-integer}
+### Vec2 Vec2(Vec2|Vec2i v) {#Vec2-Vec2-Vec2Vec2i-v}
 
-### Vec2(number, number) {#Vec2-number-number}
+### Vec2 Vec2(Vec3|Vec3i v) {#Vec2-Vec2-Vec3Vec3i-v}
 
-### Vec2(number, integer) {#Vec2-number-integer}
-
-### Vec2(integer, number) {#Vec2-integer-number}
-
-### Vec2(integer, integer) {#Vec2-integer-integer}
-
-### Vec2(Vec2) {#Vec2-Vec2}
-
-### Vec2(Vec2i) {#Vec2-Vec2i}
-
-### Vec2(Vec3) {#Vec2-Vec3}
-
-### Vec2(Vec3i) {#Vec2-Vec3i}
-
-### Vec2(Vec4) {#Vec2-Vec4}
-
-### Vec2(Vec4i) {#Vec2-Vec4i}
+### Vec2 Vec2(Vec4|Vec4i v) {#Vec2-Vec2-Vec4Vec4i-v}
 
 ## Metamethods
 
-### number __index(Vec2, integer) {#number-index-Vec2-integer}
+### Vec2 __add(Vec2 a, Vec2 b) {#Vec2-add-Vec2-a-Vec2-b}
 
-### nil __newindex(Vec2, integer, number) {#nil-newindex-Vec2-integer-number}
+### Vec2 __add(number a, Vec2 b) {#Vec2-add-number-a-Vec2-b}
 
-### Vec2 __add(Vec2, Vec2) {#Vec2-add-Vec2-Vec2}
+### Vec2 __add(Vec2 a, number b) {#Vec2-add-Vec2-a-number-b}
 
-### Vec2 __add(Vec2, Vec2i) {#Vec2-add-Vec2-Vec2i}
+### Vec2 __add(Vec2 a, Vec2i b) {#Vec2-add-Vec2-a-Vec2i-b}
 
-### Vec2 __add(Vec2, number) {#Vec2-add-Vec2-number}
+### Vec2 __sub(Vec2 a, Vec2 b) {#Vec2-sub-Vec2-a-Vec2-b}
 
-### Vec2 __add(number, Vec2) {#Vec2-add-number-Vec2}
+### Vec2 __sub(number a, Vec2 b) {#Vec2-sub-number-a-Vec2-b}
 
-### Vec2 __sub(Vec2, Vec2) {#Vec2-sub-Vec2-Vec2}
+### Vec2 __sub(Vec2 a, number b) {#Vec2-sub-Vec2-a-number-b}
 
-### Vec2 __sub(Vec2, Vec2i) {#Vec2-sub-Vec2-Vec2i}
+### Vec2 __sub(Vec2 a, Vec2i b) {#Vec2-sub-Vec2-a-Vec2i-b}
 
-### Vec2 __sub(Vec2, number) {#Vec2-sub-Vec2-number}
+### Vec2 __mul(Vec2 a, Vec2 b) {#Vec2-mul-Vec2-a-Vec2-b}
 
-### Vec2 __sub(number, Vec2) {#Vec2-sub-number-Vec2}
+### Vec2 __mul(number a, Vec2 b) {#Vec2-mul-number-a-Vec2-b}
 
-### Vec2 __mul(Vec2, Vec2) {#Vec2-mul-Vec2-Vec2}
+### Vec2 __mul(Vec2 a, number b) {#Vec2-mul-Vec2-a-number-b}
 
-### Vec2 __mul(Vec2, Vec2i) {#Vec2-mul-Vec2-Vec2i}
+### Vec2 __mul(Vec2 a, Vec2i b) {#Vec2-mul-Vec2-a-Vec2i-b}
 
-### Vec2 __mul(Vec2, number) {#Vec2-mul-Vec2-number}
+### Vec2 __div(Vec2 a, Vec2 b) {#Vec2-div-Vec2-a-Vec2-b}
 
-### Vec2 __mul(number, Vec2) {#Vec2-mul-number-Vec2}
+### Vec2 __div(number a, Vec2 b) {#Vec2-div-number-a-Vec2-b}
 
-### Vec2 __div(Vec2, Vec2) {#Vec2-div-Vec2-Vec2}
+### Vec2 __div(Vec2 a, number b) {#Vec2-div-Vec2-a-number-b}
 
-### Vec2 __div(Vec2, Vec2i) {#Vec2-div-Vec2-Vec2i}
+### Vec2 __div(Vec2 a, Vec2i b) {#Vec2-div-Vec2-a-Vec2i-b}
 
-### Vec2 __div(Vec2, number) {#Vec2-div-Vec2-number}
+### Vec2 __unm(Vec2 a) {#Vec2-unm-Vec2-a}
 
-### Vec2 __div(number, Vec2) {#Vec2-div-number-Vec2}
+### boolean __eq(Vec2 a, Vec2 b) {#boolean-eq-Vec2-a-Vec2-b}
 
-### Vec2 __mod(Vec2, Vec2) {#Vec2-mod-Vec2-Vec2}
+### boolean __eq(Vec2 a, Vec2i b) {#boolean-eq-Vec2-a-Vec2i-b}
 
-### Vec2 __mod(Vec2, Vec2i) {#Vec2-mod-Vec2-Vec2i}
+### Vec2 __mod(Vec2 a, Vec2 b) {#Vec2-mod-Vec2-a-Vec2-b}
 
-### Vec2 __mod(Vec2, number) {#Vec2-mod-Vec2-number}
+### Vec2 __mod(number a, Vec2 b) {#Vec2-mod-number-a-Vec2-b}
 
-### Vec2 __mod(number, Vec2) {#Vec2-mod-number-Vec2}
+### Vec2 __mod(Vec2 a, number b) {#Vec2-mod-Vec2-a-number-b}
 
-### Vec2 __pow(Vec2, Vec2) {#Vec2-pow-Vec2-Vec2}
+### Vec2 __mod(Vec2 a, Vec2i b) {#Vec2-mod-Vec2-a-Vec2i-b}
 
-### Vec2 __pow(Vec2, Vec2i) {#Vec2-pow-Vec2-Vec2i}
+### Vec2 __pow(Vec2 a, Vec2 b) {#Vec2-pow-Vec2-a-Vec2-b}
 
-### Vec2 __pow(Vec2, number) {#Vec2-pow-Vec2-number}
+### Vec2 __pow(number a, Vec2 b) {#Vec2-pow-number-a-Vec2-b}
 
-### Vec2 __pow(number, Vec2) {#Vec2-pow-number-Vec2}
+### Vec2 __pow(Vec2 a, number b) {#Vec2-pow-Vec2-a-number-b}
 
-### Vec2 __unm(Vec2) {#Vec2-unm-Vec2}
+### Vec2 __pow(Vec2 a, Vec2i b) {#Vec2-pow-Vec2-a-Vec2i-b}
 
-### boolean __eq(Vec2, Vec2) {#boolean-eq-Vec2-Vec2}
-
-### boolean __eq(Vec2, Vec2i) {#boolean-eq-Vec2-Vec2i}
+### string __tostring(Vec2 a) {#string-tostring-Vec2-a}
 
 ## Methods
 
@@ -99,53 +81,47 @@ id: Vec2
 
 ### number Length() {#number-Length}
 
+### Vec2 Copy() {#Vec2-Copy}
+
 ### number SqrLength() {#number-SqrLength}
 
 ### boolean IsZero() {#boolean-IsZero}
 
 ### Vec2 GetAbs() {#Vec2-GetAbs}
 
-### nil Clamp(Vec2, number, number) {#nil-Clamp-Vec2-number-number}
+### nil Clamp(number|Vec2 minValue, number|Vec2 maxValue) {#nil-Clamp-numberVec2-minValue-numberVec2-maxValue}
 
-### nil Clamp(Vec2, Vec2, Vec2) {#nil-Clamp-Vec2-Vec2-Vec2}
-
-### Vec2 GetClamped(Vec2, number, number) {#Vec2-GetClamped-Vec2-number-number}
-
-### Vec2 GetClamped(Vec2, Vec2, Vec2) {#Vec2-GetClamped-Vec2-Vec2-Vec2}
-
-### number Dot(Vec2, Vec2) {#number-Dot-Vec2-Vec2}
-
-### number Dot(Vec2, Vec2i) {#number-Dot-Vec2-Vec2i}
+### number Dot(Vec2|Vec2i v) {#number-Dot-Vec2Vec2i-v}
 
 ### boolean IsAnyNaN() {#boolean-IsAnyNaN}
 
-### Vec2 Lerp(Vec2, Vec2, number) {#Vec2-Lerp-Vec2-Vec2-number}
+### Vec2 Lerp(Vec2 b, number t) {#Vec2-Lerp-Vec2-b-number-t}
 
-### Vec2 Normalize() {#Vec2-Normalize}
+### nil Normalize() {#nil-Normalize}
 
 ### Vec2 GetNormalized() {#Vec2-GetNormalized}
 
-### nil Ceil(Vec2) {#nil-Ceil-Vec2}
+### nil Ceil() {#nil-Ceil}
 
-### Vec2 GetCeiled(Vec2) {#Vec2-GetCeiled-Vec2}
+### Vec2 GetCeiled() {#Vec2-GetCeiled}
 
-### nil Floor(Vec2) {#nil-Floor-Vec2}
+### nil Floor() {#nil-Floor}
 
-### Vec2 GetFloored(Vec2) {#Vec2-GetFloored-Vec2}
+### Vec2 GetFloored() {#Vec2-GetFloored}
 
-### nil Round(Vec2) {#nil-Round-Vec2}
+### nil Round() {#nil-Round}
 
-### Vec2 GetRounded(Vec2) {#Vec2-GetRounded-Vec2}
+### Vec2 GetRounded() {#Vec2-GetRounded}
 
-### number DistanceTo(Vec2) {#number-DistanceTo-Vec2}
+### number DistanceTo(Vec2 v) {#number-DistanceTo-Vec2-v}
 
-### number GetAngle(Vec2) {#number-GetAngle-Vec2}
+### number GetAngle() {#number-GetAngle}
 
-### nil Rotate(Vec2, number) {#nil-Rotate-Vec2-number}
+### nil Rotate(number angle) {#nil-Rotate-number-angle}
 
-### Vec2 GetRotated(Vec2, number) {#Vec2-GetRotated-Vec2-number}
+### Vec2 GetRotated(number angle) {#Vec2-GetRotated-number-angle}
 
-### string __tostring(Vec2) {#string-tostring-Vec2}
+### nil SmoothDamp(Vec2 target, Vec2 velocity, number smoothTime, number deltaTime, number? maxSpeed) {#nil-SmoothDamp-Vec2-target-Vec2-velocity-number-smoothTime-number-deltaTime-number-maxSpeed}
 
 ## Properties
 

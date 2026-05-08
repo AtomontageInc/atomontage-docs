@@ -8,19 +8,7 @@ id: VoxelData
 Component that holds voxel data. The actual data itself is in the `data` property.
 The data will only render if the object also has a `VoxelRender` component.
 
-## Constructors
-
-### VoxelData() {#VoxelData}
-
 ## Methods
-
-### nil Mirror(Vec3, Vec3) {#nil-Mirror-Vec3-Vec3}
-
-### Vec3, Vec3 GetAABounds() {#Vec3-Vec3-GetAABounds}
-
-### Vec3, Quat, Vec3 GetBounds() {#Vec3-Quat-Vec3-GetBounds}
-
-### boolean, string SetPath(string) {#boolean-string-SetPath-string}
 
 ### nil SetPathAsync(string, userdata) {#nil-SetPathAsync-string-userdata}
 Async version of SetPath. Function returns immediately and voxel data loading is performed on background. After it finishes (or fails), supplied callback is called. Callback has parameters `bool success` and `string errStr`.
@@ -29,14 +17,28 @@ If load is already running when new SetPathAsync is called, the new load is queu
 
 ## Metamethods
 
-### boolean __eq(VoxelData, VoxelData) {#boolean-eq-VoxelData-VoxelData}
+### boolean __eq(VoxelData a, VoxelData b) {#boolean-eq-VoxelData-a-VoxelData-b}
+
+### nil Mirror(Vec3 worldPos, Vec3 worldNormal) {#nil-Mirror-Vec3-worldPos-Vec3-worldNormal}
+
+### Vec3 center, Vec3 size GetAABounds() {#Vec3-center-Vec3-size-GetAABounds}
+
+### Vec3 center, Quat rot, Vec3 size GetBounds() {#Vec3-center-Quat-rot-Vec3-size-GetBounds}
+
+### boolean success, string usedPath SetPath(string path) {#boolean-success-string-usedPath-SetPath-string-path}
 
 ## Properties
 
 ### boolean copyOnWrite {#boolean-copyOnWrite}
 make local copy of voxel data resource if edited 
 
+### boolean active {#boolean-active}
+
+### boolean activeInHierarchy {#boolean-activeInHierarchy}
+
 ### Object object {#Object-object}
+
+### Object obj {#Object-obj}
 
 ### boolean isDestroyed {#boolean-isDestroyed}
 
@@ -48,11 +50,15 @@ make local copy of voxel data resource if edited
 
 ### Object Object {#Object-Object}
 
+### Object Obj {#Object-Obj}
+
 ### boolean IsDestroyed {#boolean-IsDestroyed}
 
 ### string Type {#string-Type}
 
 ### Vec3 Size {#Vec3-Size}
+
+### Vec3 size {#Vec3-size}
 
 ### string path {#string-path}
 

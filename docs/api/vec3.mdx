@@ -9,111 +9,69 @@ id: Vec3
 
 ## Constructors
 
-### Vec3() {#Vec3}
+### Vec3 Vec3(number? xyz) {#Vec3-Vec3-number-xyz}
 
-### Vec3(number) {#Vec3-number}
+### Vec3 Vec3(number x, number y, number z) {#Vec3-Vec3-number-x-number-y-number-z}
 
-### Vec3(integer) {#Vec3-integer}
+### Vec3 Vec3(Vec2 xy, number z) {#Vec3-Vec3-Vec2-xy-number-z}
 
-### Vec3(number, number, number) {#Vec3-number-number-number}
+### Vec3 Vec3(number x, Vec2 yz) {#Vec3-Vec3-number-x-Vec2-yz}
 
-### Vec3(number, number, integer) {#Vec3-number-number-integer}
+### Vec3 Vec3(Vec3 vec3) {#Vec3-Vec3-Vec3-vec3}
 
-### Vec3(number, integer, number) {#Vec3-number-integer-number}
-
-### Vec3(number, integer, integer) {#Vec3-number-integer-integer}
-
-### Vec3(integer, number, number) {#Vec3-integer-number-number}
-
-### Vec3(integer, number, integer) {#Vec3-integer-number-integer}
-
-### Vec3(integer, integer, number) {#Vec3-integer-integer-number}
-
-### Vec3(integer, integer, integer) {#Vec3-integer-integer-integer}
-
-### Vec3(Vec2, number) {#Vec3-Vec2-number}
-
-### Vec3(Vec2, integer) {#Vec3-Vec2-integer}
-
-### Vec3(Vec2i, number) {#Vec3-Vec2i-number}
-
-### Vec3(Vec2i, integer) {#Vec3-Vec2i-integer}
-
-### Vec3(number, Vec2) {#Vec3-number-Vec2}
-
-### Vec3(number, Vec2i) {#Vec3-number-Vec2i}
-
-### Vec3(integer, Vec2) {#Vec3-integer-Vec2}
-
-### Vec3(integer, Vec2i) {#Vec3-integer-Vec2i}
-
-### Vec3(Vec3) {#Vec3-Vec3}
-
-### Vec3(Vec3i) {#Vec3-Vec3i}
-
-### Vec3(Vec4) {#Vec3-Vec4}
-
-### Vec3(Vec4i) {#Vec3-Vec4i}
+### Vec3 Vec3(Vec4 vec4) {#Vec3-Vec3-Vec4-vec4}
 
 ## Metamethods
 
-### number __index(Vec3, integer) {#number-index-Vec3-integer}
+### Vec3 __add(Vec3 a, Vec3 b) {#Vec3-add-Vec3-a-Vec3-b}
 
-### nil __newindex(Vec3, integer, number) {#nil-newindex-Vec3-integer-number}
+### Vec3 __add(number a, Vec3 b) {#Vec3-add-number-a-Vec3-b}
 
-### Vec3 __add(Vec3, Vec3) {#Vec3-add-Vec3-Vec3}
+### Vec3 __add(Vec3 a, number b) {#Vec3-add-Vec3-a-number-b}
 
-### Vec3 __add(Vec3, Vec3i) {#Vec3-add-Vec3-Vec3i}
+### Vec3 __sub(Vec3 a, Vec3 b) {#Vec3-sub-Vec3-a-Vec3-b}
 
-### Vec3 __add(Vec3, number) {#Vec3-add-Vec3-number}
+### Vec3 __sub(number a, Vec3 b) {#Vec3-sub-number-a-Vec3-b}
 
-### Vec3 __add(number, Vec3) {#Vec3-add-number-Vec3}
+### Vec3 __sub(Vec3 a, number b) {#Vec3-sub-Vec3-a-number-b}
 
-### Vec3 __sub(Vec3, Vec3) {#Vec3-sub-Vec3-Vec3}
+### Vec3 __mul(Vec3 a, Vec3 b) {#Vec3-mul-Vec3-a-Vec3-b}
 
-### Vec3 __sub(Vec3, Vec3i) {#Vec3-sub-Vec3-Vec3i}
+### Vec3 __mul(number a, Vec3 b) {#Vec3-mul-number-a-Vec3-b}
 
-### Vec3 __sub(Vec3, number) {#Vec3-sub-Vec3-number}
+### Vec3 __mul(Vec3 a, number b) {#Vec3-mul-Vec3-a-number-b}
 
-### Vec3 __sub(number, Vec3) {#Vec3-sub-number-Vec3}
+### Vec3 __div(Vec3 a, Vec3 b) {#Vec3-div-Vec3-a-Vec3-b}
 
-### Vec3 __mul(Vec3, Vec3) {#Vec3-mul-Vec3-Vec3}
+### Vec3 __div(number a, Vec3 b) {#Vec3-div-number-a-Vec3-b}
 
-### Vec3 __mul(Vec3, Vec3i) {#Vec3-mul-Vec3-Vec3i}
+### Vec3 __div(Vec3 a, number b) {#Vec3-div-Vec3-a-number-b}
 
-### Vec3 __mul(Vec3, number) {#Vec3-mul-Vec3-number}
+### Vec3 __pow(Vec3 a, Vec3 b) {#Vec3-pow-Vec3-a-Vec3-b}
 
-### Vec3 __mul(number, Vec3) {#Vec3-mul-number-Vec3}
+### Vec3 __pow(number a, Vec3 b) {#Vec3-pow-number-a-Vec3-b}
 
-### Vec3 __div(Vec3, Vec3) {#Vec3-div-Vec3-Vec3}
+### Vec3 __pow(Vec3 a, number b) {#Vec3-pow-Vec3-a-number-b}
 
-### Vec3 __div(Vec3, Vec3i) {#Vec3-div-Vec3-Vec3i}
+### Vec3 __mod(Vec3 a, Vec3 b) {#Vec3-mod-Vec3-a-Vec3-b}
 
-### Vec3 __div(Vec3, number) {#Vec3-div-Vec3-number}
+### Vec3 __mod(number a, Vec3 b) {#Vec3-mod-number-a-Vec3-b}
 
-### Vec3 __div(number, Vec3) {#Vec3-div-number-Vec3}
+### Vec3 __mod(Vec3 a, number b) {#Vec3-mod-Vec3-a-number-b}
 
-### Vec3 __mod(Vec3, Vec3) {#Vec3-mod-Vec3-Vec3}
+### Vec3 __unm(Vec3 a) {#Vec3-unm-Vec3-a}
 
-### Vec3 __mod(Vec3, Vec3i) {#Vec3-mod-Vec3-Vec3i}
+### boolean __eq(Vec3 a, Vec3 b) {#boolean-eq-Vec3-a-Vec3-b}
 
-### Vec3 __mod(Vec3, number) {#Vec3-mod-Vec3-number}
+### number __index(Vec3 v, integer i) {#number-index-Vec3-v-integer-i}
 
-### Vec3 __mod(number, Vec3) {#Vec3-mod-number-Vec3}
+### number __index(Vec3 v, string i) {#number-index-Vec3-v-string-i}
 
-### Vec3 __pow(Vec3, Vec3) {#Vec3-pow-Vec3-Vec3}
+### nil __newindex(Vec3 v, integer i, number value) {#nil-newindex-Vec3-v-integer-i-number-value}
 
-### Vec3 __pow(Vec3, Vec3i) {#Vec3-pow-Vec3-Vec3i}
+### nil __newindex(Vec3 v, string i, number value) {#nil-newindex-Vec3-v-string-i-number-value}
 
-### Vec3 __pow(Vec3, number) {#Vec3-pow-Vec3-number}
-
-### Vec3 __pow(number, Vec3) {#Vec3-pow-number-Vec3}
-
-### Vec3 __unm(Vec3) {#Vec3-unm-Vec3}
-
-### boolean __eq(Vec3, Vec3) {#boolean-eq-Vec3-Vec3}
-
-### boolean __eq(Vec3, Vec3i) {#boolean-eq-Vec3-Vec3i}
+### string __tostring(Vec3 a) {#string-tostring-Vec3-a}
 
 ## Methods
 
@@ -125,57 +83,57 @@ id: Vec3
 
 ### number SqrLength() {#number-SqrLength}
 
+### Vec3 Copy() {#Vec3-Copy}
+
 ### boolean IsZero() {#boolean-IsZero}
-
-### Vec3 GetAbs() {#Vec3-GetAbs}
-
-### nil Clamp(Vec3, number, number) {#nil-Clamp-Vec3-number-number}
-
-### nil Clamp(Vec3, Vec3, Vec3) {#nil-Clamp-Vec3-Vec3-Vec3}
-
-### Vec3 GetClamped(Vec3, number, number) {#Vec3-GetClamped-Vec3-number-number}
-
-### Vec3 GetClamped(Vec3, Vec3, Vec3) {#Vec3-GetClamped-Vec3-Vec3-Vec3}
-
-### number Dot(Vec3, Vec3) {#number-Dot-Vec3-Vec3}
-
-### number Dot(Vec3, Vec3i) {#number-Dot-Vec3-Vec3i}
 
 ### boolean IsAnyNaN() {#boolean-IsAnyNaN}
 
-### Vec3 Lerp(Vec3, Vec3, number) {#Vec3-Lerp-Vec3-Vec3-number}
+### Vec3 GetAbs() {#Vec3-GetAbs}
 
-### Vec3 Normalize() {#Vec3-Normalize}
+### nil Clamp(number|Vec3 min, number|Vec3 max) {#nil-Clamp-numberVec3-min-numberVec3-max}
+
+### number Dot(Vec3|Vec3i vec) {#number-Dot-Vec3Vec3i-vec}
+
+### nil Set(number x, number y, number z) {#nil-Set-number-x-number-y-number-z}
+
+### nil SetFrom(Vec3 other) {#nil-SetFrom-Vec3-other}
+
+### Vec3 Lerp(Vec3 vec, number t) {#Vec3-Lerp-Vec3-vec-number-t}
+
+### nil Normalize() {#nil-Normalize}
 
 ### Vec3 GetNormalized() {#Vec3-GetNormalized}
 
-### nil Ceil(Vec3) {#nil-Ceil-Vec3}
+### nil Ceil() {#nil-Ceil}
 
-### Vec3 GetCeiled(Vec3) {#Vec3-GetCeiled-Vec3}
+### Vec3 GetCeiled() {#Vec3-GetCeiled}
 
-### nil Floor(Vec3) {#nil-Floor-Vec3}
+### nil Floor() {#nil-Floor}
 
-### Vec3 GetFloored(Vec3) {#Vec3-GetFloored-Vec3}
+### Vec3 GetFloored() {#Vec3-GetFloored}
 
-### nil Round(Vec3) {#nil-Round-Vec3}
+### nil Round() {#nil-Round}
 
-### Vec3 GetRounded(Vec3) {#Vec3-GetRounded-Vec3}
+### Vec3 GetRounded() {#Vec3-GetRounded}
 
 ### number Min() {#number-Min}
 
 ### number Max() {#number-Max}
 
-### number DistanceTo(Vec3) {#number-DistanceTo-Vec3}
+### number DistanceTo(Vec3 point) {#number-DistanceTo-Vec3-point}
 
-### number Dist(Vec3) {#number-Dist-Vec3}
+### number Dist(Vec3 point) {#number-Dist-Vec3-point}
 
-### number DistSqr(Vec3) {#number-DistSqr-Vec3}
+### number DistSqr(Vec3 point) {#number-DistSqr-Vec3-point}
 
-### Vec3 Cross(Vec3, Vec3) {#Vec3-Cross-Vec3-Vec3}
+### nil ToDeg() {#nil-ToDeg}
 
-### Vec3 Cross(Vec3, Vec3i) {#Vec3-Cross-Vec3-Vec3i}
+### nil ToRad() {#nil-ToRad}
 
-### string __tostring(Vec3) {#string-tostring-Vec3}
+### Vec3 Cross(Vec3|Vec3i vec) {#Vec3-Cross-Vec3Vec3i-vec}
+
+### nil SmoothDamp(Vec3 target, Vec3 velocity, number smoothTime, number deltaTime, number? maxSpeed) {#nil-SmoothDamp-Vec3-target-Vec3-velocity-number-smoothTime-number-deltaTime-number-maxSpeed}
 
 ## Properties
 

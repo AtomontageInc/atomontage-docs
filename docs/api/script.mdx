@@ -7,17 +7,33 @@ id: Script
 
 Script component. Not to be confused with the actual [lua table instance](ScriptInstance) of the script referred to as `self`.
 
+## Metamethods
+
+### boolean __eq(Script a, Script b) {#boolean-eq-Script-a-Script-b}
+
 ## Methods
 
-### integer RPC(...) {#integer-RPC}
+### integer RPC(string funcName, ... args) {#integer-RPC-string-funcName-args}
 
 ### string GetNetworkFlow() {#string-GetNetworkFlow}
 
 ### string GetScriptUpdateTime() {#string-GetScriptUpdateTime}
 
+### string GetScriptCompileTime() {#string-GetScriptCompileTime}
+
+### string GetScriptAttachTime() {#string-GetScriptAttachTime}
+
+### string GetScriptStartTime() {#string-GetScriptStartTime}
+
 ## Properties
 
+### boolean active {#boolean-active}
+
+### boolean activeInHierarchy {#boolean-activeInHierarchy}
+
 ### Object object {#Object-object}
+
+### Object obj {#Object-obj}
 
 ### boolean isDestroyed {#boolean-isDestroyed}
 
@@ -29,29 +45,29 @@ Script component. Not to be confused with the actual [lua table instance](Script
 
 ### Object Object {#Object-Object}
 
+### Object Obj {#Object-Obj}
+
 ### boolean IsDestroyed {#boolean-IsDestroyed}
 
 ### string Type {#string-Type}
 
-### table instance {#table-instance}
-
-### table Instance {#table-Instance}
+### ScriptInstance instance {#ScriptInstance-instance}
 
 ### string name {#string-name}
 
-### string Name {#string-Name}
-
 ### string file {#string-file}
-
-### string File {#string-File}
 
 ### boolean syncToClients {#boolean-syncToClients}
 
-### boolean SyncToClients {#boolean-SyncToClients}
-
 ### integer priority {#integer-priority}
 
-### integer Priority {#integer-Priority}
+### ScriptInstance Instance {#ScriptInstance-Instance}
 
-### Asset LuaFile {#Asset-LuaFile}
+### string Name {#string-Name}
+
+### string File {#string-File}
+
+### boolean SyncToClients {#boolean-SyncToClients}
+
+### integer Priority {#integer-Priority}
 
