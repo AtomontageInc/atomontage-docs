@@ -17,12 +17,21 @@ local function copyFile(fromFolder, toFolder)
 end
 
 --change on other computer, api files are copied here
-local apiFrom = "C:\\Users\\maxkr\\Documents\\Code\\Atomontage\\atomontage-docs\\generator\\emmyApi"
-local apiTo = "D:\\atomontage\\Resources\\Studio\\LuaApi\\Atomontage\\library"
+local atomontage = "C:\\Users\\maxkr\\Documents\\Code\\Atomontage\\atomontage"
+--local repoRoot = "C:\\Users\\maxkr\\Documents\\Code\\Atomontage Projects\\atomontage-docs"
+local thisFile = debug.getinfo(1, "S").source:sub(2)
+local repoRoot = thisFile:match("^(.*)[/\\]generator[/\\]main%.lua$")
+
+local apiFrom = repoRoot .. "\\generator\\emmyApi"
+local apiTo = atomontage .. "\\Resources\\Studio\\LuaApi\\Atomontage\\library"
 copyFile(apiFrom, apiTo)
 
-local systemFrom = "D:\\atomontage\\Build\\win64_vs2022\\Studio\\RelWithDebInfo\\Data\\Studio\\Script\\ae"
-local systemTo = "D:\\atomontage\\Resources\\Studio\\LuaApi\\Atomontage\\library\\systemScripts\\ae"
-copyFile(systemFrom, systemTo)
+local sdkFileFrom = repoRoot .. "\\generator\\emmyApi\\apiEmmyAtomontage.lua"
+local sdkFileTo = atomontage .. "\\Resources\\Sdk\\Montage\\apiEmmyAtomontage.lua"
+copyFile(sdkFileFrom, sdkFileTo)
+
+local systemFrom = atomontage .. "\\Build\\VS\\Studio\\RelWithDebInfo\\Data\\Studio\\Script\\ae"
+local systemTo = atomontage .. "\\Resources\\Studio\\LuaApi\\Atomontage\\library\\systemScripts\\ae"
+--copyFile(systemFrom, systemTo)
 
 print("done")

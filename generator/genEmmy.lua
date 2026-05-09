@@ -2,6 +2,261 @@ local genEmmy = {}
 
 local util = require("generator.util")
 
+-- Methods whose auto-generated emmy emission isn't expressive enough — e.g. they need EmmyLua
+-- generics, type-literal magic (`\`T\``), aliased param types (keyCode/mouseButton), static `.`
+-- syntax, or multiple overloads. Each entry's value is the emmy text to emit at the position
+-- where auto-gen would have produced the basic version. C++ keeps its `LuaDocClass.Functions`
+-- entries for completeness; we just replace the emmy output here.
+-- Single source of truth: edit/add an override here, no separate skip-list needed.
+local manualMethodOverrides = {
+    Object = {
+        AddComponent = [[--- @generic T: Component
+--- @param type `T`|componentType
+--- @return T
+function Object:AddComponent(type) end
+
+]],
+        GetComponentByType = [[--- @generic ComponentType: Component
+--- @param name `ComponentType`|componentType
+--- @return ComponentType
+function Object:GetComponentByType(name) end
+
+]],
+        GetComponentsByType = [[--- @generic ComponentType: Component
+--- @param name `ComponentType`|componentType
+--- @return ComponentType[]
+function Object:GetComponentsByType(name) end
+
+]],
+        FindScript = [[--- @generic ScriptInstanceType: ScriptInstance
+--- @param name `ScriptInstanceType`
+--- @return ScriptInstanceType
+function Object:FindScript(name) end
+
+]],
+    },
+
+    Scene = {
+        TraceRay = [[--- @class TraceRayParams:table
+--- @field Origin Vec3
+--- @field Dir Vec3
+--- @field TraceAtlas boolean
+--- @field TraceCommon boolean
+--- @field ForceComponents VoxelRenderer[]
+--- @field IgnoreComponents VoxelRenderer[]
+
+--- @param p1 TraceRayParams
+--- @return Hit[]
+function Scene:TraceRay(p1) end
+
+]],
+    },
+
+    Input = {
+        MouseButtonDown = [[--- @param mouseButton mouseButton
+--- @return boolean
+function Input:MouseButtonDown(mouseButton) end
+
+]],
+        MouseButton = [[--- @param p1 mouseButton
+--- @return boolean
+function Input:MouseButton(p1) end
+
+]],
+        MouseButtonUp = [[--- @param p1 mouseButton
+--- @return boolean
+function Input:MouseButtonUp(p1) end
+
+]],
+    },
+
+    -- Mat4 statics: sol2 binds these as free-function lambdas (no `Mat4f` self) — must be
+    -- called as `Mat4.X(...)` not `Mat4:X(...)`. Auto-gen always emits `:`, so override here.
+    Mat4 = {
+        Translation = [[--- @param x number
+--- @param y number
+--- @param z number
+--- @return Mat4
+function Mat4.Translation(x, y, z) end
+
+--- @param vec Vec3
+--- @return Mat4
+function Mat4.Translation(vec) end
+
+]],
+        RotationXYZ = [[--- @param x number
+--- @param y number
+--- @param z number
+--- @return Mat4
+function Mat4.RotationXYZ(x, y, z) end
+
+--- @param angles Vec3
+--- @return Mat4
+function Mat4.RotationXYZ(angles) end
+
+]],
+        RotationYawPitchRoll = [[--- @param angleYaw number
+--- @param anglePitch number
+--- @param angleRoll number
+--- @return Mat4
+function Mat4.RotationYawPitchRoll(angleYaw, anglePitch, angleRoll) end
+
+--- @param angles Vec3
+--- @return Mat4
+function Mat4.RotationYawPitchRoll(angles) end
+
+]],
+        Scaling = [[--- @param x number
+--- @param y number
+--- @param z number
+--- @return Mat4
+function Mat4.Scaling(x, y, z) end
+
+--- @param scale Vec3
+--- @return Mat4
+function Mat4.Scaling(scale) end
+
+]],
+        LookAt = [[--- @param eyePos Vec3
+--- @param targetPos Vec3
+--- @param up Vec3
+--- @return Mat4
+function Mat4.LookAt(eyePos, targetPos, up) end
+
+]],
+        Perspective = [[--- @param fovY number
+--- @param aspect number
+--- @param znear number
+--- @param zfar number
+--- @return Mat4
+function Mat4.Perspective(fovY, aspect, znear, zfar) end
+
+]],
+        Ortho = [[--- @param left number
+--- @param right number
+--- @param bottom number
+--- @param top number
+--- @param zNear number
+--- @param zFar number
+--- @return Mat4
+function Mat4.Ortho(left, right, bottom, top, zNear, zFar) end
+
+]],
+        -- Mat4:Invert mutates the matrix in place and returns it. sol2 lets callers
+        -- use either `m:Invert()` (instance) or `Mat4.Invert(m)` (static-style with
+        -- explicit self) — emit both so EmmyLua type-checks both call patterns.
+        Invert = [[--- @return Mat4
+function Mat4:Invert() end
+
+--- @param m Mat4
+--- @return Mat4
+function Mat4.Invert(m) end
+
+]],
+    },
+
+    -- VoxelEdit (Brush) statics: bound as `static` member functions (no implicit self) —
+    -- callers use `VoxelEdit.X(...)` syntax. Auto-gen emits `:`, so override here.
+    VoxelEdit = {
+        FillTmpLayers = [[--- @param layerFlags TmpLayerFlags
+--- @param camPos Vec3
+--- @param targets Vec3[]
+--- @param targetRadius number
+--- @param clientId integer
+--- @return nil
+function VoxelEdit.FillTmpLayers(layerFlags, camPos, targets, targetRadius, clientId) end
+
+]],
+        FreeTmpLayers = [[--- @param clientId integer
+--- @return nil
+function VoxelEdit.FreeTmpLayers(clientId) end
+
+]],
+    },
+
+    -- Vec3 methods that are bound as plain instance methods but commonly called
+    -- with `.` syntax (passing self explicitly). sol2 accepts both at runtime;
+    -- we document both forms so EmmyLua doesn't complain about either.
+    Vec3 = {
+        Lerp = [[--- @param b Vec3
+--- @param t number
+--- @return Vec3
+function Vec3:Lerp(b, t) end
+
+--- @param a Vec3
+--- @param b Vec3
+--- @param t number
+--- @return Vec3
+function Vec3.Lerp(a, b, t) end
+
+]],
+        IsAnyNaN = [[--- @return boolean
+function Vec3:IsAnyNaN() end
+
+--- @param v Vec3
+--- @return boolean
+function Vec3.IsAnyNaN(v) end
+
+]],
+    },
+
+    -- Quat statics: sol2 binds these as free-function lambdas (no `Quatf` self) — must be
+    -- called as `Quat.X(...)` not `Quat:X(...)`. Auto-gen always emits `:`, so override here.
+    Quat = {
+        LookAt = [[--- @param dir Vec3
+--- @param up Vec3?
+--- @return Quat
+function Quat.LookAt(dir, up) end
+
+]],
+        Lerp = [[--- @param p1 Quat
+--- @param p2 Quat
+--- @param p3 number
+--- @return Quat
+function Quat.Lerp(p1, p2, p3) end
+
+]],
+        Slerp = [[--- @param p1 Quat
+--- @param p2 Quat
+--- @param p3 number
+--- @return Quat
+function Quat.Slerp(p1, p2, p3) end
+
+]],
+        Sterp = [[--- @param a Quat
+--- @param b Quat
+--- @param t number
+--- @param twistAxis Vec3?
+--- @return Quat
+function Quat.Sterp(a, b, t, twistAxis) end
+
+]],
+        Euler = [[--- @param p1 number
+--- @param p2 number
+--- @param p3 number
+--- @return Quat
+function Quat.Euler(p1, p2, p3) end
+
+--- @param p1 Vec3
+--- @return Quat
+function Quat.Euler(p1) end
+
+]],
+        AngleAxis = [[--- @param p1 number
+--- @param p2 Vec3
+--- @return Quat
+function Quat.AngleAxis(p1, p2) end
+
+]],
+        Axes = [[--- @param u Vec3
+--- @param v Vec3
+--- @return Quat
+function Quat.Axes(u, v) end
+
+]],
+    },
+}
+
 --[[
 can support generics like this but name param must match class name
 
@@ -34,24 +289,45 @@ local emmyDefaultLines = [[
 ---| Object
 
 --- @alias materialName
----| '"none"'
----| '"gold"'
----| '"copper"'
----| '"silver"'
----| '"bronze"'
----| '"rock"'
----| '"sand"'
----| '"stone"'
----| '"concrete"'
----| '"brick"'
----| '"mortar"'
----| '"plaster"'
----| '"wall_paint"'
+---| '"snow"' 0.00
+---| '"sand"' 0.00
+---| '"poop"' 0.05
+---| '"flesh"' 0.05
+---| '"vegetation"' 0.07
+---| '"soil"' 0.10
+---| '"fruit"' 0.10
+---| '"food"' 0.10
+---| '"leather"' 0.15
+---| '"ice"' 0.15
+---| '"rubber"' 0.20
+---| '"paint"' 0.25
+---| '"wood"' 0.25
+---| '"fabric"' 0.25
+---| '"gold"' 0.25
+---| '"mortar"' 0.30
+---| '"brick"' 0.30
+---| '"plastic"' 0.30
+---| '"bedrock"' 0.35
+---| '"stone"' 0.45
+---| '"aluminium"' 0.55
+---| '"copper"' 0.55
+---| '"bronze"' 0.60
+---| '"concrete"' 0.65
+---| '"bone"' 0.65
+---| '"steel"' 0.65
+---| '"nickel"' 0.70
+---| '"ceramic"' 0.70
+---| '"chromium"' 0.75
 
 --- @alias mouseButton
 ---| 1 # left button
 ---| 2 # middle button
 ---| 3 # right button
+
+--- Per-material removed-volume map. Keys are material names, values are total removed
+--- volume in cubic meters. Returned by brush onFinished callback when material counting
+--- is enabled (Brush:SetCountMaterialMask / Brush.removeCountList).
+--- @alias RemoveCountInfo table<materialName, number>
 
 --https://wiki.libsdl.org/SDL_Keycode
 --- @alias keyCode
@@ -276,6 +552,48 @@ local emmyDefaultLines = [[
 ---| '"Z"'
 
 
+--- Polymorphic runtime alias. Resolves to whichever runtime is active in the current Lua state:
+--- - Server-side global script: `Server`
+--- - Client app: `Client`
+--- - Server-side per-client script: `ClientContext`
+--- Calls to methods that exist on only one of those will fail at runtime when called from a different side.
+--- @class RUI : Server, Client, ClientContext
+RUI = nil
+
+--- Internal table populated by the engine's binding system. Maps class/enum names to metadata used by the EmmyLua doc generator.
+--- @type table
+_AEBindings = nil
+
+--- Logs a message to the engine log file (server log on the server, client log on the client).
+--- For interactive console output use `print()` instead.
+--- @param message string
+function Log(message) end
+
+--- Logs an error message (with stack trace) to the engine log file.
+--- @param message string
+function LogErr(message) end
+
+--- Engine-invoked callbacks. The engine looks up entries on this table by name and
+--- calls them if present. User scripts may assign their own implementations to
+--- intercept these events; bootstrap.lua provides defaults for the common ones.
+--- @class Callbacks
+--- Called when a Lua error occurs. If unset, generateError() is called directly.
+--- @field error fun(message: string, errorType: string, uiActionID: integer?)
+--- Called once per frame, before scripts' Update(). `deltaTime` is in seconds.
+--- @field update fun(deltaTime: number)
+--- Called when files are dropped onto the application window.
+--- @field dropFiles fun(files: string[], fromClientId: integer)
+--- Called on application/scene shutdown. Last chance to save state.
+--- @field onClose fun()
+--- Called when the OS dispatches a deep-link URL to the application.
+--- @field onUniversalLink fun(link: string)
+--- Called after a prefab is inserted into the scene. `ob` is the inserted root object.
+--- @field onPrefabInserted fun(ob: Object)
+--- Called when a previously-requested music file finishes downloading.
+--- @field onMusicDownloaded fun(musicFile: string)
+Callbacks = {}
+
+-- shape class hierarchy (auto-gen doesn't currently encode base classes, declare them here)
 --- @class Box:Shape
 --- @class Sphere:Shape
 --- @class Capsule:Shape
@@ -283,392 +601,63 @@ local emmyDefaultLines = [[
 --- @class Polygon:Shape
 
 
---- @param pos Vec3
---- @param rot Quat
---- @param scale Vec3
---- @return Box
-function Box(pos, rot, scale) end
-
---- @param pos Vec3
---- @param scale Vec3?
---- @return Box
-function Box(pos, scale) end
-
-
---- @param pos1 Vec3
---- @param pos2 Vec3
---- @param radius number?
---- @param radius2 number?
---- @return Capsule
-function Capsule(pos1, pos2, radius, radius2) end
-
-
---- @param pos1 Vec3
---- @param pos2 Vec3
---- @param radius number?
---- @param radius2 number?
---- @return Cylinder
-function Cylinder(pos1, pos2, radius, radius2) end
-
-
---- @class Object
---- @field children Object[]
---- @field components Component[]
-
-
---- @class VoxelEdit
---- @field filter Filter
---- @field shape Shape
---- @field onProgress fun(progress:number) --progress 0-100
---- @field onFinished fun()
---- @field onError fun()
---- @field copyResource VoxelDataResource
-
-
---- @class TraceRayParams:table
---- @field Origin Vec3
---- @field Dir Vec3
---- @field TraceAtlas boolean
---- @field TraceCommon boolean
---- @field ForceComponents VoxelRenderer[]
---- @field IgnoreComponents VoxelRenderer[]
-
---- @param p1 TraceRayParams
---- @return Hit[]
-function Scene:TraceRay(p1) end
-
-
---- @return Hit[]
-function Collision:Raycast() end
-
---- @param p1 Vec3
---- @param p2 Vec3
---- @return Hit[]
-function Collision:Raycast(p1, p2) end
-
-
---- @return Overlap[]
-function Collision:GetOverlap() end
-
---- @param shape Shape
---- @return Overlap[]
-function Collision:GetOverlap(shape) end
-
-
---- @generic T:Component
---- @param type `T`|componentType
---- @return T
-function Object:AddComponent(type) end
-
---- @generic ComponentType: Component
---- @param name `ComponentType`|componentType
---- @return ComponentType
-function Object:GetComponentByType(name) end
-
---- @generic ComponentType: Component
---- @param name `ComponentType`|componentType
---- @return ComponentType[]
-function Object:GetComponentsByType(name) end
-
---- @generic ScriptInstanceType: ScriptInstance
---- @param name `ScriptInstanceType`
---- @return ScriptInstanceType
-function Object:FindScript(name) end
-
-
---- @param p1 string
---- @return Object[]
-function Scene:GetObjectsByName(p1) end
-
---- @return Object[]
-function Scene:GetAllObjects() end
-
---- @return Object[]
-function Scene:GetRootObjects() end
-
---- @param p1 string
---- @return Object[]
-function Scene:GetObjectsByTag(p1) end
-
---- @param capsuleStart Vec3
---- @param capsuleEnd Vec3
---- @param capsuleRadius number
---- @param velocity Vec3
---- @param size number
---- @return nil
-function Client:AddPlayerLODPriorityBubbleShape(capsuleStart, capsuleEnd, capsuleRadius, velocity, size) end
-
-
---- @return number[]
-function Server:GetClients() end
-
-
---- @param p1 integer
---- @return Transform
-function Transform:GetChild(p1) end
-
---- @param p1 string
---- @return Transform
-function Transform:GetChild(p1) end
-
-
---- @param p1 keyCode
---- @return boolean
-function Input:KeyDown(p1) end
-
---- @param p1 keyCode
---- @return boolean
-function Input:Key(p1) end
-
---- @param p1 keyCode
---- @return boolean
-function Input:KeyUp(p1) end
-
---- @return keyCode[]
-function Input:KeyCombosDown() end
-
---- @param mouseButton mouseButton
---- @return boolean
-function Input:MouseButtonDown(mouseButton) end
-
---- @param p1 mouseButton
---- @return boolean
-function Input:MouseButton(p1) end
-
---- @param p1 mouseButton
---- @return boolean
-function Input:MouseButtonUp(p1) end
-
-
---- @param p1 Vec3
---- @return Quat
-function Quat.LookAt(p1) end
-
---- @param p1 Quat
---- @param p2 Quat
---- @param p3 number
---- @return Quat
-function Quat.Lerp(p1, p2, p3) end
-
---- @param p1 Quat
---- @param p2 Quat
---- @param p3 number
---- @return Quat
-function Quat.Slerp(p1, p2, p3) end
-
---- @param p1 number
---- @param p2 number
---- @param p3 number
---- @return Quat
-function Quat.Euler(p1, p2, p3) end
-
---- @param p1 Vec3
---- @return Quat
-function Quat.Euler(p1) end
-
---- @param p1 number
---- @param p2 Vec3
---- @return Quat
-function Quat.AngleAxis(p1, p2) end
-
---- @param p1 Vec3
---- @param p2 Vec3
---- @param p3 number
---- @return Vec3
-function Vec3.Lerp(p1, p2, p3) end
-
-
---- @return Vec3
-function Quat:GetEuler() end
-
-
---- @param p2 number
---- @param p3 number
---- @return nil
-function Vec2:Clamp(p2, p3) end
-
---- @param p2 Vec2
---- @param p3 Vec2
---- @return nil
-function Vec2:Clamp(p2, p3) end
-
---- @param p2 number
---- @param p3 number
---- @return Vec2
-function Vec2:GetClamped(p2, p3) end
-
---- @param p2 Vec2
---- @param p3 Vec2
---- @return Vec2
-function Vec2:GetClamped(p2, p3) end
-
-
---- @param p2 number
---- @param p3 number
---- @return nil
-function Vec3:Clamp(p2, p3) end
-
---- @param p2 Vec3
---- @param p3 Vec3
---- @return nil
-function Vec3:Clamp(p2, p3) end
-
---- @param p2 number
---- @param p3 number
---- @return Vec3
-function Vec3:GetClamped(p2, p3) end
-
---- @param p2 Vec3
---- @param p3 Vec3
---- @return Vec3
-function Vec3:GetClamped(p2, p3) end
-
-
---- @param p1 string
---- @return Material
-function Scene:CreateMaterial(p1) end
-
-
---- @param text string
---- @param pos Vec2 0-1
---- @param pivot Vec2 0 = left allingned, 0.5 = centered, 1 = right alligned
---- @param color Vec4
---- @param size integer 1-6
---- @param colorOutline Vec4?
---- @param p7 number?
---- @return nil
-function Client:WriteToScreen(text, pos, pivot, color, size, colorOutline, p7) end
-
-
---- @param hand Side
---- @param duration number in seconds, 0 <= minimal
---- @param frequency number Hz, 0 = unspecified
---- @param amplitude number 0-1
---- @return nil
-function Client:ApplyVRHapticFeedback(hand, duration, frequency, amplitude) end
-
-
-
-
-
---`Client`
---`Server`
-
---The object visible in the hierarchy. Every object has a transform and can have additional components attached to it.
-
---[View Documentation](https://docs.atomontage.com/api/Object)
---- @class Object
---- @field transform Transform
---- @field isDestroyed boolean
---- @field id string
---- @field name string
---- @field active boolean
---- @field activeInHierarchy boolean
---- @field save boolean
---- @field parent Object
---- @field children table
---- @field childCount integer
---- @field siblingIndex integer
---- @field isPrefabObject boolean
---- @field components table
---- @field componentsCount integer
-Object = {
-	transform = nil, ---Get the transform to modify the position, rotation and scale of the object
-	isDestroyed = nil, ---True if the object was destroyed. Note that references to this object will still be valid 
-	id = nil, ---This is id is unique across clients and server
-	active = nil, ---Set the object to be active or inactive. Inactive objects are not updated or rendered. All its children also become inactive.
-	activeInHierarchy = nil, ---Readonly. Check if the object is active in the scene. It may be inactive because a parent is inactive.
-	save = nil, ---Save this object in the hierarchy. If not saved it will be deleted after lua reset or server restart
-}
-
---Get child object by name
---- @param p1 string
---- @return Object
-function Object:GetChild(p1) end
-
---- @param p1 Guid
---- @return Object
-function Object:GetChildById(p1) end
-
---- @return boolean
-function Object:RemoveParent() end
-
---- @return boolean
-function Object:IsPrefab() end
-
---- @param p1 string
---- @return boolean
-function Object:IsPrefab(p1) end
-
---- @param p1 string
---- @param p2 boolean
---- @return Script
-function Object:AddScript(p1, p2) end
-
---- @return MeshData
-function Object:AddMeshData() end
-
---- @param p1 string
---- @return VoxelData
-function Object:AddVoxelData(p1) end
-
---- @param p1 string
---- @return StaticVoxelData
-function Object:AddStaticVoxelData(p1) end
-
---- @return VoxelRenderer
-function Object:AddVoxelRenderer() end
-
---- @return Camera
-function Object:AddCamera() end
-
---- @return Sky
-function Object:AddSkybox() end
-
---- @param p1 string
---- @return userdata
-function Object:AddComponent(p1) end
-
---- @param p1 string
---- @return boolean
-function Object:RemoveComponent(p1) end
-
---- @param p1 userdata
---- @return boolean
-function Object:RemoveComponent(p1) end
-
---Find a component by type name. Returns the first component found
---- @param p1 string
---- @return userdata
-function Object:GetComponentByType(p1) end
-
---Find all components by type name
---- @param p1 string
---- @return table
-function Object:GetComponentsByType(p1) end
-
---Find attached script component lua table by name
---- @param p1 string
---- @return userdata
-function Object:FindScript(p1) end
-
---- @return Camera
-function Object:GetCamera() end
-
---- @return string
-function Object:GetNetworkFlow() end
-
---- @return string
-function Object:GetScriptUpdateTime() end
-
---- @return integer
-function Object:GetRefCount() end
-
 ]]
+
+-- map: readonlyProps[ClassName][propertyName] = true. Built from the bindings dumps so
+-- writeProps can append "(readonly)" to the @field description for documented-readonly
+-- properties. EmmyLua/sumneko has no native @readonly enforcement — this is informational
+-- and shows up in hover tooltips.
+local readonlyProps = {}
+
+-- map: deprecatedProps[ClassName][propertyName] = true and deprecatedMethods[ClassName][methodName] = true.
+-- Built from the bindings dumps so writeProps/writeMethods can emit `--- @deprecated` for entries
+-- the C++ side flagged with `: deprecated`. EmmyLua/sumneko renders these strikethrough on hover
+-- and warns at call sites.
+local deprecatedProps = {}
+local deprecatedMethods = {}
+
+local function indexReadonlyFromBindings(bindings)
+    if not bindings or not bindings.Classes then return end
+    for className, class in pairs(bindings.Classes) do
+        if class.properties then
+            for _, prop in ipairs(class.properties) do
+                if prop.readonly and prop.name then
+                    readonlyProps[className] = readonlyProps[className] or {}
+                    readonlyProps[className][prop.name] = true
+                end
+                if prop.isDeprecated and prop.name then
+                    deprecatedProps[className] = deprecatedProps[className] or {}
+                    deprecatedProps[className][prop.name] = true
+                end
+            end
+        end
+        if class.functions then
+            for _, fn in ipairs(class.functions) do
+                if fn.isDeprecated and fn.name then
+                    deprecatedMethods[className] = deprecatedMethods[className] or {}
+                    deprecatedMethods[className][fn.name] = true
+                end
+            end
+        end
+        if class.constructors then
+            for _, fn in ipairs(class.constructors) do
+                if fn.isDeprecated and fn.name then
+                    deprecatedMethods[className] = deprecatedMethods[className] or {}
+                    deprecatedMethods[className][fn.name] = true
+                end
+            end
+        end
+    end
+end
 
 function genEmmy:createFile(bindingsServer, bindingsClient)
     local file = io.open("generator\\emmyApi\\apiEmmyAtomontage.lua", "w")
-    
+
+    -- index readonly + deprecated flags from both server- and client-side bindings (a prop
+    -- or method may exist on either side; if flagged anywhere we treat it as such).
+    indexReadonlyFromBindings(bindingsServer)
+    indexReadonlyFromBindings(bindingsClient)
+
     --default lines
     file:write(emmyDefaultLines, "\n")
 
@@ -682,6 +671,19 @@ function genEmmy:createFile(bindingsServer, bindingsClient)
     file:write("\n")
 
     return file
+end
+
+-- exposed for writeProps below
+function genEmmy:isReadonly(className, propName)
+    return readonlyProps[className] and readonlyProps[className][propName] or false
+end
+
+function genEmmy:isPropDeprecated(className, propName)
+    return deprecatedProps[className] and deprecatedProps[className][propName] or false
+end
+
+function genEmmy:isMethodDeprecated(className, methodName)
+    return deprecatedMethods[className] and deprecatedMethods[className][methodName] or false
 end
 
 function genEmmy:addEnum(file, name, intro, finalRows)
@@ -750,9 +752,12 @@ local operators = {
     ["__bnot"] = true,
     ["__shl"] = true,
     ["__shr"] = true,
+    -- relational operators (eq/lt/le) aren't supported by sumneko's `@operator` annotation —
+    -- it only covers arithmetic/bitwise/concat/idiv/index/etc. Comparison operators are
+    -- inferred from typed fields, so leaving these out doesn't lose anything.
     --["__eq"] = true,
-    ["__lt"] = true,
-    ["__le"] = true,
+    --["__lt"] = true,
+    --["__le"] = true,
 }
 
 function genEmmy:writeOperators(file, className, finalMethods)
@@ -789,49 +794,101 @@ function genEmmy:writeOperators(file, className, finalMethods)
     end
 end
 
+-- Splits a comma-separated parameter list into trimmed param strings, ignoring commas
+-- that are nested inside (), [] or {} so embedded function-type signatures like
+-- `fun(success : boolean, response : string)` stay intact as a single param.
+local function splitTopLevelParams(s)
+    local parts = {}
+    local depth = 0
+    local startIdx = 1
+    for i = 1, #s do
+        local c = s:sub(i, i)
+        if c == '(' or c == '[' or c == '{' then
+            depth = depth + 1
+        elseif c == ')' or c == ']' or c == '}' then
+            depth = depth - 1
+        elseif c == ',' and depth == 0 then
+            local part = s:sub(startIdx, i - 1):match("^%s*(.-)%s*$")
+            if part and part ~= "" then parts[#parts + 1] = part end
+            startIdx = i + 1
+        end
+    end
+    local tail = s:sub(startIdx):match("^%s*(.-)%s*$")
+    if tail and tail ~= "" then parts[#parts + 1] = tail end
+    return parts
+end
+
+-- Parses a single "TYPE NAME" param entry where TYPE may contain spaces / parens
+-- (e.g. `fun(success : boolean) onResponse`). Splits on the LAST whitespace —
+-- everything before is the type, everything after is the name. Returns (type, name)
+-- with name=nil if there's only a type (no trailing identifier).
+local function splitTypeAndName(word)
+    local typeStr, nameStr = word:match("^(.+)%s+(%S+)$")
+    if typeStr and nameStr then return typeStr, nameStr end
+    return word, nil
+end
+
 function genEmmy:writeProps(file, className, finalProperties)
-    --props
+    -- Emit one `--- @field name type [description]` per property. Sumneko/lua-language-server
+    -- supports inline description after the type, so no need for a sidecar table with
+    -- `name = nil` placeholders — that workaround caused "Cannot assign nil to <NonNilType>"
+    -- diagnostics for typed fields like Object/Vec3.
+    --
+    -- Sumneko has no per-`@field` `@deprecated` annotation: placing `--- @deprecated`
+    -- before a `@field` bubbles the deprecation up to the whole class. So we surface
+    -- `readonly` and `deprecated` as plain text markers in the description (visible in
+    -- hover tooltips, not enforced as diagnostics). Methods can still use real
+    -- `--- @deprecated` since sumneko does support it on functions.
     for i, prop in ipairs(finalProperties) do
         local header = prop.entry[1]
         --### Vec3 position {#Vec3-position}
-        header = header:gsub("const ", "") --for now just remove that
-        local _, _, returnType, name = string.find(header, "### (%S+)%s(%S+)%s*")
-        assert(returnType, "err")
+        --### fun(progress : number) onProgress {#anchor}   (type may contain spaces / parens)
+        header = header:gsub("const ", "")
+        local body = header:match("^###%s+(.-)%s*{#") or header:match("^###%s+(.+)$")
+        assert(body, "could not parse property header: " .. header)
+        local returnType, name = splitTypeAndName(body)
+        assert(returnType, "could not split type/name from: " .. body)
         returnType = self:convertToEmmyLuaType(returnType)
-        file:write("--- @field ", name, " ", returnType, "\n")
-    end
-    --file:write(className," = {}", "\n\n")
 
-    --TEMP write table with contents (workaround because comments dont work behind @field)
-    local lines = {}
-    for i, prop in ipairs(finalProperties) do
-        local hasComment = util:hasDocumentation(prop.entry)
-        if hasComment then
-            local comment = util:getDocumentation(prop.entry)
-            local header = prop.entry[1]
-            header = header:gsub("const ", "") --for now just remove that
-            local _, _, returnType, name = string.find(header, "### (%S+)%s(%S+)%s*")
-            local line = table.concat({"\t", name, " = nil, ", "---", comment, "\n"})
-            table.insert(lines, line)
+        local description = util:hasDocumentation(prop.entry) and util:getDocumentation(prop.entry) or nil
+        if description then
+            description = description:gsub("[\r\n]+", " ")
+        end
+
+        local flags = {}
+        if self:isReadonly(className, name) then flags[#flags + 1] = "readonly" end
+        if self:isPropDeprecated(className, name) then flags[#flags + 1] = "deprecated" end
+        if #flags > 0 then
+            local prefix = "(" .. table.concat(flags, ", ") .. ")"
+            description = description and (prefix .. " " .. description) or prefix
+        end
+
+        if description then
+            file:write("--- @field ", name, " ", returnType, " ", description, "\n")
+        else
+            file:write("--- @field ", name, " ", returnType, "\n")
         end
     end
-    if next(lines) then
-        file:write(className, " = {", "\n")
-        for i, line in ipairs(lines) do
-            file:write(line)
-        end
-        file:write("}", "\n\n")
-    else
-        file:write(className, " = {}", "\n\n")
-    end
+    file:write(className, " = {}", "\n\n")
 end
 
 function genEmmy:writeMethods(file, className, finalMethods)
+    local overrides = manualMethodOverrides[className]
+    local emittedOverrides = {}
     --methods
     for i, prop in ipairs(finalMethods) do
         local lines = prop.entry
         local header, returnType, name, params = genEmmy:dissectMethodEntry(lines)
-        
+
+        if overrides and overrides[name] then
+            -- emit the manual override once (in place of the auto-generated emission)
+            if not emittedOverrides[name] then
+                file:write(overrides[name])
+                emittedOverrides[name] = true
+            end
+            goto continue
+        end
+
         --write function documentation
         if (util:hasDocumentation(lines)) then
             file:write("--[[", "\n")
@@ -852,7 +909,11 @@ function genEmmy:writeMethods(file, className, finalMethods)
 
         --is constructor
         local isConstructor = name == className and returnType == className
-        
+
+        if self:isMethodDeprecated(className, name) then
+            file:write("--- @deprecated\n")
+        end
+
         --write function
         local paramNames = {}
         for i, info in ipairs(params) do
@@ -880,6 +941,7 @@ function genEmmy:writeMethods(file, className, finalMethods)
                 file:write("function ", className, ":", name, "(", paramNamesStr, ") end", "\n\n")
             end
         end
+        ::continue::
     end
 end
 
@@ -890,11 +952,11 @@ function genEmmy:dissectMethodEntry(lines)
     local _, _, returnType, name, paramsStr = string.find(header, "### ([%w%s%,%[%]?|]-)%s?(%S*)%((.*)%)")
     local params = {}
     assert(paramsStr, "header contains illegal characters: " .. header.." " .. tostring(returnType).. " " .. tostring(name).. " " .. tostring(paramsStr))
-    for word in string.gmatch(paramsStr, '%s?([^,]+)') do
-        local _, _, ptype, name = string.find(word, "(%S*)%s?(%S*)")
-        if name == "" then name = nil end
+    for _, word in ipairs(splitTopLevelParams(paramsStr)) do
+        local ptype, paramName = splitTypeAndName(word)
+        if paramName == "" then paramName = nil end
         ptype = self:convertToEmmyLuaType(ptype)
-        table.insert(params, { ptype, name })
+        table.insert(params, { ptype, paramName })
     end
 
     returnType = self:convertToEmmyLuaType(returnType)
