@@ -1275,7 +1275,7 @@ function Client:SetScreenColor(color, permanent) end
 
 --[[
 Play sound with asset name, at position, with volume and loop. Only single channel audio.
-Returns [AudioSource](./AudioSource.mdx)
+Returns [AudioSource](./audioSource.mdx)
 
 [View Documentation](https://docs.atomontage.com/api/Client#AudioSource-PlaySound-string-soundPath-Vec3-position-number-volume-boolean-loop)
 ]]
@@ -1288,7 +1288,7 @@ function Client:PlaySound(soundPath, position, volume, loop) end
 
 --[[
 Play sound with asset name, with volume and loop. This play stereo music without any position just like normal audio player.
-Returns [AudioMusic](./AudioMusic.mdx)
+Returns [AudioMusic](./audioMusic.mdx)
 
 [View Documentation](https://docs.atomontage.com/api/Client#AudioMusic-PlayMusic-string-musicFile-number-volume-boolean-loop)
 ]]

@@ -534,6 +534,7 @@ end
 
 function genDocs:generateHeading(header)
     local id = genDocs:getHeadingID(header)
+    header = header:gsub("<", "&lt;"):gsub(">", "&gt;")
 
     --add link if this is a class
     --[[
