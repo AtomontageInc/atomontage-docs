@@ -8,14 +8,11 @@ id: Object
 The object visible in the hierarchy. Every object has a transform and can have additional components attached to it.
 
 
-## Methods
-
-### number GetTotalVolume(string stopIfChildObjHasScript) {#number-GetTotalVolume-string-stopIfChildObjHasScript}
-Volume of all the VoxelData components in the object and all its children
-
 ## Metamethods
 
 ### boolean __eq(Object a, Object b) {#boolean-eq-Object-a-Object-b}
+
+## Methods
 
 ### Vec3 LocalToWorld(Vec3 point) {#Vec3-LocalToWorld-Vec3-point}
 
@@ -71,6 +68,7 @@ Find attached script component lua table by name
 ### boolean HasScript(string name) {#boolean-HasScript-string-name}
 
 ### number GetVolumeWithChildren(string stopIfChildObjHasScript) {#number-GetVolumeWithChildren-string-stopIfChildObjHasScript}
+Volume of all the VoxelData components in the object and all its children
 
 ### string GetNetworkFlow() {#string-GetNetworkFlow}
 
@@ -148,8 +146,6 @@ This is id is unique across clients and server
 ### RigidBody? rigidBody {#RigidBody-rigidBody}
 
 ### Vec3 Pos {#Vec3-Pos}
-
-### number PosY {#number-PosY}
 
 ### Quat Rot {#Quat-Rot}
 

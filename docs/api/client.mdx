@@ -204,7 +204,7 @@ Returns [`CommandLine`](./commandLine.mdx)
 
 ### Color GetBGColor() {#Color-GetBGColor}
 
-### nil SetBGColor(Color color) {#nil-SetBGColor-Color-color}
+### nil SetBGColor(Color|Vec4 color) {#nil-SetBGColor-ColorVec4-color}
 
 ### boolean GetVREnabled() {#boolean-GetVREnabled}
 
@@ -216,7 +216,7 @@ Returns [`CommandLine`](./commandLine.mdx)
 
 ### Vec3 pos, Quat rot GetVRHeadsetTransform(Space space) {#Vec3-pos-Quat-rot-GetVRHeadsetTransform-Space-space}
 
-### nil ApplyVRHapticFeedback(integer hand, number duration, number frequency, number amplitude) {#nil-ApplyVRHapticFeedback-integer-hand-number-duration-number-frequency-number-amplitude}
+### nil ApplyVRHapticFeedback(Side hand, number duration, number frequency, number amplitude) {#nil-ApplyVRHapticFeedback-Side-hand-number-duration-number-frequency-number-amplitude}
 
 ### boolean GetVREyeTrackingSupported() {#boolean-GetVREyeTrackingSupported}
 
@@ -335,6 +335,26 @@ Pause all playing sounds and music
 Resume all paused sounds and music
 
 ### nil StopAudio() {#nil-StopAudio}
+
+### nil EnableRenderingWithFadeEffect(integer type, number duration) {#nil-EnableRenderingWithFadeEffect-integer-type-number-duration}
+
+### nil DisableRenderingWithFadeEffect(integer type, number duration) {#nil-DisableRenderingWithFadeEffect-integer-type-number-duration}
+
+### nil ToggleRenderingWithFadeEffect(integer type, number duration) {#nil-ToggleRenderingWithFadeEffect-integer-type-number-duration}
+
+### nil SetOutlineColor(Vec4 color) {#nil-SetOutlineColor-Vec4-color}
+
+### nil SetHighlightColor(Vec4 color) {#nil-SetHighlightColor-Vec4-color}
+
+### nil DrawPointSpriteSphere(Vec3 pos, number radius, Vec4 color, boolean shade) {#nil-DrawPointSpriteSphere-Vec3-pos-number-radius-Vec4-color-boolean-shade}
+
+### nil DrawBillboardSphere(Vec3 pos, number radius, Vec4 color, boolean shade) {#nil-DrawBillboardSphere-Vec3-pos-number-radius-Vec4-color-boolean-shade}
+
+### nil DrawBillboard(integer texture, Vec3 pos, number size, Vec4 color, number angleDeg) {#nil-DrawBillboard-integer-texture-Vec3-pos-number-size-Vec4-color-number-angleDeg}
+
+### nil DrawBillboards(table billboards) {#nil-DrawBillboards-table-billboards}
+
+### boolean ToggleFullScreen() {#boolean-ToggleFullScreen}
 
 ## Properties
 

@@ -1,0 +1,76 @@
+---
+title: ClientContext
+id: ClientContext
+---
+`Server`
+
+## Methods
+
+### string UIItemUpdate(integer actionID, UIItem item, any value) {#string-UIItemUpdate-integer-actionID-UIItem-item-any-value}
+
+### nil SelectItemInUICreator(UIItem uiItem) {#nil-SelectItemInUICreator-UIItem-uiItem}
+
+### UIItem GetUIItemByUIActionID(integer uiActionID) {#UIItem-GetUIItemByUIActionID-integer-uiActionID}
+
+### string GetUIActionType(integer uiActionID) {#string-GetUIActionType-integer-uiActionID}
+
+### string GetUIActionScript(integer uiActionID) {#string-GetUIActionScript-integer-uiActionID}
+
+### integer GetCurrentUIActionID() {#integer-GetCurrentUIActionID}
+
+### nil OnLuaLog() {#nil-OnLuaLog}
+
+### boolean IsServer() {#boolean-IsServer}
+
+### boolean IsClient() {#boolean-IsClient}
+
+### string GetScript(string fileName) {#string-GetScript-string-fileName}
+
+### nil ClearLuaLogClient() {#nil-ClearLuaLogClient}
+
+### nil ScrollToLastestLuaLog() {#nil-ScrollToLastestLuaLog}
+
+### CommandLine GetCommandLine() {#CommandLine-GetCommandLine}
+
+### table GetVersion() {#table-GetVersion}
+
+### string GetSystem() {#string-GetSystem}
+
+### number GetFPS() {#number-GetFPS}
+
+### integer GetScriptsVersion() {#integer-GetScriptsVersion}
+
+### number GetLogValue(string name) {#number-GetLogValue-string-name}
+
+### nil SetLogValue(string name, number value) {#nil-SetLogValue-string-name-number-value}
+
+### table GetLogValueForPlot(string name) {#table-GetLogValueForPlot-string-name}
+
+### number GetLogIValue(integer name) {#number-GetLogIValue-integer-name}
+
+### string GetLogIValueName(integer name) {#string-GetLogIValueName-integer-name}
+
+### string GetLogIValueOutputName(integer name) {#string-GetLogIValueOutputName-integer-name}
+
+### boolean GetLogIsValue(integer name) {#boolean-GetLogIsValue-integer-name}
+
+### integer GetLogValuesCount() {#integer-GetLogValuesCount}
+
+### Vec2i GetVideoRange() {#Vec2i-GetVideoRange}
+
+### integer GetCurrentFrame() {#integer-GetCurrentFrame}
+
+### nil SetCurrentFrame(integer frame) {#nil-SetCurrentFrame-integer-frame}
+
+### boolean IsContainerEnabledAndVisible() {#boolean-IsContainerEnabledAndVisible}
+
+### nil LuaStartDebugger() {#nil-LuaStartDebugger}
+
+### nil LuaEnableDebugging(boolean enable) {#nil-LuaEnableDebugging-boolean-enable}
+
+## Properties
+
+### integer clientID {#integer-clientID}
+
+### string mode {#string-mode}
+

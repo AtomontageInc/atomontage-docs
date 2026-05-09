@@ -125,7 +125,8 @@ Smoothing/Inflate/Deflate
 ### nil FreeTmpLayers(integer clientId) {#nil-FreeTmpLayers-integer-clientId}
 It projects cone on voxel geometry and everything inside will be copies to tmp
 all raycasts will collide with this tmp layer instead until FreeTmpLayers
-### nil FillTmpLayers(integer clientId) {#nil-FillTmpLayers-integer-clientId}
+
+### nil FillTmpLayers(TmpLayerFlags layerFlags, Vec3 camPos, Vec3[] targets, number targetRadius, integer clientId) {#nil-FillTmpLayers-TmpLayerFlags-layerFlags-Vec3-camPos-Vec3-targets-number-targetRadius-integer-clientId}
 It projects cone on voxel geometry and everything inside will be copies to tmp
 all raycasts will collide with this tmp layer instead until FreeTmpLayers
 parameters specify "cone" - two positions and end radius
@@ -145,15 +146,6 @@ parameters specify "cone" - two positions and end radius
 ### nil BackupSurfaceAttributes() {#nil-BackupSurfaceAttributes}
 
 ## Properties
-
-### fun(progress:number) OnProgress {#fun-progressnumber-OnProgress}
-callback function. progress from 0-1. May not be called every frame. Is called after script updates 
-
-### fun(info:RemoveCountInfo) OnFinished {#fun-infoRemoveCountInfo-OnFinished}
-callback function. onFinished is called after onProgress if it was last part
-
-### fun() OnError {#fun-OnError}
-callback function
 
 ### boolean blendEnable {#boolean-blendEnable}
 
@@ -244,8 +236,11 @@ if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least
 ### number imageNormalBlendPower {#number-imageNormalBlendPower}
 
 ### fun(progress:number) onProgress {#fun-progressnumber-onProgress}
+callback function. progress from 0-1. May not be called every frame. Is called after script updates 
 
 ### fun(info:RemoveCountInfo) onFinished {#fun-infoRemoveCountInfo-onFinished}
+callback function. onFinished is called after onProgress if it was last part
 
 ### fun() onError {#fun-onError}
+callback function
 

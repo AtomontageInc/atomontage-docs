@@ -20,14 +20,19 @@ Stop the sound
 ## Properties
 
 ### Vec3 pos {#Vec3-pos}
+Position of sound in 3D space
 
 ### Vec3 velocity {#Vec3-velocity}
+Direction of movement. Length of vector determine speed. Units is m/s Important for fast moving object. It affect doppler shift which cause that fast incoming object sounds with higher pitch.
 
 ### Object followObject {#Object-followObject}
+Make position of sound and this object same and keep them synced.
 
 ### number volume {#number-volume}
+Volume of the sound. Number in range 0 - 1
 
 ### boolean loop {#boolean-loop}
+Set to true for looping.
 
 ### boolean relativePos {#boolean-relativePos}
 
@@ -48,39 +53,4 @@ Stop the sound
 ### number playbackPos {#number-playbackPos}
 
 ### number playbackLength {#number-playbackLength}
-
-### Vec3 Pos {#Vec3-Pos}
-Position of sound in 3D space
-
-### Vec3 Velocity {#Vec3-Velocity}
-Direction of movement. Length of vector determine speed. Units is m/s Important for fast moving object. It affect doppler shift which cause that fast incoming object sounds with higher pitch.
-
-### Object FollowObject {#Object-FollowObject}
-Make position of sound and this object same and keep them synced.
-
-### number Volume {#number-Volume}
-Volume of the sound. Number in range 0 - 1
-
-### boolean Loop {#boolean-Loop}
-Set to true for looping.
-
-### boolean RelativePos {#boolean-RelativePos}
-
-### number Pitch {#number-Pitch}
-
-### number MinDistance {#number-MinDistance}
-
-### number MaxDistance {#number-MaxDistance}
-
-### number Attenuation {#number-Attenuation}
-
-### boolean Playing {#boolean-Playing}
-
-### boolean Paused {#boolean-Paused}
-
-### boolean Stopped {#boolean-Stopped}
-
-### number PlaybackPos {#number-PlaybackPos}
-
-### number PlaybackLength {#number-PlaybackLength}
 

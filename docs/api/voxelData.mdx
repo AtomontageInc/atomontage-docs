@@ -8,16 +8,11 @@ id: VoxelData
 Component that holds voxel data. The actual data itself is in the `data` property.
 The data will only render if the object also has a `VoxelRender` component.
 
-## Methods
-
-### nil SetPathAsync(string, userdata) {#nil-SetPathAsync-string-userdata}
-Async version of SetPath. Function returns immediately and voxel data loading is performed on background. After it finishes (or fails), supplied callback is called. Callback has parameters `bool success` and `string errStr`.
-
-If load is already running when new SetPathAsync is called, the new load is queued and performed after the current one finishes (SetPathAsync still exists immediatelly). In the future we may have more advanced strategy for handling concurrent loads.
-
 ## Metamethods
 
 ### boolean __eq(VoxelData a, VoxelData b) {#boolean-eq-VoxelData-a-VoxelData-b}
+
+## Methods
 
 ### nil Mirror(Vec3 worldPos, Vec3 worldNormal) {#nil-Mirror-Vec3-worldPos-Vec3-worldNormal}
 
@@ -28,9 +23,6 @@ If load is already running when new SetPathAsync is called, the new load is queu
 ### boolean success, string usedPath SetPath(string path) {#boolean-success-string-usedPath-SetPath-string-path}
 
 ## Properties
-
-### boolean copyOnWrite {#boolean-copyOnWrite}
-make local copy of voxel data resource if edited 
 
 ### boolean active {#boolean-active}
 

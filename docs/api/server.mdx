@@ -91,17 +91,17 @@ Common scenes
 
 ### integer GetMaxConnections() {#integer-GetMaxConnections}
 
-### nil HttpPost(string url, table headers, string data, fun onResponse) {#nil-HttpPost-string-url-table-headers-string-data-fun-onResponse}
+### nil HttpPost(string url, table headers, string data, fun(success:boolean, response:string, statusCode:integer) onResponse) {#nil-HttpPost-string-url-table-headers-string-data-fun-successboolean-responsestring-statusCodeinteger-onResponse}
 
-### nil HttpGet(string url, table headers, fun onResponse) {#nil-HttpGet-string-url-table-headers-fun-onResponse}
+### nil HttpGet(string url, table headers, fun(success:boolean, response:string, statusCode:integer) onResponse) {#nil-HttpGet-string-url-table-headers-fun-successboolean-responsestring-statusCodeinteger-onResponse}
 
-### nil HttpDownload(string url, table headers, fun onResponse) {#nil-HttpDownload-string-url-table-headers-fun-onResponse}
+### nil HttpDownload(string url, table headers, fun(success:boolean, response:string, statusCode:integer, file:File?) onResponse) {#nil-HttpDownload-string-url-table-headers-fun-successboolean-responsestring-statusCodeinteger-fileFile-onResponse}
 
 ### integer GetPing(integer clientID) {#integer-GetPing-integer-clientID}
 
 ### boolean MoveFileToMontageVoxelsFolder(File fileLua, string subPath) {#boolean-MoveFileToMontageVoxelsFolder-File-fileLua-string-subPath}
 
-### nil MakeUrlForFile(File fileLua, fun eventUpdate, fun eventFinish) {#nil-MakeUrlForFile-File-fileLua-fun-eventUpdate-fun-eventFinish}
+### nil MakeUrlForFile(File fileLua, fun(progress:number) eventUpdate, fun(success:boolean, url:string) eventFinish) {#nil-MakeUrlForFile-File-fileLua-fun-progressnumber-eventUpdate-fun-successboolean-urlstring-eventFinish}
 
 ### number GetLogValue(string logName) {#number-GetLogValue-string-logName}
 

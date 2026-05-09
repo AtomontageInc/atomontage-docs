@@ -47,15 +47,15 @@ Also see [`Scene:MakeNameValid`](#string-MakeNameValid-string)
 ### nil DestroyObject(Object obj) {#nil-DestroyObject-Object-obj}
 Flags the object for deletion. The object will not actually be destroyed until the next frame.
 
-### table GetObjectsByName(string name) {#table-GetObjectsByName-string-name}
+### Object[] GetObjectsByName(string name) {#Object-GetObjectsByName-string-name}
 
 ### Object GetObjectByName(string name) {#Object-GetObjectByName-string-name}
 
 ### Object GetObjectById(string id) {#Object-GetObjectById-string-id}
 
-### table GetRootObjects() {#table-GetRootObjects}
+### Object[] GetRootObjects() {#Object-GetRootObjects}
 
-### table GetAllObjects() {#table-GetAllObjects}
+### Object[] GetAllObjects() {#Object-GetAllObjects}
 
 ### Object CloneObject(Object obj) {#Object-CloneObject-Object-obj}
 
@@ -87,7 +87,7 @@ Flags the object for deletion. The object will not actually be destroyed until t
 
 ### VoxelDB? GetVoxelDB(string db) {#VoxelDB-GetVoxelDB-string-db}
 
-### table TraceRay(table params) {#table-TraceRay-table-params}
+### Hit[] TraceRay(table params) {#Hit-TraceRay-table-params}
 
 ### Vec3|Vec3[] ConvertWcToDc(VoxelRenderer vr, Vec3|Vec3[] wcPos) {#Vec3Vec3-ConvertWcToDc-VoxelRenderer-vr-Vec3Vec3-wcPos}
 
