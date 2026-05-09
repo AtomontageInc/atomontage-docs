@@ -5,7 +5,7 @@ const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 module.exports = {
   title: 'Atomontage Docs',
   tagline: 'Atomontage Tools Documentation',
-  url: 'https://atomontagedocs.netlify.app/',
+  url: 'https://docs.atomontage.com/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
