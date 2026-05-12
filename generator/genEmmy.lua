@@ -28,10 +28,36 @@ function Object:GetComponentByType(name) end
 function Object:GetComponentsByType(name) end
 
 ]],
+        GetComponentWithChildren = [[--- @generic ComponentType: Component
+--- @param name `ComponentType`|componentType
+--- @param includeInactive? boolean
+--- @return ComponentType
+function Object:GetComponentWithChildren(name, includeInactive) end
+
+]],
+        GetComponentsWithChildren = [[--- @generic ComponentType: Component
+--- @param name `ComponentType`|componentType
+--- @param includeInactive? boolean
+--- @return ComponentType[]
+function Object:GetComponentsWithChildren(name, includeInactive) end
+
+]],
         FindScript = [[--- @generic ScriptInstanceType: ScriptInstance
 --- @param name `ScriptInstanceType`
 --- @return ScriptInstanceType
 function Object:FindScript(name) end
+
+]],
+        FindScriptWithChildren = [[--- @generic ScriptInstanceType: ScriptInstance
+--- @param name `ScriptInstanceType`
+--- @return ScriptInstanceType
+function Object:FindScriptWithChildren(name) end
+
+]],
+        FindScriptInParents = [[--- @generic ScriptInstanceType: ScriptInstance
+--- @param name `ScriptInstanceType`
+--- @return ScriptInstanceType
+function Object:FindScriptInParents(name) end
 
 ]],
     },
@@ -329,8 +355,18 @@ local emmyDefaultLines = [[
 --- is enabled (Brush:SetCountMaterialMask / Brush.removeCountList).
 --- @alias RemoveCountInfo table<materialName, number>
 
---https://wiki.libsdl.org/SDL_Keycode
+-- Mostly SDL scancode names (https://wiki.libsdl.org/SDL_Keycode). The first block is
+-- Atomontage-added (not SDL): Input.cpp::GetKeyCode substring-matches "Alt"/"Ctrl"/"Shift" to the
+-- L-modifier scancodes, and parses "MouseButton<N>" to SDL_NUM_SCANCODES+N.
 --- @alias keyCode
+---| '"Alt"'
+---| '"Ctrl"'
+---| '"Shift"'
+---| '"MouseButton1"'
+---| '"MouseButton2"'
+---| '"MouseButton3"'
+---| '"MouseButton4"'
+---| '"MouseButton5"'
 ---| '"0"'
 ---| '"1"'
 ---| '"2"'
@@ -973,6 +1009,9 @@ function genEmmy:convertToEmmyLuaType(strType)
     strType = strType:gsub("char", "string")
     strType = strType:gsub("void", "nil")
     ]]
+    -- genDocs escapes `<`/`>` to HTML entities for MDX rendering; undo that here so
+    -- EmmyLua generic types like `table<string,number>` come through unescaped.
+    strType = strType:gsub("&lt;", "<"):gsub("&gt;", ">")
     return strType
 end
 

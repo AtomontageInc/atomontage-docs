@@ -54,8 +54,18 @@
 --- is enabled (Brush:SetCountMaterialMask / Brush.removeCountList).
 --- @alias RemoveCountInfo table<materialName, number>
 
---https://wiki.libsdl.org/SDL_Keycode
+-- Mostly SDL scancode names (https://wiki.libsdl.org/SDL_Keycode). The first block is
+-- Atomontage-added (not SDL): Input.cpp::GetKeyCode substring-matches "Alt"/"Ctrl"/"Shift" to the
+-- L-modifier scancodes, and parses "MouseButton<N>" to SDL_NUM_SCANCODES+N.
 --- @alias keyCode
+---| '"Alt"'
+---| '"Ctrl"'
+---| '"Shift"'
+---| '"MouseButton1"'
+---| '"MouseButton2"'
+---| '"MouseButton3"'
+---| '"MouseButton4"'
+---| '"MouseButton5"'
 ---| '"0"'
 ---| '"1"'
 ---| '"2"'
