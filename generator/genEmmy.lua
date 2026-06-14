@@ -686,19 +686,17 @@ local function indexReadonlyFromBindings(bindings)
     end
 end
 
-function genEmmy:createFile(bindingsServer, bindingsClient)
+function genEmmy:createFile(bindings)
     local file = io.open("generator\\emmyApi\\apiEmmyAtomontage.lua", "w")
 
-    -- index readonly + deprecated flags from both server- and client-side bindings (a prop
-    -- or method may exist on either side; if flagged anywhere we treat it as such).
-    indexReadonlyFromBindings(bindingsServer)
-    indexReadonlyFromBindings(bindingsClient)
+    -- index readonly + deprecated flags from the bindings
+    indexReadonlyFromBindings(bindings)
 
     --default lines
     file:write(emmyDefaultLines, "\n")
 
     --add component alias
-    local comps = util:getAllComponents(bindingsServer)
+    local comps = util:getAllComponents(bindings)
     table.sort(comps) --sort ABC
     file:write("--- @alias componentType", "\n")
     for i, comp in ipairs(comps) do

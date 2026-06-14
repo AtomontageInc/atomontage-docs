@@ -119,9 +119,9 @@ it should be in range 1-8
 
 ### nil Save(string filePath, string compression, number quality) {#nil-Save-string-filePath-string-compression-number-quality}
 
-### table InspectNormals() {#table-InspectNormals}
+### table InspectNormals(Vec3 pos, integer radiusVoxels, integer lod, VoxelRenderer? vr) {#table-InspectNormals-Vec3-pos-integer-radiusVoxels-integer-lod-VoxelRenderer-vr}
 
-### table Inspect() {#table-Inspect}
+### VoxelInspectData? Inspect(Vec3 pos, integer size, integer axis, string[] layers, integer lod, VoxelRenderer? vr) {#VoxelInspectData-Inspect-Vec3-pos-integer-size-integer-axis-string-layers-integer-lod-VoxelRenderer-vr}
 
 ### integer GetLODsCount() {#integer-GetLODsCount}
 
@@ -145,12 +145,4 @@ World position and size of AABB (axis-aligned bounding box) of the static voxel 
 ### number blendOpacity {#number-blendOpacity}
 
 ### number blendRadiusRatio {#number-blendRadiusRatio}
-
-### boolean BlendEnabled {#boolean-BlendEnabled}
-
-### BlendMode BlendMode {#BlendMode-BlendMode}
-
-### number BlendOpacity {#number-BlendOpacity}
-
-### number BlendRadiusRatio {#number-BlendRadiusRatio}
 

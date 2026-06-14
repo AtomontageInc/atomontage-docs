@@ -1,0 +1,97 @@
+---
+title: UI
+id: UI
+---
+`Client`
+`Server`
+
+## Methods
+
+### Panel AddPanel(Widget parent, string? name) {#Panel-AddPanel-Widget-parent-string-name}
+
+### Button AddButton(Widget parent, string? name) {#Button-AddButton-Widget-parent-string-name}
+
+### ButtonPanel AddButtonPanel(Widget parent, string? name) {#ButtonPanel-AddButtonPanel-Widget-parent-string-name}
+
+### Label AddLabel(Widget parent, string? name) {#Label-AddLabel-Widget-parent-string-name}
+
+### Header AddHeader(Widget parent, string? name) {#Header-AddHeader-Widget-parent-string-name}
+
+### Checkbox AddCheckbox(Widget parent, string? name) {#Checkbox-AddCheckbox-Widget-parent-string-name}
+
+### Inputbox AddInputbox(Widget parent, string? name) {#Inputbox-AddInputbox-Widget-parent-string-name}
+
+### Vectorbox AddVectorbox(Widget parent, string? name) {#Vectorbox-AddVectorbox-Widget-parent-string-name}
+
+### Slider AddSlider(Widget parent, string? name) {#Slider-AddSlider-Widget-parent-string-name}
+
+### Selectbox AddSelectbox(Widget parent, string? name) {#Selectbox-AddSelectbox-Widget-parent-string-name}
+
+### Colorbox AddColorbox(Widget parent, string? name) {#Colorbox-AddColorbox-Widget-parent-string-name}
+
+### Separator AddSeparator(Widget parent, string? name) {#Separator-AddSeparator-Widget-parent-string-name}
+
+### Widget AddWidget(string type, Widget parent) {#Widget-AddWidget-string-type-Widget-parent}
+
+### Widget CloneWidget(Widget widget) {#Widget-CloneWidget-Widget-widget}
+
+### nil DeleteWidget(Widget widget) {#nil-DeleteWidget-Widget-widget}
+
+### nil DeleteWidgets(Widget parent) {#nil-DeleteWidgets-Widget-parent}
+
+### Widget SelectedWidget() {#Widget-SelectedWidget}
+
+### nil SelectWidget(Widget widget) {#nil-SelectWidget-Widget-widget}
+
+### nil FocusWidget(Widget widget) {#nil-FocusWidget-Widget-widget}
+
+### boolean CanMoveWidgetInto(Widget widget, Widget target) {#boolean-CanMoveWidgetInto-Widget-widget-Widget-target}
+
+### nil MoveWidgetInto(Widget widget, Widget target) {#nil-MoveWidgetInto-Widget-widget-Widget-target}
+
+### nil MoveWidgetBy(Widget widget, integer delta) {#nil-MoveWidgetBy-Widget-widget-integer-delta}
+
+### Window AddWindow(boolean? isSystemUI) {#Window-AddWindow-boolean-isSystemUI}
+
+### nil DeleteWindow(Window window) {#nil-DeleteWindow-Window-window}
+
+### table GetWindows() {#table-GetWindows}
+
+### Window WindowByName(string name) {#Window-WindowByName-string-name}
+
+### Window AddSubWindow(string name, Widget parent, boolean? open) {#Window-AddSubWindow-string-name-Widget-parent-boolean-open}
+
+### nil OpenWindow(Window|string window, boolean? focus, boolean? animate) {#nil-OpenWindow-Windowstring-window-boolean-focus-boolean-animate}
+
+### nil CloseWindow(Window window) {#nil-CloseWindow-Window-window}
+
+### nil CloseAllWindows() {#nil-CloseAllWindows}
+
+### nil ClosePopups() {#nil-ClosePopups}
+
+### nil FocusWindow(Window window) {#nil-FocusWindow-Window-window}
+
+### nil BringToFront(Window window) {#nil-BringToFront-Window-window}
+
+### nil PopupWindow(Window window, Widget anchor, Vec2? pos, Vec2? size) {#nil-PopupWindow-Window-window-Widget-anchor-Vec2-pos-Vec2-size}
+
+### any GetCfg(string name) {#any-GetCfg-string-name}
+
+### table GetCfgAll() {#table-GetCfgAll}
+
+### nil SetUIScale(number scale) {#nil-SetUIScale-number-scale}
+
+### number GetUIScale() {#number-GetUIScale}
+
+### nil SaveUI(string path) {#nil-SaveUI-string-path}
+
+### nil LoadUI(string path) {#nil-LoadUI-string-path}
+
+### nil ResetLua() {#nil-ResetLua}
+
+### nil OpenLuaFile(string path) {#nil-OpenLuaFile-string-path}
+
+### nil OpenWindowLuaFile(Window window) {#nil-OpenWindowLuaFile-Window-window}
+
+### nil DebugWidgetInfo(Widget widget) {#nil-DebugWidgetInfo-Widget-widget}
+

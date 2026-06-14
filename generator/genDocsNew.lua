@@ -18,24 +18,16 @@ local genDocs = {}
 local docsLocation = "docs\\api\\"
 local enumsLocation = "docs\\api\\enums\\"
 
-local f = io.open("generator/bindingDumpServer.txt", "r")
+local f = io.open("generator/bindingDump.txt", "r")
 local bindingsSerialized = f:read("*all")
 f:close()
 
 local fun, err = load(bindingsSerialized)
 if err then error(err) end
-local _BindingsServer = fun()
-
-local f = io.open("generator/bindingDumpClient.txt", "r")
-local bindingsSerialized = f:read("*all")
-f:close()
-
-local fun, err = load(bindingsSerialized)
-if err then error(err) end
-local _BindingsClient = fun()
+local _Bindings = fun()
 
 
-local fileEmmyLua = genEmmy:createFile(_BindingsServer, _BindingsClient)
+local fileEmmyLua = genEmmy:createFile(_Bindings)
 
 function genDocs:gen()
     --make directory
@@ -74,14 +66,14 @@ function genDocs:gen()
  
     --itterate sorted by ABC for emmy order
     local tkeys = {}
-    for k, v in pairs(_BindingsServer.Classes) do
+    for k, v in pairs(_Bindings.Classes) do
         table.insert(tkeys, k)
     end
     table.sort(tkeys)
 
 
     for _, nameOrig in ipairs(tkeys) do
-        local class = _BindingsServer.Classes[nameOrig]
+        local class = _Bindings.Classes[nameOrig]
         local name = util:firstToLower(nameOrig)
         fileNamesClasses[name] = nil
         genDocs:generateClassFile(name, class)
@@ -89,10 +81,10 @@ function genDocs:gen()
 
     --itterate sorted by ABC
     local tkeys = {}
-    for k in pairs(_BindingsServer.Enums) do table.insert(tkeys, k) end
+    for k in pairs(_Bindings.Enums) do table.insert(tkeys, k) end
     table.sort(tkeys)
     for _, name in ipairs(tkeys) do
-        local values = _BindingsServer.Enums[name]
+        local values = _Bindings.Enums[name]
         local name = util:firstToLower(name)
         --name = name:gsub("::", " ") --remove this?
         if not string.find(name, "::") then --just skip these weird internal things for now

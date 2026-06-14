@@ -2,7 +2,7 @@ require("os")
 
 local util = require("generator.util")
 local genEmmy = require("generator.genEmmy")
-local genDocs = require("generator.genDocs")
+--local genDocs = require("generator.genDocs") --old generator, superseded by genDocsNew; loaded both dumps at require-time
 local genDocsNew = require("generator.genDocsNew")
 local serpent = require("generator.serpent")
 

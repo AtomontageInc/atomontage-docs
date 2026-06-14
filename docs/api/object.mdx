@@ -23,6 +23,7 @@ The object visible in the hierarchy. Every object has a transform and can have a
 ### Vec3 WorldToLocalVec(Vec3 vec) {#Vec3-WorldToLocalVec-Vec3-vec}
 
 ### nil LookAt(Vec3 pos, Vec3? up) {#nil-LookAt-Vec3-pos-Vec3-up}
+Rotates the object to face the given world point (optional up vector).
 
 ### Object? GetChild(string name) {#Object-GetChild-string-name}
 Get child object by name
@@ -57,13 +58,19 @@ Find all components by type name
 
 ### Component AddComponent(string componentType) {#Component-AddComponent-string-componentType}
 
-### boolean IsPrefab(string? name) {#boolean-IsPrefab-string-name}
-
 ### Object[] WithChildren(boolean? includeInactive) {#Object-WithChildren-boolean-includeInactive}
 get the object and all its children, descendants, does not returns destroyed objects
 
 ### ScriptInstance FindScript(string name) {#ScriptInstance-FindScript-string-name}
 Find attached script component lua table by name
+
+### ScriptInstance FindScriptWithChildren(string name) {#ScriptInstance-FindScriptWithChildren-string-name}
+
+### Object? FindObjectWithChildren(string|Object find, boolean? includeInactive) {#Object-FindObjectWithChildren-stringObject-find-boolean-includeInactive}
+
+### Component? GetComponentWithChildren(string typeName, boolean? includeInactive) {#Component-GetComponentWithChildren-string-typeName-boolean-includeInactive}
+
+### Component[] GetComponentsWithChildren(string typeName, boolean? includeInactive) {#Component-GetComponentsWithChildren-string-typeName-boolean-includeInactive}
 
 ### boolean HasScript(string name) {#boolean-HasScript-string-name}
 

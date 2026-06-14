@@ -13,17 +13,24 @@ Script component. Not to be confused with the actual [lua table instance](Script
 
 ## Methods
 
+### nil setSerializeVar(string key, any value) {#nil-setSerializeVar-string-key-any-value}
+
+### nil setSerializeVarAsset(string key, string assetId) {#nil-setSerializeVarAsset-string-key-string-assetId}
+
 ### integer RPC(string funcName, ... args) {#integer-RPC-string-funcName-args}
 
 ### string GetNetworkFlow() {#string-GetNetworkFlow}
 
 ### string GetScriptUpdateTime() {#string-GetScriptUpdateTime}
+Microseconds spent in this script's last `Update`/`LateUpdate`, returned as a string (may contain comma separators — parse with `tonumber((tostring(s):gsub(",","")))`). Requires `Scene:SetProfileScriptsUpdate(true)`.
 
 ### string GetScriptCompileTime() {#string-GetScriptCompileTime}
 
 ### string GetScriptAttachTime() {#string-GetScriptAttachTime}
+Microseconds of this script's last `Attach` call (string, µs).
 
 ### string GetScriptStartTime() {#string-GetScriptStartTime}
+Microseconds of this script's last `Start` call (string, µs).
 
 ## Properties
 
@@ -55,11 +62,17 @@ Script component. Not to be confused with the actual [lua table instance](Script
 
 ### string name {#string-name}
 
+### Asset luaFile {#Asset-luaFile}
+
+### string luaFilePath {#string-luaFilePath}
+
 ### string file {#string-file}
 
 ### boolean syncToClients {#boolean-syncToClients}
 
 ### integer priority {#integer-priority}
+
+### VarTable varsTable {#VarTable-varsTable}
 
 ### ScriptInstance Instance {#ScriptInstance-Instance}
 

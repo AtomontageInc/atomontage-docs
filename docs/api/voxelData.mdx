@@ -17,6 +17,7 @@ The data will only render if the object also has a `VoxelRender` component.
 ### nil Mirror(Vec3 worldPos, Vec3 worldNormal) {#nil-Mirror-Vec3-worldPos-Vec3-worldNormal}
 
 ### Vec3 center, Vec3 size GetAABounds() {#Vec3-center-Vec3-size-GetAABounds}
+Returns the world-space axis-aligned bounds (center, size). Affected by the object's rotation, and reports size `(0,0,0)` when `receiveTransform=false`.
 
 ### Vec3 center, Quat rot, Vec3 size GetBounds() {#Vec3-center-Quat-rot-Vec3-size-GetBounds}
 
@@ -52,6 +53,9 @@ The data will only render if the object also has a `VoxelRender` component.
 
 ### Vec3 size {#Vec3-size}
 
+### integer contentVersion {#integer-contentVersion}
+Monotonic counter incremented every time the underlying voxel content is invalidated (any edit that changes voxel presence). Cheap O(1) read for caching downstream computations like total volume.
+
 ### string path {#string-path}
 
 ### string originalPath {#string-originalPath}
@@ -60,6 +64,7 @@ The data will only render if the object also has a `VoxelRender` component.
 The voxel data resource that this voxel data is using
 
 ### boolean save {#boolean-save}
+Marks the voxel data to be persisted on save; it does not write any voxels by itself.
 
 ### boolean editable {#boolean-editable}
 

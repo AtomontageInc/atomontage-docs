@@ -18,4 +18,11 @@ id: Material
 ### nil SetPropertyVec4(string name, Vec4 vec) {#nil-SetPropertyVec4-string-name-Vec4-vec}
 
 ### nil SetProperty(string name, Vec3|Vec4 vec) {#nil-SetProperty-string-name-Vec3Vec4-vec}
+Feeds a live `Vec3`/`Vec4` value into a shader uniform without rebuilding or reloading shaders — the practical way to drive a "maker-settable" uniform (e.g. from a UI slider). Notes:
+- The named field must already exist in a UBO the material actually uses; a brand-new UBO at an unused binding won't get filled. Pack scalars into a `Vec4`.
+- The value applies on the **next frame**; no [`Client:ReloadShaders`](./client.mdx) needed for the value itself.
+- An unset UBO field reads as **garbage** — call `SetProperty` once at load to initialize it, and clamp to sane ranges in the shader.
+- Get the shared material the renderer actually draws with `Scene:CreateMaterial("name")` (returns the cached instance, not a copy).
+
+See also the typed [`SetPropertyVec3`](#nil-SetPropertyVec3-string-name-Vec3-vec) / [`SetPropertyVec4`](#nil-SetPropertyVec4-string-name-Vec4-vec).
 

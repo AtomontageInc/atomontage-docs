@@ -25,11 +25,33 @@ id: AE
 
 ### CommandLine GetCommandLine() {#CommandLine-GetCommandLine}
 
+### string GetScript(string fileName) {#string-GetScript-string-fileName}
+
+### table GetVersion() {#table-GetVersion}
+
+### System GetSystem() {#System-GetSystem}
+
+### Device GetDevice() {#Device-GetDevice}
+
 ### number GetLogTime(string name) {#number-GetLogTime-string-name}
+Reads an engine profiler timer's last-frame value in **seconds** (multiply by `1e6` for µs to match the "Profiling On Server" window's Duration column). Pass a timer name discovered via [`GetLogTimers`](#table-GetLogTimers-string-namePrefix), e.g. `AE:GetLogTime("SUF/Server - Update")`. Single reads fluctuate frame-to-frame — sample over several frames and average/take percentiles.
 
 ### table GetLogTimers(string namePrefix) {#table-GetLogTimers-string-namePrefix}
+Lists all engine profiler timer **names** under a prefix — use it to discover what's measurable, then call [`GetLogTime`](#number-GetLogTime-string-name) on each. `AE:GetLogTimers("")` returns everything; `AE:GetLogTimers("NEW/")` filters by prefix. Common prefixes: `SUF/` (server update-frame labels shown in the Profiling window, with `SUF/Frame` as the total frame timer) and `NEW/` (independent C++ subsystem probes that may overlap `SUF/`).
 
 ### number GetLogValue(string name, number? defaultVal) {#number-GetLogValue-string-name-number-defaultVal}
 
+### nil SetLogValue(string name, number value) {#nil-SetLogValue-string-name-number-value}
+
+### Asset[], string[] GetAssetsFiltered(string assetFolder, string subfolder, string assetType) {#Asset-string-GetAssetsFiltered-string-assetFolder-string-subfolder-string-assetType}
+
 ### Asset[] GetAssets() {#Asset-GetAssets}
+
+### string[] GetAssetSources() {#string-GetAssetSources}
+
+### Asset? GetAssetById(string id) {#Asset-GetAssetById-string-id}
+
+### integer TypeInt(string typeName) {#integer-TypeInt-string-typeName}
+
+### table GetAELuaBindings() {#table-GetAELuaBindings}
 

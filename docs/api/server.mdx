@@ -19,13 +19,12 @@ This class is only available on server
 
 ### nil DisconnectClient(integer clientID) {#nil-DisconnectClient-integer-clientID}
 
-### integer GetScriptsVersion() {#integer-GetScriptsVersion}
-
-### string GetScript(string scriptName) {#string-GetScript-string-scriptName}
-
 ### nil LuaReset() {#nil-LuaReset}
+Re-runs all server Lua scripts from scratch. The entire Lua state is wiped — no tables, globals, or per-script `self` data survive — then every script reloads. Does not reload scene geometry.
 
 ### string[] GetLuaFilesList() {#string-GetLuaFilesList}
+
+### Asset[] assets, string[] paths GetMontageLuaAssets() {#Asset-assets-string-paths-GetMontageLuaAssets}
 
 ### string[] GetVoxelFilesList() {#string-GetVoxelFilesList}
 Voxel files in the Montage/Voxels, those you saved in your montage and they are not necessary uploaded to the cloud already. local montage assets
@@ -39,49 +38,32 @@ Common, those we provide cloud with as free to use
 ### string[] GetCommonScenesList() {#string-GetCommonScenesList}
 Common scenes
 
-### string[] GetPrefabsList() {#string-GetPrefabsList}
+### table[] GetPrefabsList() {#table-GetPrefabsList}
 
-### Object InsertPrefab(integer id) {#Object-InsertPrefab-integer-id}
+### Object InsertPrefab(Asset prefab, string? newName, boolean? setSave) {#Object-InsertPrefab-Asset-prefab-string-newName-boolean-setSave}
 
-### Object InsertPrefab(integer id, boolean deepCopy) {#Object-InsertPrefab-integer-id-boolean-deepCopy}
+### Asset MakePrefab(Object fromObject) {#Asset-MakePrefab-Object-fromObject}
 
-### Object InsertPrefab(string name, string? newName, boolean? setSave, boolean? deepCopy) {#Object-InsertPrefab-string-name-string-newName-boolean-setSave-boolean-deepCopy}
-
-### Object InsertPrefab(string name, boolean setSave) {#Object-InsertPrefab-string-name-boolean-setSave}
-
-### nil MakePrefab(string name) {#nil-MakePrefab-string-name}
+### boolean UpdatePrefab(Object obj) {#boolean-UpdatePrefab-Object-obj}
 
 ### table GetInsertPrefabStats() {#table-GetInsertPrefabStats}
 
 ### nil PreloadVDRsForPrefab(string name, integer count) {#nil-PreloadVDRsForPrefab-string-name-integer-count}
 
 ### nil SaveScene() {#nil-SaveScene}
+Saves the whole scene to disk, including voxel geometry.
 
 ### nil SaveSceneHierarchy() {#nil-SaveSceneHierarchy}
+Saves the object hierarchy and scripts only, without voxel geometry (much faster than `SaveScene`).
 
 ### nil ReloadScene() {#nil-ReloadScene}
+Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaReset`](#nil-LuaReset).
 
 ### nil ResetSceneToInitState(boolean? reloadTerrain) {#nil-ResetSceneToInitState-boolean-reloadTerrain}
 
 ### nil BackupMontage() {#nil-BackupMontage}
 
-### nil OnLuaLog() {#nil-OnLuaLog}
-
-### boolean IsClient() {#boolean-IsClient}
-
-### boolean IsServer() {#boolean-IsServer}
-
 ### boolean DevMode() {#boolean-DevMode}
-
-### integer GetCurrentUIActionID() {#integer-GetCurrentUIActionID}
-
-### nil ScrollToLastestLuaLog() {#nil-ScrollToLastestLuaLog}
-
-### CommandLine GetCommandLine() {#CommandLine-GetCommandLine}
-
-### table GetVersion() {#table-GetVersion}
-
-### System GetSystem() {#System-GetSystem}
 
 ### string GetDateTime() {#string-GetDateTime}
 
@@ -103,19 +85,9 @@ Common scenes
 
 ### nil MakeUrlForFile(File fileLua, fun(progress:number) eventUpdate, fun(success:boolean, url:string) eventFinish) {#nil-MakeUrlForFile-File-fileLua-fun-progressnumber-eventUpdate-fun-successboolean-urlstring-eventFinish}
 
-### number GetLogValue(string logName) {#number-GetLogValue-string-logName}
-
-### number GetFPS() {#number-GetFPS}
-
 ### table GetStreamingStats() {#table-GetStreamingStats}
 
 ### table GetMainDispatcherStats() {#table-GetMainDispatcherStats}
-
-### nil TriggerCrash() {#nil-TriggerCrash}
-
-### nil TriggerException() {#nil-TriggerException}
-
-### nil TriggerCriticalError() {#nil-TriggerCriticalError}
 
 ### nil Restart() {#nil-Restart}
 
@@ -147,17 +119,18 @@ Common scenes
 
 ### nil GenLuaApi(string api) {#nil-GenLuaApi-string-api}
 
-### nil TakeScreenshot() {#nil-TakeScreenshot}
-
 ## Properties
 
 ### integer clientID {#integer-clientID}
 
+### boolean initMode {#boolean-initMode}
+
 ### boolean editMode {#boolean-editMode}
 
+### boolean playMode {#boolean-playMode}
+
 ### boolean modeChangeReloadGeom {#boolean-modeChangeReloadGeom}
+Whether toggling [`editMode`](#boolean-editMode) (the Edit/Play switch) reloads voxel geometry.
 
-### boolean EditMode {#boolean-EditMode}
-
-### boolean ModeChangeReloadGeom {#boolean-ModeChangeReloadGeom}
+### ServerSceneSettings settings {#ServerSceneSettings-settings}
 

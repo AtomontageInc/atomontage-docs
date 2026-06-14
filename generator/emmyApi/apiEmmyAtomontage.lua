@@ -341,12 +341,10 @@ Callbacks = {}
 ---| '"Camera"'
 ---| '"MeshData"'
 ---| '"MeshRenderer"'
----| '"Prefab"'
 ---| '"RigidBody"'
 ---| '"Script"'
 ---| '"Sky"'
 ---| '"StaticVoxelData"'
----| '"Transform"'
 ---| '"VoxelData"'
 ---| '"VoxelRenderer"'
 
@@ -387,10 +385,33 @@ function AE:GetDebugTime() end
 --- @return CommandLine
 function AE:GetCommandLine() end
 
+--- @param fileName string
+--- @return string
+function AE:GetScript(fileName) end
+
+--- @return table
+function AE:GetVersion() end
+
+--- @return System
+function AE:GetSystem() end
+
+--- @return Device
+function AE:GetDevice() end
+
+--[[
+Reads an engine profiler timer's last-frame value in **seconds** (multiply by `1e6` for µs to match the "Profiling On Server" window's Duration column). Pass a timer name discovered via [`GetLogTimers`](#table-GetLogTimers-string-namePrefix), e.g. `AE:GetLogTime("SUF/Server - Update")`. Single reads fluctuate frame-to-frame — sample over several frames and average/take percentiles.
+
+[View Documentation](https://docs.atomontage.com/api/AE#number-GetLogTime-string-name)
+]]
 --- @param name string
 --- @return number
 function AE:GetLogTime(name) end
 
+--[[
+Lists all engine profiler timer **names** under a prefix — use it to discover what's measurable, then call [`GetLogTime`](#number-GetLogTime-string-name) on each. `AE:GetLogTimers("")` returns everything; `AE:GetLogTimers("NEW/")` filters by prefix. Common prefixes: `SUF/` (server update-frame labels shown in the Profiling window, with `SUF/Frame` as the total frame timer) and `NEW/` (independent C++ subsystem probes that may overlap `SUF/`).
+
+[View Documentation](https://docs.atomontage.com/api/AE#table-GetLogTimers-string-namePrefix)
+]]
 --- @param namePrefix string
 --- @return table
 function AE:GetLogTimers(namePrefix) end
@@ -400,8 +421,33 @@ function AE:GetLogTimers(namePrefix) end
 --- @return number
 function AE:GetLogValue(name, defaultVal) end
 
+--- @param name string
+--- @param value number
+--- @return nil
+function AE:SetLogValue(name, value) end
+
+--- @param assetFolder string
+--- @param subfolder string
+--- @param assetType string
+--- @return Asset[], string[]
+function AE:GetAssetsFiltered(assetFolder, subfolder, assetType) end
+
 --- @return Asset[]
 function AE:GetAssets() end
+
+--- @return string[]
+function AE:GetAssetSources() end
+
+--- @param id string
+--- @return Asset?
+function AE:GetAssetById(id) end
+
+--- @param typeName string
+--- @return integer
+function AE:TypeInt(typeName) end
+
+--- @return table
+function AE:GetAELuaBindings() end
 
 --[[
 `Client`
@@ -418,13 +464,22 @@ AnyVar = {}
 --- @return boolean
 function AnyVar:IsType(type) end
 
---- @param type string
+--- @param type string?
 --- @return boolean
 function AnyVar:IsAsset(type) end
 
---- @param com string
+--- @param type string?
 --- @return boolean
-function AnyVar:IsObjWithCom(com) end
+function AnyVar:IsServerAsset(type) end
+
+--- @return boolean
+function AnyVar:IsServerObject() end
+
+--- @return boolean
+function AnyVar:IsServerComponent() end
+
+--- @return boolean
+function AnyVar:IsObject() end
 
 --- @return boolean
 function AnyVar:IsComponent() end
@@ -440,7 +495,44 @@ function AnyVar:IsComponent() end
 --- @field type integer
 --- @field typeStr string
 --- @field deleted boolean
+--- @field id string
+--- @field filepath string
+--- @field canReferenceAssets boolean
 Asset = {}
+
+--- @return Asset[]
+function Asset:GetReferencedAssets() end
+
+--- @return table
+function Asset:GetReferencedAssetsAndTypes() end
+
+--- @param asset Asset
+--- @return Asset[]
+function Asset:GetAssetsReferencingAsset(asset) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/AssetLink)
+]]
+--- @class AssetLink
+--- @field asset Asset
+--- @field assetType string (readonly)
+--- @field assetName string (readonly)
+--- @field assetId string (readonly)
+AssetLink = {}
+
+--- @return AssetLink
+function AssetLink() end
+
+--- @param assetType string
+--- @return AssetLink
+function AssetLink(assetType) end
+
+--- @param asset Asset
+--- @return AssetLink
+function AssetLink(asset) end
 
 --[[
 `Client`
@@ -572,6 +664,69 @@ function Box(pos, rot, size) end
 [View Documentation](https://docs.atomontage.com/api/Button)
 ]]
 --- @class Button
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
 --- @field text string
 --- @field textAlign Vec2
 --- @field multiLine boolean
@@ -579,8 +734,13 @@ function Box(pos, rot, size) end
 --- @field value boolean
 --- @field icon string
 --- @field icon2 string
+--- @field iconMargin Vec2
 --- @field closeWindow boolean
 Button = {}
+
+--- @param name string
+--- @return Widget
+function Button:WidgetByName(name) end
 
 --[[
 `Client`
@@ -589,9 +749,76 @@ Button = {}
 [View Documentation](https://docs.atomontage.com/api/ButtonPanel)
 ]]
 --- @class ButtonPanel
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
 --- @field buttonType UIButtonType
 --- @field value boolean
 ButtonPanel = {}
+
+--- @param name string
+--- @return Widget
+function ButtonPanel:WidgetByName(name) end
 
 --[[
 `Client`
@@ -681,9 +908,78 @@ function Capsule(pos1, pos2, radius1, radius2) end
 [View Documentation](https://docs.atomontage.com/api/Checkbox)
 ]]
 --- @class Checkbox
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
 --- @field text string
 --- @field value boolean
+--- @field checkboxType string
+--- @field switchHeight number
 Checkbox = {}
+
+--- @param name string
+--- @return Widget
+function Checkbox:WidgetByName(name) end
 
 --[[
 `Client`
@@ -694,45 +990,36 @@ This class is only available on client
 [View Documentation](https://docs.atomontage.com/api/Client)
 ]]
 --- @class Client
+--- @field MasterVolume number Audio volume in range 0 - 1.
+--- @field SoundVolume number Audio volume in range 0 - 1.
+--- @field MusicVolume number Audio volume in range 0 - 1.
 --- @field clientID integer (readonly)
 --- @field userID string (readonly)
---- @field mode ClientMode
+--- @field mode ClientMode ClientMode enum: View=0, Edit=1, DevDebug=2.
 --- @field isMaker boolean (readonly)
 --- @field platform string (readonly)
 --- @field sysInfo string (readonly)
+--- @field initMode boolean (readonly)
 --- @field editMode boolean (readonly)
---- @field wannaShowLuaConsole boolean
+--- @field playMode boolean (readonly)
 --- @field masterVolume number
 --- @field soundVolume number
 --- @field musicVolume number
---- @field EditMode boolean (readonly, deprecated)
---- @field WannaShowLuaConsole boolean (deprecated)
---- @field MasterVolume number (deprecated) Audio volume in range 0 - 1.
---- @field SoundVolume number (deprecated) Audio volume in range 0 - 1.
---- @field MusicVolume number (deprecated) Audio volume in range 0 - 1.
 Client = {}
+
+--[[
+Returns [`CommandLine`](./commandLine.mdx)
+
+[View Documentation](https://docs.atomontage.com/api/Client#CommandLine-GetCommandLine)
+]]
+--- @return CommandLine
+function Client:GetCommandLine() end
 
 --- @return string
 function Client:GetUserID() end
 
 --- @return integer
 function Client:GetID() end
-
---- @param itemId integer
---- @param uiItem UIItem
---- @param value any
---- @return string
-function Client:UIItemUpdate(itemId, uiItem, value) end
-
---- @param keyActionID string
---- @return nil
-function Client:OpenKeyboardShortcutInput(keyActionID) end
-
---- @return nil
-function Client:ToggleUICreatorWindow() end
-
---- @return nil
-function Client:ToggleUIVisibility() end
 
 --- @param show boolean
 --- @return nil
@@ -741,89 +1028,15 @@ function Client:SetShowWindows(show) end
 --- @return boolean
 function Client:GetShowWindows() end
 
---- @return boolean
-function Client:GetUICapturesMouseOrKeyboard() end
-
---- @return boolean
-function Client:GetUICapturesMouse() end
-
---- @return boolean
-function Client:GetUICapturesKeyboard() end
-
---- @return boolean
-function Client:GetUICapturesTextInput() end
-
---- @return boolean
-function Client:GetUIIsInEditMode() end
-
---- @param windowName string
---- @return nil
-function Client:OpenUIWindow(windowName) end
-
---- @param windowName string
---- @return nil
-function Client:CloseUIWindow(windowName) end
-
---- @param windowName string
---- @param open boolean
---- @return nil
-function Client:SetUIWindowOpen(windowName, open) end
-
---- @param windowName string
---- @return nil
-function Client:ToggleUIWindow(windowName) end
-
---- @param windowName string
---- @return boolean
-function Client:IsWindowOpen(windowName) end
-
---- @param windowName string
---- @param pos Vec2
---- @return nil
-function Client:SetWindowPos(windowName, pos) end
-
---- @return nil
-function Client:OpenUI() end
-
---- @return nil
-function Client:CloseUI() end
-
---- @return boolean
-function Client:IsUIOpen() end
-
---- @param rot Quat
---- @param pose Vec3
---- @return nil
-function Client:SetUIPose(rot, pose) end
-
---- @return Quat rot, Vec3 pos
-function Client:GetUIPose() end
-
---- @param scriptName string
---- @return Script
-function Client:GetScript(scriptName) end
-
 --- @param fileName string
 --- @param lineNumber integer?
 --- @return nil
 function Client:OpenScriptFile(fileName, lineNumber) end
 
---- @param scale number
+--- @param fileName string
+--- @param lineNumber integer?
 --- @return nil
-function Client:SetUIScale(scale) end
-
---- @return number
-function Client:GetUIScale() end
-
---- @return boolean
-function Client:GetUIScaleAuto() end
-
---- @param auto boolean
---- @return nil
-function Client:SetUIScaleAuto(auto) end
-
---- @return string
-function Client:GetUILayout() end
+function Client:OpenMontageScriptFile(fileName, lineNumber) end
 
 --- @return string
 function Client:GetMontageURL() end
@@ -895,57 +1108,6 @@ function Client:GetLogValue(name, defaultValue) end
 --- @return nil
 function Client:SetLogValue(name, value) end
 
---- @param name string
---- @param value string
---- @return nil
-function Client:SetStrLogValue(name, value) end
-
---- @param index integer
---- @return integer
-function Client:GetLogIValue(index) end
-
---- @param index integer
---- @return string
-function Client:GetLogIValueName(index) end
-
---- @param index integer
---- @return string
-function Client:GetLogIValueOutputName(index) end
-
---- @param name string
---- @return boolean
-function Client:GetLogIsValue(name) end
-
---- @return integer
-function Client:GetLogValuesCount() end
-
---- @param name string
---- @return table
-function Client:GetLogValueForPlot(name) end
-
---- @param name string
---- @return string
-function Client:GetLogStrValue(name) end
-
---- @param index integer
---- @return string
-function Client:GetLogStrIValue(index) end
-
---- @param index integer
---- @return string
-function Client:GetLogStrIValueName(index) end
-
---- @param index integer
---- @return string
-function Client:GetLogStrIValueOutputName(index) end
-
---- @param name string
---- @return boolean
-function Client:GetLogStrIsValue(name) end
-
---- @return integer
-function Client:GetLogStrValuesCount() end
-
 --- @return table
 function Client:GetMainDispatcherStats() end
 
@@ -962,31 +1124,12 @@ function Client:SetRenderStatsEnabled(enable) end
 --- @return number
 function Client:GetFPS() end
 
---- @return Config
-function Client:GetConfigInputActions() end
-
 --- @return nil
 function Client:ConnectToServer() end
 
 --- @param path string
 --- @return boolean opened
 function Client:OpenFolder(path) end
-
---- @return integer
-function Client:GetScriptsVersion() end
-
---- @return integer
-function Client:GetLoadedScriptsVersion() end
-
---- @return nil
-function Client:OnLuaLog() end
-
---- @return nil
-function Client:ScrollToLastestLuaLog() end
-
---- @param uiItem UIItem
---- @return boolean
-function Client:IsContainerEnabledAndVisible(uiItem) end
 
 --[[
 Log a message to file. In most cases you wanna use print() for console output
@@ -998,35 +1141,10 @@ Log a message to file. In most cases you wanna use print() for console output
 function Client:Log(message) end
 
 --- @return boolean
-function Client:IsClient() end
-
---- @return boolean
-function Client:IsServer() end
-
---- @return boolean
 function Client:DevMode() end
 
 --- @return boolean
 function Client:GetNetworkThrottlingNow() end
-
---- @param uiItem UIItem
---- @return nil
-function Client:SelectItemInUICreator(uiItem) end
-
---- @param actionID integer
---- @return UIItem
-function Client:GetUIItemByUIActionID(actionID) end
-
---- @param actionID integer
---- @return string
-function Client:GetUIActionType(actionID) end
-
---- @param actionID integer
---- @return string
-function Client:GetUIActionScript(actionID) end
-
---- @return string
-function Client:GetCurrentUIActionID() end
 
 --- @param color Color
 --- @return nil
@@ -1064,14 +1182,6 @@ function Client:GetWindowSize() end
 
 --- @return Vec2
 function Client:GetViewportSize() end
-
---[[
-Returns [`CommandLine`](./commandLine.mdx)
-
-[View Documentation](https://docs.atomontage.com/api/Client#CommandLine-GetCommandLine)
-]]
---- @return CommandLine
-function Client:GetCommandLine() end
 
 --- @return Color
 function Client:GetBGColor() end
@@ -1156,15 +1266,6 @@ function Client:Restart() end
 function Client:ChooseImage() end
 
 --- @return nil
-function Client:TriggerCrash() end
-
---- @return nil
-function Client:TriggerException() end
-
---- @return nil
-function Client:TriggerCriticalError() end
-
---- @return nil
 function Client:ToggleChannelRendering() end
 
 --- @return integer
@@ -1202,14 +1303,8 @@ function Client:GetEntityPath() end
 --- @return nil
 function Client:TakeScreenshot(name, attachTimestamp) end
 
---- @return table
-function Client:GetVersion() end
-
---- @return System
-function Client:GetSystem() end
-
---- @return Device
-function Client:GetDevice() end
+--- @return boolean
+function Client:IsMobile() end
 
 --- @return integer
 function Client:GetMemoryUsage() end
@@ -1239,22 +1334,6 @@ function Client:OpenBrowserWithURL(url) end
 --- @param fromCache boolean
 --- @return nil
 function Client:ReloadPage(fromCache) end
-
---- @return table
-function Client:EnumerateTestRenderObjects() end
-
---- @param objectName string
---- @return boolean
-function Client:IsTestRenderObjectEnabled(objectName) end
-
---- @param objectName string
---- @param enabled boolean
---- @return boolean
-function Client:SetTestRenderObjectEnabled(objectName, enabled) end
-
---- @param objectName string
---- @return boolean
-function Client:ToggleTestRenderObjectEnabled(objectName) end
 
 --- @return nil
 function Client:ResetPlayerLODPriorityBubble() end
@@ -1371,6 +1450,11 @@ function Client:SetHighlightColor(color) end
 --- @return nil
 function Client:DrawPointSpriteSphere(pos, radius, color, shade) end
 
+--[[
+Draw a sphere sprite at a world position, optionally shaded. Client-side, call every frame.
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-DrawBillboardSphere-Vec3-pos-number-radius-Vec4-color-boolean-shade)
+]]
 --- @param pos Vec3
 --- @param radius number
 --- @param color Vec4
@@ -1378,6 +1462,11 @@ function Client:DrawPointSpriteSphere(pos, radius, color, shade) end
 --- @return nil
 function Client:DrawBillboardSphere(pos, radius, color, shade) end
 
+--[[
+Draw a camera-facing textured quad in world space. Client-side, call every frame.
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-DrawBillboard-integer-texture-Vec3-pos-number-size-Vec4-color-number-angleDeg)
+]]
 --- @param texture integer
 --- @param pos Vec3
 --- @param size number
@@ -1386,133 +1475,17 @@ function Client:DrawBillboardSphere(pos, radius, color, shade) end
 --- @return nil
 function Client:DrawBillboard(texture, pos, size, color, angleDeg) end
 
+--[[
+Batch-draw multiple billboards from a table of descriptors.
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-DrawBillboards-table-billboards)
+]]
 --- @param billboards table
 --- @return nil
 function Client:DrawBillboards(billboards) end
 
 --- @return boolean
 function Client:ToggleFullScreen() end
-
---[[
-`Server`
-
-[View Documentation](https://docs.atomontage.com/api/ClientContext)
-]]
---- @class ClientContext
---- @field clientID integer (readonly)
---- @field mode string (readonly)
-ClientContext = {}
-
---- @param actionID integer
---- @param item UIItem
---- @param value any
---- @return string
-function ClientContext:UIItemUpdate(actionID, item, value) end
-
---- @param uiItem UIItem
---- @return nil
-function ClientContext:SelectItemInUICreator(uiItem) end
-
---- @param uiActionID integer
---- @return UIItem
-function ClientContext:GetUIItemByUIActionID(uiActionID) end
-
---- @param uiActionID integer
---- @return string
-function ClientContext:GetUIActionType(uiActionID) end
-
---- @param uiActionID integer
---- @return string
-function ClientContext:GetUIActionScript(uiActionID) end
-
---- @return integer
-function ClientContext:GetCurrentUIActionID() end
-
---- @return nil
-function ClientContext:OnLuaLog() end
-
---- @return boolean
-function ClientContext:IsServer() end
-
---- @return boolean
-function ClientContext:IsClient() end
-
---- @param fileName string
---- @return string
-function ClientContext:GetScript(fileName) end
-
---- @return nil
-function ClientContext:ClearLuaLogClient() end
-
---- @return nil
-function ClientContext:ScrollToLastestLuaLog() end
-
---- @return CommandLine
-function ClientContext:GetCommandLine() end
-
---- @return table
-function ClientContext:GetVersion() end
-
---- @return string
-function ClientContext:GetSystem() end
-
---- @return number
-function ClientContext:GetFPS() end
-
---- @return integer
-function ClientContext:GetScriptsVersion() end
-
---- @param name string
---- @return number
-function ClientContext:GetLogValue(name) end
-
---- @param name string
---- @param value number
---- @return nil
-function ClientContext:SetLogValue(name, value) end
-
---- @param name string
---- @return table
-function ClientContext:GetLogValueForPlot(name) end
-
---- @param name integer
---- @return number
-function ClientContext:GetLogIValue(name) end
-
---- @param name integer
---- @return string
-function ClientContext:GetLogIValueName(name) end
-
---- @param name integer
---- @return string
-function ClientContext:GetLogIValueOutputName(name) end
-
---- @param name integer
---- @return boolean
-function ClientContext:GetLogIsValue(name) end
-
---- @return integer
-function ClientContext:GetLogValuesCount() end
-
---- @return Vec2i
-function ClientContext:GetVideoRange() end
-
---- @return integer
-function ClientContext:GetCurrentFrame() end
-
---- @param frame integer
---- @return nil
-function ClientContext:SetCurrentFrame(frame) end
-
---- @return boolean
-function ClientContext:IsContainerEnabledAndVisible() end
-
---- @return nil
-function ClientContext:LuaStartDebugger() end
-
---- @param enable boolean
---- @return nil
-function ClientContext:LuaEnableDebugging(enable) end
 
 --[[
 `Client`
@@ -1683,9 +1656,75 @@ function Color:Copy() end
 [View Documentation](https://docs.atomontage.com/api/Colorbox)
 ]]
 --- @class Colorbox
---- @field value Color
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
 --- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
+--- @field value Color
 Colorbox = {}
+
+--- @param name string
+--- @return Widget
+function Colorbox:WidgetByName(name) end
 
 --[[
 `Client`
@@ -1753,7 +1792,7 @@ All components inherit from this class. It is not meant to be instantiated direc
 --- @class Component
 --- @field active boolean
 --- @field activeInHierarchy boolean (readonly)
---- @field object Object (readonly, deprecated)
+--- @field object Object (readonly)
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
@@ -1832,6 +1871,16 @@ function Config:SetVec3(key, value) end
 --- @param value Vec4
 --- @return nil
 function Config:SetVec4(key, value) end
+
+--- @param key string
+--- @param default any?
+--- @return any
+function Config:Get(key, default) end
+
+--- @param key string
+--- @param value any
+--- @return nil
+function Config:Set(key, value) end
 
 --- @param key string
 --- @return nil
@@ -2000,51 +2049,79 @@ function Gamepad:RumbleTriggers(leftRumble, rightRumble, duration) end
 `Client`
 `Server`
 
-[View Documentation](https://docs.atomontage.com/api/Guid)
-]]
---- @class Guid
---- @field IsNull boolean (readonly)
-Guid = {}
-
---- @return Guid
-function Guid() end
-
---- @param a Guid
---- @param b Guid
---- @return boolean
-function Guid:__eq(a, b) end
-
---- @param a Guid
---- @param b Guid
---- @return boolean
-function Guid:__lt(a, b) end
-
---- @param a Guid
---- @param b Guid
---- @return boolean
-function Guid:__le(a, b) end
-
---- @param a Guid
---- @return string
-function Guid:__tostring(a) end
-
---- @return string
-function Guid:ToString() end
-
---- @param str string
---- @return Guid
-function Guid:FromString(str) end
-
---[[
-`Client`
-`Server`
-
 [View Documentation](https://docs.atomontage.com/api/Header)
 ]]
 --- @class Header
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
 --- @field text string
 --- @field collapsed boolean
 Header = {}
+
+--- @param name string
+--- @return Widget
+function Header:WidgetByName(name) end
 
 --[[
 `Client`
@@ -2090,8 +2167,9 @@ because it respects the order in which the input was received and other benefits
 --- @class Input
 Input = {}
 
+--- @param includeEditor boolean?
 --- @return table[]
-function Input:GetEvents() end
+function Input:GetEvents(includeEditor) end
 
 --- @param key keyCode
 --- @return boolean
@@ -2161,6 +2239,43 @@ function Input:MousePosPercLast() end
 
 --- @return Vec2
 function Input:MouseMovePerc() end
+
+--[[
+Injects a synthetic key down/up into the real input funnel, as if the user pressed it.
+
+[View Documentation](https://docs.atomontage.com/api/Input#nil-InjectKey-string-key-boolean-down)
+]]
+--- @param key string
+--- @param down boolean
+--- @return nil
+function Input:InjectKey(key, down) end
+
+--- @param button integer
+--- @param down boolean
+--- @return nil
+function Input:InjectMouseButton(button, down) end
+
+--- @param dxPerc number
+--- @param dyPerc number
+--- @return nil
+function Input:InjectMouseMove(dxPerc, dyPerc) end
+
+--- @param xPerc number
+--- @param yPerc number
+--- @return nil
+function Input:InjectMousePos(xPerc, yPerc) end
+
+--- @param amount integer
+--- @return nil
+function Input:InjectMouseWheel(amount) end
+
+--[[
+Releases all keys and buttons previously set via the `Inject*` functions.
+
+[View Documentation](https://docs.atomontage.com/api/Input#nil-ClearInjected)
+]]
+--- @return nil
+function Input:ClearInjected() end
 
 --- @return boolean
 function Input:GetRelativeMouseMode() end
@@ -2281,12 +2396,79 @@ function Input:GetActiveGamepad() end
 [View Documentation](https://docs.atomontage.com/api/Inputbox)
 ]]
 --- @class Inputbox
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
 --- @field value string
 --- @field range Range
 --- @field inputType UIInputType
 --- @field multiLine boolean
 --- @field textAlign Vec2
 Inputbox = {}
+
+--- @param name string
+--- @return Widget
+function Inputbox:WidgetByName(name) end
 
 --[[
 `Client`
@@ -2295,10 +2477,78 @@ Inputbox = {}
 [View Documentation](https://docs.atomontage.com/api/Label)
 ]]
 --- @class Label
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
 --- @field text string
+--- @field labelType UILabelType
 --- @field multiLine boolean
 --- @field textAlign Vec2
 Label = {}
+
+--- @param name string
+--- @return Widget
+function Label:WidgetByName(name) end
 
 --[[
 `Client`
@@ -2757,6 +3007,17 @@ function Material:GetPropertyVec4(name) end
 --- @return nil
 function Material:SetPropertyVec4(name, vec) end
 
+--[[
+Feeds a live `Vec3`/`Vec4` value into a shader uniform without rebuilding or reloading shaders — the practical way to drive a "maker-settable" uniform (e.g. from a UI slider). Notes:
+- The named field must already exist in a UBO the material actually uses; a brand-new UBO at an unused binding won't get filled. Pack scalars into a `Vec4`.
+- The value applies on the **next frame**; no [`Client:ReloadShaders`](./client.mdx) needed for the value itself.
+- An unset UBO field reads as **garbage** — call `SetProperty` once at load to initialize it, and clamp to sane ranges in the shader.
+- Get the shared material the renderer actually draws with `Scene:CreateMaterial("name")` (returns the cached instance, not a copy).
+
+See also the typed [`SetPropertyVec3`](#nil-SetPropertyVec3-string-name-Vec3-vec) / [`SetPropertyVec4`](#nil-SetPropertyVec4-string-name-Vec4-vec).
+
+[View Documentation](https://docs.atomontage.com/api/Material#nil-SetProperty-string-name-Vec3Vec4-vec)
+]]
 --- @param name string
 --- @param vec Vec3|Vec4
 --- @return nil
@@ -2783,6 +3044,8 @@ function Material:SetProperty(name, vec) end
 --- @field Type string (readonly, deprecated)
 --- @field resourceUsageMode ResourceUsage
 --- @field topology PrimitiveTopology
+--- @field vertexCount integer
+--- @field indexCount integer
 MeshData = {}
 
 --- @param a MeshData
@@ -2811,6 +3074,11 @@ function MeshData:AddVertex(pos, color) end
 --- @return nil
 function MeshData:AddIndex(a, b, c) end
 
+--[[
+Adds a Shape (Box/Sphere/Capsule/Cylinder/Polyhedron) to the mesh as triangles or lines, tinted by `color`.
+
+[View Documentation](https://docs.atomontage.com/api/MeshData#nil-AddShape-Shape-shape-Color-color)
+]]
 --- @param shape Shape
 --- @param color Color
 --- @return nil
@@ -2920,6 +3188,11 @@ function Object:LocalToWorldVec(vec) end
 --- @return Vec3
 function Object:WorldToLocalVec(vec) end
 
+--[[
+Rotates the object to face the given world point (optional up vector).
+
+[View Documentation](https://docs.atomontage.com/api/Object#nil-LookAt-Vec3-pos-Vec3-up)
+]]
 --- @param pos Vec3
 --- @param up Vec3?
 --- @return nil
@@ -2989,10 +3262,6 @@ function Object:GetComponents(typeName) end
 --- @return T
 function Object:AddComponent(type) end
 
---- @param name string?
---- @return boolean
-function Object:IsPrefab(name) end
-
 --[[
 get the object and all its children, descendants, does not returns destroyed objects
 
@@ -3006,6 +3275,28 @@ function Object:WithChildren(includeInactive) end
 --- @param name `ScriptInstanceType`
 --- @return ScriptInstanceType
 function Object:FindScript(name) end
+
+--- @generic ScriptInstanceType: ScriptInstance
+--- @param name `ScriptInstanceType`
+--- @return ScriptInstanceType
+function Object:FindScriptWithChildren(name) end
+
+--- @param find string|Object
+--- @param includeInactive boolean?
+--- @return Object?
+function Object:FindObjectWithChildren(find, includeInactive) end
+
+--- @generic ComponentType: Component
+--- @param name `ComponentType`|componentType
+--- @param includeInactive? boolean
+--- @return ComponentType
+function Object:GetComponentWithChildren(name, includeInactive) end
+
+--- @generic ComponentType: Component
+--- @param name `ComponentType`|componentType
+--- @param includeInactive? boolean
+--- @return ComponentType[]
+function Object:GetComponentsWithChildren(name, includeInactive) end
 
 --- @param name string
 --- @return boolean
@@ -3055,15 +3346,87 @@ Overlap = {}
 [View Documentation](https://docs.atomontage.com/api/Panel)
 ]]
 --- @class Panel
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
 --- @field scroll boolean
 --- @field scrollX boolean
 --- @field scrollY boolean
 --- @field textureColor Color
+--- @field texture Asset
+--- @field textureScaleMode string
+--- @field borders string
+--- @field glyph string
+--- @field glyphScaleMode string
 Panel = {}
 
---- @param value Texture
+--- @param name string
+--- @return Widget
+function Panel:WidgetByName(name) end
+
+--- @param widget Widget
 --- @return nil
-function Panel:SetTexture(value) end
+function Panel:ScrollYToWidget(widget) end
 
 --[[
 `Client`
@@ -3194,39 +3557,16 @@ function Polyhedron:BuildWheelTrack(width, height, border, bevel, fromPos, toPos
 --- @return boolean valid, string error
 function Polyhedron:IsValid() end
 
+--[[
+Returns a **new** polyhedron transformed by position, rotation, and uniform scale; the original instance is left unchanged.
+
+[View Documentation](https://docs.atomontage.com/api/Polyhedron#Polyhedron-Transform-Vec3-pos-Quat-rot-number-scale)
+]]
 --- @param pos Vec3
 --- @param rot Quat
 --- @param scale number
 --- @return Polyhedron
 function Polyhedron:Transform(pos, rot, scale) end
-
---[[
-`Client`
-`Server`
-
-[View Documentation](https://docs.atomontage.com/api/Prefab)
-]]
---- @class Prefab
---- @field active boolean
---- @field activeInHierarchy boolean (readonly)
---- @field object Object (readonly)
---- @field obj Object (readonly)
---- @field isDestroyed boolean (readonly)
---- @field type string (readonly)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
---- @field name string
---- @field Name string (deprecated)
-Prefab = {}
-
---- @param a Prefab
---- @param b Prefab
---- @return boolean
-function Prefab:__eq(a, b) end
 
 --[[
 `Client`
@@ -3686,6 +4026,11 @@ function RigidBody:GetCollisions(eventType) end
 --- @field Gravity number
 Scene = {}
 
+--[[
+Simulation time in seconds; use this instead of the sandboxed `os.time`.
+
+[View Documentation](https://docs.atomontage.com/api/Scene#number-GetTime)
+]]
 --- @return number
 function Scene:GetTime() end
 
@@ -3705,6 +4050,11 @@ end
 --- @return number
 function Scene:GetDeltaTime() end
 
+--[[
+High-resolution wall-clock time in seconds, for measuring real-time differences.
+
+[View Documentation](https://docs.atomontage.com/api/Scene#number-GetDebugTime)
+]]
 --- @return number
 function Scene:GetDebugTime() end
 
@@ -3829,9 +4179,19 @@ function Scene:CanMoveObject(obj, newParentObj) end
 --- @return Material?
 function Scene:CreateMaterial(path) end
 
+--[[
+Returns the currently active (rendering) camera.
+
+[View Documentation](https://docs.atomontage.com/api/Scene#Camera-GetActiveCamera)
+]]
 --- @return Camera
 function Scene:GetActiveCamera() end
 
+--[[
+Makes the given camera the active view.
+
+[View Documentation](https://docs.atomontage.com/api/Scene#nil-SetActiveCamera-Camera-cam)
+]]
 --- @param cam Camera
 --- @return nil
 function Scene:SetActiveCamera(cam) end
@@ -3857,16 +4217,6 @@ function Scene:GetVoxelDB(db) end
 --- @return Hit[]
 function Scene:TraceRay(p1) end
 
---- @param vr VoxelRenderer
---- @param wcPos Vec3|Vec3[]
---- @return Vec3|Vec3[]
-function Scene:ConvertWcToDc(vr, wcPos) end
-
---- @param vr VoxelRenderer
---- @param dcPos Vec3|Vec3[]
---- @return Vec3|Vec3[]
-function Scene:ConvertDcToWc(vr, dcPos) end
-
 --- @param name string
 --- @return boolean
 function Scene:IsNameValid(name) end
@@ -3880,10 +4230,6 @@ function Scene:GetLogCounters() end
 
 --- @return nil
 function Scene:ResetLogCountersDif() end
-
---- @param obj Object
---- @return boolean
-function Scene:UpdatePrefab(obj) end
 
 --- @param obj Object
 --- @return boolean
@@ -3907,6 +4253,11 @@ function Scene:CreateLighting(type, algo) end
 --- @return boolean
 function Scene:GetProfileScriptsUpdate() end
 
+--[[
+Enables or disables collection of the per-script Update timings read by [`GetScriptsProfiling`](#table-GetScriptsProfiling). Toggling it off only stops collection — the accumulated `avg`/`max` survive until cleared by `Server:LuaReset()`.
+
+[View Documentation](https://docs.atomontage.com/api/Scene#nil-SetProfileScriptsUpdate-boolean-value)
+]]
 --- @param value boolean
 --- @return nil
 function Scene:SetProfileScriptsUpdate(value) end
@@ -3917,6 +4268,21 @@ function Scene:GetSimpleStats() end
 --- @return table
 function Scene:GetVDRStats() end
 
+--[[
+Returns an array of per-script-**type** rows (summed across all instances of that script), each row being `{name, time, avg, max, cnt}`:
+
+| Field | Meaning |
+| - | - |
+| `name` | Script type name |
+| `time` | Time in the last frame (µs) |
+| `avg` | Running average per frame (µs) — use this for stable readings |
+| `max` | Worst single frame (µs) |
+| `cnt` | Number of live instances of this script |
+
+All times are in microseconds (may come back as comma-formatted strings — parse with `tonumber((tostring(v):gsub(",","")))`). Collection must first be enabled with [`SetProfileScriptsUpdate(true)`](#nil-SetProfileScriptsUpdate-booleanean-value), otherwise the rows stay empty/stale. Only time spent inside `Update`/`LateUpdate` is counted — work in RPC handlers, event listeners, and `Attach`/`Start` is **not** attributed here.
+
+[View Documentation](https://docs.atomontage.com/api/Scene#table-GetScriptsProfiling)
+]]
 --- @return table
 function Scene:GetScriptsProfiling() end
 
@@ -3943,9 +4309,12 @@ Script component. Not to be confused with the actual [lua table instance](Script
 --- @field Type string (readonly, deprecated)
 --- @field instance ScriptInstance
 --- @field name string
---- @field file string
+--- @field luaFile Asset
+--- @field luaFilePath string
+--- @field file string (deprecated)
 --- @field syncToClients boolean
 --- @field priority integer
+--- @field varsTable VarTable (readonly)
 --- @field Instance ScriptInstance (deprecated)
 --- @field Name string (deprecated)
 --- @field File string (deprecated)
@@ -3958,6 +4327,16 @@ Script = {}
 --- @return boolean
 function Script:__eq(a, b) end
 
+--- @param key string
+--- @param value any
+--- @return nil
+function Script:setSerializeVar(key, value) end
+
+--- @param key string
+--- @param assetId string
+--- @return nil
+function Script:setSerializeVarAsset(key, assetId) end
+
 --- @param funcName string
 --- @vararg any
 --- @return integer
@@ -3966,15 +4345,30 @@ function Script:RPC(funcName, ...) end
 --- @return string
 function Script:GetNetworkFlow() end
 
+--[[
+Microseconds spent in this script's last `Update`/`LateUpdate`, returned as a string (may contain comma separators — parse with `tonumber((tostring(s):gsub(",","")))`). Requires `Scene:SetProfileScriptsUpdate(true)`.
+
+[View Documentation](https://docs.atomontage.com/api/Script#string-GetScriptUpdateTime)
+]]
 --- @return string
 function Script:GetScriptUpdateTime() end
 
 --- @return string
 function Script:GetScriptCompileTime() end
 
+--[[
+Microseconds of this script's last `Attach` call (string, µs).
+
+[View Documentation](https://docs.atomontage.com/api/Script#string-GetScriptAttachTime)
+]]
 --- @return string
 function Script:GetScriptAttachTime() end
 
+--[[
+Microseconds of this script's last `Start` call (string, µs).
+
+[View Documentation](https://docs.atomontage.com/api/Script#string-GetScriptStartTime)
+]]
 --- @return string
 function Script:GetScriptStartTime() end
 
@@ -4233,10 +4627,153 @@ function ScriptInstance:RPC(funcName, ...) end
 [View Documentation](https://docs.atomontage.com/api/Selectbox)
 ]]
 --- @class Selectbox
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
 --- @field value integer
 --- @field valueStr string
 --- @field values table
 Selectbox = {}
+
+--- @param name string
+--- @return Widget
+function Selectbox:WidgetByName(name) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/Separator)
+]]
+--- @class Separator
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
+Separator = {}
+
+--- @param name string
+--- @return Widget
+function Separator:WidgetByName(name) end
 
 --[[
 `Server`
@@ -4248,10 +4785,11 @@ This class is only available on server
 ]]
 --- @class Server
 --- @field clientID integer (readonly)
+--- @field initMode boolean
 --- @field editMode boolean
---- @field modeChangeReloadGeom boolean
---- @field EditMode boolean (deprecated)
---- @field ModeChangeReloadGeom boolean (deprecated)
+--- @field playMode boolean
+--- @field modeChangeReloadGeom boolean Whether toggling [`editMode`](#boolean-editMode) (the Edit/Play switch) reloads voxel geometry.
+--- @field settings ServerSceneSettings (readonly)
 Server = {}
 
 --- @return integer[]
@@ -4272,18 +4810,19 @@ function Server:IsVRClient(clientID) end
 --- @return nil
 function Server:DisconnectClient(clientID) end
 
---- @return integer
-function Server:GetScriptsVersion() end
+--[[
+Re-runs all server Lua scripts from scratch. The entire Lua state is wiped — no tables, globals, or per-script `self` data survive — then every script reloads. Does not reload scene geometry.
 
---- @param scriptName string
---- @return string
-function Server:GetScript(scriptName) end
-
+[View Documentation](https://docs.atomontage.com/api/Server#nil-LuaReset)
+]]
 --- @return nil
 function Server:LuaReset() end
 
 --- @return string[]
 function Server:GetLuaFilesList() end
+
+--- @return Asset[] assets, string[] paths
+function Server:GetMontageLuaAssets() end
 
 --[[
 Voxel files in the Montage/Voxels, those you saved in your montage and they are not necessary uploaded to the cloud already. local montage assets
@@ -4317,33 +4856,22 @@ Common scenes
 --- @return string[]
 function Server:GetCommonScenesList() end
 
---- @return string[]
+--- @return table[]
 function Server:GetPrefabsList() end
 
---- @param id integer
---- @return Object
-function Server:InsertPrefab(id) end
-
---- @param id integer
---- @param deepCopy boolean
---- @return Object
-function Server:InsertPrefab(id, deepCopy) end
-
---- @param name string
+--- @param prefab Asset
 --- @param newName string?
 --- @param setSave boolean?
---- @param deepCopy boolean?
 --- @return Object
-function Server:InsertPrefab(name, newName, setSave, deepCopy) end
+function Server:InsertPrefab(prefab, newName, setSave) end
 
---- @param name string
---- @param setSave boolean
---- @return Object
-function Server:InsertPrefab(name, setSave) end
+--- @param fromObject Object
+--- @return Asset
+function Server:MakePrefab(fromObject) end
 
---- @param name string
---- @return nil
-function Server:MakePrefab(name) end
+--- @param obj Object
+--- @return boolean
+function Server:UpdatePrefab(obj) end
 
 --- @return table
 function Server:GetInsertPrefabStats() end
@@ -4353,12 +4881,27 @@ function Server:GetInsertPrefabStats() end
 --- @return nil
 function Server:PreloadVDRsForPrefab(name, count) end
 
+--[[
+Saves the whole scene to disk, including voxel geometry.
+
+[View Documentation](https://docs.atomontage.com/api/Server#nil-SaveScene)
+]]
 --- @return nil
 function Server:SaveScene() end
 
+--[[
+Saves the object hierarchy and scripts only, without voxel geometry (much faster than `SaveScene`).
+
+[View Documentation](https://docs.atomontage.com/api/Server#nil-SaveSceneHierarchy)
+]]
 --- @return nil
 function Server:SaveSceneHierarchy() end
 
+--[[
+Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaReset`](#nil-LuaReset).
+
+[View Documentation](https://docs.atomontage.com/api/Server#nil-ReloadScene)
+]]
 --- @return nil
 function Server:ReloadScene() end
 
@@ -4369,32 +4912,8 @@ function Server:ResetSceneToInitState(reloadTerrain) end
 --- @return nil
 function Server:BackupMontage() end
 
---- @return nil
-function Server:OnLuaLog() end
-
---- @return boolean
-function Server:IsClient() end
-
---- @return boolean
-function Server:IsServer() end
-
 --- @return boolean
 function Server:DevMode() end
-
---- @return integer
-function Server:GetCurrentUIActionID() end
-
---- @return nil
-function Server:ScrollToLastestLuaLog() end
-
---- @return CommandLine
-function Server:GetCommandLine() end
-
---- @return table
-function Server:GetVersion() end
-
---- @return System
-function Server:GetSystem() end
 
 --- @return string
 function Server:GetDateTime() end
@@ -4442,27 +4961,11 @@ function Server:MoveFileToMontageVoxelsFolder(fileLua, subPath) end
 --- @return nil
 function Server:MakeUrlForFile(fileLua, eventUpdate, eventFinish) end
 
---- @param logName string
---- @return number
-function Server:GetLogValue(logName) end
-
---- @return number
-function Server:GetFPS() end
-
 --- @return table
 function Server:GetStreamingStats() end
 
 --- @return table
 function Server:GetMainDispatcherStats() end
-
---- @return nil
-function Server:TriggerCrash() end
-
---- @return nil
-function Server:TriggerException() end
-
---- @return nil
-function Server:TriggerCriticalError() end
 
 --- @return nil
 function Server:Restart() end
@@ -4528,8 +5031,72 @@ function Server:PBRTranscodeToPBR0Ver1() end
 --- @return nil
 function Server:GenLuaApi(api) end
 
---- @return nil
-function Server:TakeScreenshot() end
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/ServerAsset)
+]]
+--- @class ServerAsset
+--- @field id string (readonly)
+--- @field type integer (readonly)
+--- @field typeStr string (readonly)
+--- @field name string (readonly)
+ServerAsset = {}
+
+--- @return ServerAsset
+function ServerAsset() end
+
+--- @param id string
+--- @param type integer
+--- @param name string
+--- @return ServerAsset
+function ServerAsset(id, type, name) end
+
+--- @param idStr string
+--- @param type integer
+--- @param name string
+--- @return ServerAsset
+function ServerAsset(idStr, type, name) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/ServerComponent)
+]]
+--- @class ServerComponent
+--- @field id string (readonly)
+--- @field type integer (readonly)
+--- @field typeStr string (readonly)
+ServerComponent = {}
+
+--- @return ServerComponent
+function ServerComponent() end
+
+--- @param idStr string
+--- @param type integer
+--- @return ServerComponent
+function ServerComponent(idStr, type) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/ServerObject)
+]]
+--- @class ServerObject
+--- @field id string (readonly)
+--- @field name string (readonly)
+ServerObject = {}
+
+--- @return ServerObject
+function ServerObject() end
+
+--- @param idStr string
+--- @param name string
+--- @return ServerObject
+function ServerObject(idStr, name) end
 
 --[[
 `Client`
@@ -4636,10 +5203,79 @@ function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 [View Documentation](https://docs.atomontage.com/api/Slider)
 ]]
 --- @class Slider
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
 --- @field value number
 --- @field scalars integer
 --- @field sliderType UISliderType
+--- @field range Vec2
+--- @field integer boolean
 Slider = {}
+
+--- @param name string
+--- @return Widget
+function Slider:WidgetByName(name) end
 
 --[[
 `Client`
@@ -4740,6 +5376,7 @@ Texture = {}
 --- @field fixedFPS number (readonly)
 --- @field fixedTime number (readonly)
 --- @field fixedFrame number (readonly)
+--- @field fps number (readonly)
 Time = {}
 
 --[[
@@ -4751,18 +5388,7 @@ Holds position, rotation, and scale
 [View Documentation](https://docs.atomontage.com/api/Transform)
 ]]
 --- @class Transform
---- @field active boolean
---- @field activeInHierarchy boolean (readonly)
---- @field object Object (readonly)
 --- @field obj Object (readonly)
---- @field isDestroyed boolean (readonly)
---- @field type string (readonly)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
 --- @field localPos Vec3 The local position of the object relative to its parent
 --- @field localScale number The local scale of the object relative to its parent
 --- @field localRot Quat The local rotation of the object represented as a quaternion.
@@ -4771,7 +5397,7 @@ Holds position, rotation, and scale
 --- @field rot Quat The global (world) rotation of the object as a quaternion
 --- @field eulerRot Vec3 The global (world) rotation of the object represented as Euler angles.
 --- @field scale number The global (world) scale of the object.
---- @field fingerprint number (readonly)
+--- @field fingerprint number (readonly) 64-bit value that changes when the global (world) position, rotation, or scale change — including motion caused by an ancestor moving. Useful for cheap change detection.
 --- @field right Vec3 (readonly) The right direction vector of the object in world space.
 --- @field up Vec3 (readonly) The right direction vector of the object in world space.
 --- @field forward Vec3 (readonly) The forward direction vector of the object in world space.
@@ -4824,42 +5450,202 @@ function Transform:LookAt(pos, up) end
 `Client`
 `Server`
 
-[View Documentation](https://docs.atomontage.com/api/UIItem)
+[View Documentation](https://docs.atomontage.com/api/UI)
 ]]
---- @class UIItem
-UIItem = {}
+--- @class UI
+UI = {}
 
---- @return string
-function UIItem:GetID() end
+--- @param parent Widget
+--- @param name string?
+--- @return Panel
+function UI:AddPanel(parent, name) end
 
---- @return string
-function UIItem:GetType() end
+--- @param parent Widget
+--- @param name string?
+--- @return Button
+function UI:AddButton(parent, name) end
 
---- @return string
-function UIItem:GetLabel() end
+--- @param parent Widget
+--- @param name string?
+--- @return ButtonPanel
+function UI:AddButtonPanel(parent, name) end
 
---[[
-`Client`
-`Server`
+--- @param parent Widget
+--- @param name string?
+--- @return Label
+function UI:AddLabel(parent, name) end
 
-[View Documentation](https://docs.atomontage.com/api/UILayout)
-]]
---- @class UILayout
---- @field mID integer
---- @field mName string
---- @field mWindows table
-UILayout = {}
+--- @param parent Widget
+--- @param name string?
+--- @return Header
+function UI:AddHeader(parent, name) end
 
---[[
-`Client`
-`Server`
+--- @param parent Widget
+--- @param name string?
+--- @return Checkbox
+function UI:AddCheckbox(parent, name) end
 
-[View Documentation](https://docs.atomontage.com/api/UILayouts)
-]]
---- @class UILayouts
---- @field mSelected integer
---- @field mLayouts table
-UILayouts = {}
+--- @param parent Widget
+--- @param name string?
+--- @return Inputbox
+function UI:AddInputbox(parent, name) end
+
+--- @param parent Widget
+--- @param name string?
+--- @return Vectorbox
+function UI:AddVectorbox(parent, name) end
+
+--- @param parent Widget
+--- @param name string?
+--- @return Slider
+function UI:AddSlider(parent, name) end
+
+--- @param parent Widget
+--- @param name string?
+--- @return Selectbox
+function UI:AddSelectbox(parent, name) end
+
+--- @param parent Widget
+--- @param name string?
+--- @return Colorbox
+function UI:AddColorbox(parent, name) end
+
+--- @param parent Widget
+--- @param name string?
+--- @return Separator
+function UI:AddSeparator(parent, name) end
+
+--- @param type string
+--- @param parent Widget
+--- @return Widget
+function UI:AddWidget(type, parent) end
+
+--- @param widget Widget
+--- @return Widget
+function UI:CloneWidget(widget) end
+
+--- @param widget Widget
+--- @return nil
+function UI:DeleteWidget(widget) end
+
+--- @param parent Widget
+--- @return nil
+function UI:DeleteWidgets(parent) end
+
+--- @return Widget
+function UI:SelectedWidget() end
+
+--- @param widget Widget
+--- @return nil
+function UI:SelectWidget(widget) end
+
+--- @param widget Widget
+--- @return nil
+function UI:FocusWidget(widget) end
+
+--- @param widget Widget
+--- @param target Widget
+--- @return boolean
+function UI:CanMoveWidgetInto(widget, target) end
+
+--- @param widget Widget
+--- @param target Widget
+--- @return nil
+function UI:MoveWidgetInto(widget, target) end
+
+--- @param widget Widget
+--- @param delta integer
+--- @return nil
+function UI:MoveWidgetBy(widget, delta) end
+
+--- @param isSystemUI boolean?
+--- @return Window
+function UI:AddWindow(isSystemUI) end
+
+--- @param window Window
+--- @return nil
+function UI:DeleteWindow(window) end
+
+--- @return table
+function UI:GetWindows() end
+
+--- @param name string
+--- @return Window
+function UI:WindowByName(name) end
+
+--- @param name string
+--- @param parent Widget
+--- @param open boolean?
+--- @return Window
+function UI:AddSubWindow(name, parent, open) end
+
+--- @param window Window|string
+--- @param focus boolean?
+--- @param animate boolean?
+--- @return nil
+function UI:OpenWindow(window, focus, animate) end
+
+--- @param window Window
+--- @return nil
+function UI:CloseWindow(window) end
+
+--- @return nil
+function UI:CloseAllWindows() end
+
+--- @return nil
+function UI:ClosePopups() end
+
+--- @param window Window
+--- @return nil
+function UI:FocusWindow(window) end
+
+--- @param window Window
+--- @return nil
+function UI:BringToFront(window) end
+
+--- @param window Window
+--- @param anchor Widget
+--- @param pos Vec2?
+--- @param size Vec2?
+--- @return nil
+function UI:PopupWindow(window, anchor, pos, size) end
+
+--- @param name string
+--- @return any
+function UI:GetCfg(name) end
+
+--- @return table
+function UI:GetCfgAll() end
+
+--- @param scale number
+--- @return nil
+function UI:SetUIScale(scale) end
+
+--- @return number
+function UI:GetUIScale() end
+
+--- @param path string
+--- @return nil
+function UI:SaveUI(path) end
+
+--- @param path string
+--- @return nil
+function UI:LoadUI(path) end
+
+--- @return nil
+function UI:ResetLua() end
+
+--- @param path string
+--- @return nil
+function UI:OpenLuaFile(path) end
+
+--- @param window Window
+--- @return nil
+function UI:OpenWindowLuaFile(window) end
+
+--- @param widget Widget
+--- @return nil
+function UI:DebugWidgetInfo(widget) end
 
 --[[
 `Client`
@@ -4897,6 +5683,48 @@ function VVCollision:RaycastTo(startPos, endPos) end
 --- @param radius number
 --- @return Hit[]
 function VVCollision:CapsuleOverlap(pos1, pos2, radius) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/VarEnum)
+]]
+--- @class VarEnum
+--- @field value string
+--- @field values string[] (readonly)
+VarEnum = {}
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/VarList)
+]]
+--- @class VarList
+--- @field byVar AnyVar (readonly)
+--- @field values AnyVar[] (readonly)
+VarList = {}
+
+--- @param value any
+--- @return nil
+function VarList:Add(value) end
+
+--- @param index number
+--- @return nil
+function VarList:Remove(index) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/VarTable)
+]]
+--- @class VarTable
+--- @field values table (readonly)
+--- @field editOrder string[] (readonly)
+--- @field tooltips table (readonly)
+VarTable = {}
 
 --[[
 `Client`
@@ -6247,6 +7075,11 @@ function Vec4:Clamp(minValue, maxValue) end
 --- @return number
 function Vec4:Dot(other) end
 
+--[[
+Builds a plane as a Vec4 from a point on it and its outward normal direction (e.g. for `Polyhedron:AddPlane`).
+
+[View Documentation](https://docs.atomontage.com/api/Vec4#Vec4-MakePlane-Vec3-pos-Vec3-dir)
+]]
 --- @param pos Vec3
 --- @param dir Vec3
 --- @return Vec4
@@ -6445,10 +7278,79 @@ function Vec4i:Dot(other) end
 [View Documentation](https://docs.atomontage.com/api/Vectorbox)
 ]]
 --- @class Vectorbox
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
 --- @field scalars integer
 --- @field integer boolean
 --- @field value Vec2|Vec3|Vec4|Vec2i|Vec3i|Vec4i
+--- @field inputsPadding Vec2
+--- @field inputsPaddingMode UIPropertyMode
 Vectorbox = {}
+
+--- @param name string
+--- @return Widget
+function Vectorbox:WidgetByName(name) end
 
 --[[
 `Server`
@@ -6466,10 +7368,6 @@ The voxel edit functions in this class are old and may not correctly work. Inste
 --- @field blendMode BlendMode
 --- @field blendOpacity number
 --- @field blendRadiusRatio number
---- @field BlendEnabled boolean (deprecated)
---- @field BlendMode BlendMode (deprecated)
---- @field BlendOpacity number (deprecated)
---- @field BlendRadiusRatio number (deprecated)
 VoxelDB = {}
 
 --- @return nil
@@ -6750,11 +7648,21 @@ function VoxelDB:CopyTo(destVoxelDB) end
 --- @return nil
 function VoxelDB:Save(filePath, compression, quality) end
 
+--- @param pos Vec3
+--- @param radiusVoxels integer
+--- @param lod integer
+--- @param vr VoxelRenderer?
 --- @return table
-function VoxelDB:InspectNormals() end
+function VoxelDB:InspectNormals(pos, radiusVoxels, lod, vr) end
 
---- @return table
-function VoxelDB:Inspect() end
+--- @param pos Vec3
+--- @param size integer
+--- @param axis integer
+--- @param layers string[]
+--- @param lod integer
+--- @param vr VoxelRenderer?
+--- @return VoxelInspectData?
+function VoxelDB:Inspect(pos, size, axis, layers, lod, vr) end
 
 --- @return integer
 function VoxelDB:GetLODsCount() end
@@ -6798,10 +7706,11 @@ The data will only render if the object also has a `VoxelRender` component.
 --- @field Type string (readonly, deprecated)
 --- @field Size Vec3 (readonly, deprecated)
 --- @field size Vec3 (readonly)
+--- @field contentVersion integer (readonly) Monotonic counter incremented every time the underlying voxel content is invalidated (any edit that changes voxel presence). Cheap O(1) read for caching downstream computations like total volume.
 --- @field path string
 --- @field originalPath string (readonly)
 --- @field data VoxelDataResource The voxel data resource that this voxel data is using
---- @field save boolean
+--- @field save boolean Marks the voxel data to be persisted on save; it does not write any voxels by itself.
 --- @field editable boolean
 VoxelData = {}
 
@@ -6815,6 +7724,11 @@ function VoxelData:__eq(a, b) end
 --- @return nil
 function VoxelData:Mirror(worldPos, worldNormal) end
 
+--[[
+Returns the world-space axis-aligned bounds (center, size). Affected by the object's rotation, and reports size `(0,0,0)` when `receiveTransform=false`.
+
+[View Documentation](https://docs.atomontage.com/api/VoxelData#Vec3-center-Vec3-size-GetAABounds)
+]]
 --- @return Vec3 center, Vec3 size
 function VoxelData:GetAABounds() end
 
@@ -7028,7 +7942,9 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 --- @field imageNormal Image
 --- @field imageUVTm Mat4
 --- @field imageUVClamp boolean
---- @field imageNormalBlendEnable boolean
+--- @field imageTriplanar boolean
+--- @field imageNormalOverwrite boolean
+--- @field imageProjectionFade boolean
 --- @field imageNormalBlendPower number
 --- @field onProgress fun(progress:number) callback function. progress from 0-1. May not be called every frame. Is called after script updates 
 --- @field onFinished fun(info:RemoveCountInfo) callback function. onFinished is called after onProgress if it was last part
@@ -7222,10 +8138,149 @@ function VoxelRenderer:GetBounds() end
 `Client`
 `Server`
 
+[View Documentation](https://docs.atomontage.com/api/Widget)
+]]
+--- @class Widget
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2 Spacing between sibling widgets (x) and between wrapped flow lines (y).
+--- @field alignItems string Cross-axis alignment of child widgets: `start`/`center`/`end`/`stretch`.
+--- @field alignSelf string Overrides the parent's `alignItems` for this widget (`auto` inherits).
+--- @field justifyContent string Main-axis distribution of children: `start`/`center`/`end`/`space-between`/`space-around`.
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
+Widget = {}
+
+--- @param name string
+--- @return Widget
+function Widget:WidgetByName(name) end
+
+--[[
+`Client`
+`Server`
+
 [View Documentation](https://docs.atomontage.com/api/Window)
 ]]
 --- @class Window
---- @field luaFile string
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onPress fun
+--- @field onPressStart fun
+--- @field onPressCancel fun
+--- @field onMouseMove fun
+--- @field onHover fun
+--- @field onHoverEnd fun
+--- @field onFocus fun
+--- @field onFocusEnd fun
+--- @field onKeyDown fun
+--- @field onKeyUp fun
+--- @field onValueChange fun
+--- @field onDragStart fun
+--- @field onDragOver fun
+--- @field onDragLeave fun
+--- @field onDragEnd fun
+--- @field luaFile Asset
 --- @field header boolean
 --- @field text string
 --- @field scroll boolean
@@ -7234,8 +8289,15 @@ function VoxelRenderer:GetBounds() end
 --- @field stayOnBottom boolean
 --- @field stayOnTop boolean
 --- @field resizable boolean
+--- @field noInput boolean
+--- @field borders string
+--- @field enableShadow boolean
 --- @field obj table
 Window = {}
+
+--- @param name string
+--- @return Widget
+function Window:WidgetByName(name) end
 
 --- @return nil
 function Window:Close() end
@@ -7498,13 +8560,6 @@ TmpLayerFlags = {
 	Atlas = 2,
 }
 
---- @enum UIActionsPlace
-UIActionsPlace = {
-	Client = 0,
-	Server = 1,
-	Inherited = 2,
-}
-
 --- @enum UIButtonType
 UIButtonType = {
 	Gray = 0,
@@ -7522,31 +8577,10 @@ UIInputType = {
 	Float = 2,
 }
 
---- @enum UIItemType
-UIItemType = {
-	Undefined = 0,
-	Window = 1,
-	Header = 2,
-	Panel = 3,
-	Grid = 4,
-	Tab = 5,
-	Separator = 6,
-	Button = 7,
-	Number = 8,
-	Wheel = 9,
-	TextInput = 10,
-	ListBox = 11,
-	ListBoxSimple = 12,
-	ListBoxEnum = 13,
-	CheckBox = 14,
-	Radio = 15,
-	Label = 16,
-	Color = 17,
-	Vector = 18,
-	Matrix = 19,
-	Transformation = 20,
-	Plot = 21,
-	Count = 22,
+--- @enum UILabelType
+UILabelType = {
+	Normal = 0,
+	Label = 1,
 }
 
 --- @enum UIPosType

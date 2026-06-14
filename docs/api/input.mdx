@@ -14,7 +14,7 @@ because it respects the order in which the input was received and other benefits
 
 ## Methods
 
-### table[] GetEvents() {#table-GetEvents}
+### table[] GetEvents(boolean? includeEditor) {#table-GetEvents-boolean-includeEditor}
 
 ### boolean KeyDown(keyCode key) {#boolean-KeyDown-keyCode-key}
 
@@ -53,6 +53,20 @@ because it respects the order in which the input was received and other benefits
 ### Vec2 MousePosPercLast() {#Vec2-MousePosPercLast}
 
 ### Vec2 MouseMovePerc() {#Vec2-MouseMovePerc}
+
+### nil InjectKey(string key, boolean down) {#nil-InjectKey-string-key-boolean-down}
+Injects a synthetic key down/up into the real input funnel, as if the user pressed it.
+
+### nil InjectMouseButton(integer button, boolean down) {#nil-InjectMouseButton-integer-button-boolean-down}
+
+### nil InjectMouseMove(number dxPerc, number dyPerc) {#nil-InjectMouseMove-number-dxPerc-number-dyPerc}
+
+### nil InjectMousePos(number xPerc, number yPerc) {#nil-InjectMousePos-number-xPerc-number-yPerc}
+
+### nil InjectMouseWheel(integer amount) {#nil-InjectMouseWheel-integer-amount}
+
+### nil ClearInjected() {#nil-ClearInjected}
+Releases all keys and buttons previously set via the `Inject*` functions.
 
 ### boolean GetRelativeMouseMode() {#boolean-GetRelativeMouseMode}
 

@@ -1,6 +1,6 @@
 ---
-title: Window
-id: Window
+title: Widget
+id: Widget
 ---
 `Client`
 `Server`
@@ -8,10 +8,6 @@ id: Window
 ## Methods
 
 ### Widget WidgetByName(string name) {#Widget-WidgetByName-string-name}
-
-### nil Close() {#nil-Close}
-
-### boolean IsPopup() {#boolean-IsPopup}
 
 ## Properties
 
@@ -84,12 +80,16 @@ id: Window
 ### string marginMode {#string-marginMode}
 
 ### Vec2 gap {#Vec2-gap}
+Spacing between sibling widgets (x) and between wrapped flow lines (y).
 
 ### string alignItems {#string-alignItems}
+Cross-axis alignment of child widgets: `start`/`center`/`end`/`stretch`.
 
 ### string alignSelf {#string-alignSelf}
+Overrides the parent's `alignItems` for this widget (`auto` inherits).
 
 ### string justifyContent {#string-justifyContent}
+Main-axis distribution of children: `start`/`center`/`end`/`space-between`/`space-around`.
 
 ### Vec2 mp {#Vec2-mp}
 
@@ -140,30 +140,4 @@ id: Window
 ### fun onDragLeave {#fun-onDragLeave}
 
 ### fun onDragEnd {#fun-onDragEnd}
-
-### Asset luaFile {#Asset-luaFile}
-
-### boolean header {#boolean-header}
-
-### string text {#string-text}
-
-### boolean scroll {#boolean-scroll}
-
-### boolean scrollX {#boolean-scrollX}
-
-### boolean scrollY {#boolean-scrollY}
-
-### boolean stayOnBottom {#boolean-stayOnBottom}
-
-### boolean stayOnTop {#boolean-stayOnTop}
-
-### boolean resizable {#boolean-resizable}
-
-### boolean noInput {#boolean-noInput}
-
-### string borders {#string-borders}
-
-### boolean enableShadow {#boolean-enableShadow}
-
-### table obj {#table-obj}
 

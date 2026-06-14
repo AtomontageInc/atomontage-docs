@@ -8,6 +8,7 @@ id: Scene
 ## Methods
 
 ### number GetTime() {#number-GetTime}
+Simulation time in seconds; use this instead of the sandboxed `os.time`.
 
 ### number GetDeltaTime() {#number-GetDeltaTime}
 
@@ -21,6 +22,7 @@ function self:Update()
 end
 ```
 ### number GetDebugTime() {#number-GetDebugTime}
+High-resolution wall-clock time in seconds, for measuring real-time differences.
 
 ### integer GetCurrentFrame() {#integer-GetCurrentFrame}
 
@@ -80,18 +82,16 @@ Flags the object for deletion. The object will not actually be destroyed until t
 ### Material? CreateMaterial(string path) {#Material-CreateMaterial-string-path}
 
 ### Camera GetActiveCamera() {#Camera-GetActiveCamera}
+Returns the currently active (rendering) camera.
 
 ### nil SetActiveCamera(Camera cam) {#nil-SetActiveCamera-Camera-cam}
+Makes the given camera the active view.
 
 ### string AddNewScriptFile(string scriptName, Object forObject) {#string-AddNewScriptFile-string-scriptName-Object-forObject}
 
 ### VoxelDB? GetVoxelDB(string db) {#VoxelDB-GetVoxelDB-string-db}
 
 ### Hit[] TraceRay(table params) {#Hit-TraceRay-table-params}
-
-### Vec3|Vec3[] ConvertWcToDc(VoxelRenderer vr, Vec3|Vec3[] wcPos) {#Vec3Vec3-ConvertWcToDc-VoxelRenderer-vr-Vec3Vec3-wcPos}
-
-### Vec3|Vec3[] ConvertDcToWc(VoxelRenderer vr, Vec3|Vec3[] dcPos) {#Vec3Vec3-ConvertDcToWc-VoxelRenderer-vr-Vec3Vec3-dcPos}
 
 ### boolean IsNameValid(string name) {#boolean-IsNameValid-string-name}
 
@@ -100,8 +100,6 @@ Flags the object for deletion. The object will not actually be destroyed until t
 ### table GetLogCounters() {#table-GetLogCounters}
 
 ### nil ResetLogCountersDif() {#nil-ResetLogCountersDif}
-
-### boolean UpdatePrefab(Object obj) {#boolean-UpdatePrefab-Object-obj}
 
 ### boolean ResetPrefab(Object obj) {#boolean-ResetPrefab-Object-obj}
 
@@ -116,12 +114,24 @@ Flags the object for deletion. The object will not actually be destroyed until t
 ### boolean GetProfileScriptsUpdate() {#boolean-GetProfileScriptsUpdate}
 
 ### nil SetProfileScriptsUpdate(boolean value) {#nil-SetProfileScriptsUpdate-boolean-value}
+Enables or disables collection of the per-script Update timings read by [`GetScriptsProfiling`](#table-GetScriptsProfiling). Toggling it off only stops collection — the accumulated `avg`/`max` survive until cleared by `Server:LuaReset()`.
 
 ### table GetSimpleStats() {#table-GetSimpleStats}
 
 ### table GetVDRStats() {#table-GetVDRStats}
 
 ### table GetScriptsProfiling() {#table-GetScriptsProfiling}
+Returns an array of per-script-**type** rows (summed across all instances of that script), each row being `{name, time, avg, max, cnt}`:
+
+| Field | Meaning |
+| - | - |
+| `name` | Script type name |
+| `time` | Time in the last frame (µs) |
+| `avg` | Running average per frame (µs) — use this for stable readings |
+| `max` | Worst single frame (µs) |
+| `cnt` | Number of live instances of this script |
+
+All times are in microseconds (may come back as comma-formatted strings — parse with `tonumber((tostring(v):gsub(",","")))`). Collection must first be enabled with [`SetProfileScriptsUpdate(true)`](#nil-SetProfileScriptsUpdate-boolean-value), otherwise the rows stay empty/stale. Only time spent inside `Update`/`LateUpdate` is counted — work in RPC handlers, event listeners, and `Attach`/`Start` is **not** attributed here.
 
 ## Properties
 
