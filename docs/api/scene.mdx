@@ -18,7 +18,7 @@ function self:Update()
     local speed = 10
     local move = Vec3.right
     --remember to multiply by delta time, since the time passed between each Update() is not constant
-    self.transform.pos = self.transform.pos + move * speed * Scene:GetDeltaTime() 
+    self.obj.pos = self.obj.pos + move * speed * Scene:GetDeltaTime() 
 end
 ```
 ### number GetDebugTime() {#number-GetDebugTime}
@@ -91,8 +91,6 @@ Makes the given camera the active view.
 
 ### VoxelDB? GetVoxelDB(string db) {#VoxelDB-GetVoxelDB-string-db}
 
-### Hit[] TraceRay(table params) {#Hit-TraceRay-table-params}
-
 ### boolean IsNameValid(string name) {#boolean-IsNameValid-string-name}
 
 ### string MakeNameValid(string name) {#string-MakeNameValid-string-name}
@@ -137,11 +135,9 @@ All times are in microseconds (may come back as comma-formatted strings — pars
 
 ### integer voxelDataResourceTemplateSizeThreshold {#integer-voxelDataResourceTemplateSizeThreshold}
 
-### integer VoxelDataResourceTemplateSizeThreshold {#integer-VoxelDataResourceTemplateSizeThreshold}
+### boolean simulationPaused {#boolean-simulationPaused}
 
-### boolean SimulationPaused {#boolean-SimulationPaused}
+### number simulationSpeed {#number-simulationSpeed}
 
-### number SimulationSpeed {#number-SimulationSpeed}
-
-### number Gravity {#number-Gravity}
+### number gravity {#number-gravity}
 

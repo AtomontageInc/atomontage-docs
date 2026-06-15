@@ -48,7 +48,7 @@ local vd = ob:AddComponent("VoxelData")
 local vr = ob:AddComponent("VoxelRenderer")
 local vres = VoxelDataResource() --new empty voxel data
 vd.data = vres
-ob.transform.pos = Vec3(0, 30, 0)
+ob.pos = Vec3(0, 30, 0)
 
 --voxel edit    
 local ve = VoxelEdit()
@@ -59,7 +59,7 @@ ve.filter.forceList = { ob }
 
 --add sphere
 ve.color = Vec3(0,0.5,1)
-ve.shape = Sphere(ob.transform.pos, 1)
+ve.shape = Sphere(ob.pos, 1)
 ve:Add()
 ```
 
@@ -81,9 +81,9 @@ ve.filter.useNotStatic = false
 
 --select what data to copy and its pasted transformation
 ve.copyResource = copyFrom:GetComponentByType("VoxelData").data
-ve.copyDestinationPos = copyFrom.transform.pos
-ve.copyDestinationRot = copyFrom.transform.rot
-ve.copyDestinationScale = copyFrom.transform.scale
+ve.copyDestinationPos = copyFrom.pos
+ve.copyDestinationRot = copyFrom.rot
+ve.copyDestinationScale = copyFrom.scale
 ve:Copy()
 ```
 
@@ -232,10 +232,13 @@ if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least
 ### boolean imageUVClamp {#boolean-imageUVClamp}
 
 ### boolean imageTriplanar {#boolean-imageTriplanar}
+Triplanar projection — samples the image along world X/Y/Z so it covers every face, with the tiling grid anchored in world space. When false, the image is planar-projected along a single direction.
 
 ### boolean imageNormalOverwrite {#boolean-imageNormalOverwrite}
+When true, the image's normal map replaces the surface normal (flattening to bare geometry if the texture has no normal); when false it blends into the existing surface normal.
 
 ### boolean imageProjectionFade {#boolean-imageProjectionFade}
+Planar projection only: fade the albedo on faces angled away from the projection axis (decal-style, lands only on the facing face). Ignored for triplanar, which covers every face.
 
 ### number imageNormalBlendPower {#number-imageNormalBlendPower}
 

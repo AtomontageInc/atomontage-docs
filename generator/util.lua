@@ -4,16 +4,19 @@ local util = {}
 function util:getAllComponents(_Bindings)
     local components = {}
     for name, class in pairs(_Bindings.Classes) do
-        if name ~= "Component" then 
-            local hasType = false
-            local hasObject = false
+        if name ~= "Component" then
+            -- a component derives from Component, so it carries the base props `activeInHierarchy`,
+            -- `type` and `obj`. (Earlier this keyed off PascalCase `Obj`/`Type`, which were
+            -- deprecated aliases since removed. `activeInHierarchy` alone also matches `Object`,
+            -- and `obj`/`type` alone also match non-components like `Hit`, so require all three.)
+            local hasActive, hasType, hasObj = false, false, false
             for i, prop in ipairs(class.properties or {}) do
-                local name = prop.name
-                hasType = hasType or name:find("Type")
-                hasObject = hasObject or name:find("Obj")
+                if prop.name == "activeInHierarchy" then hasActive = true end
+                if prop.name == "type" then hasType = true end
+                if prop.name == "obj" then hasObj = true end
             end
-            if hasType and hasObject then
-                table.insert(components, name)          
+            if hasActive and hasType and hasObj then
+                table.insert(components, name)
             end
         end
     end

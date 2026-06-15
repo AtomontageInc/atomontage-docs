@@ -382,6 +382,11 @@ function AE:OnClient() end
 --- @return number
 function AE:GetDebugTime() end
 
+--[[
+Returns the [`CommandLine`](./commandLine.mdx) (engine command-line arguments).
+
+[View Documentation](https://docs.atomontage.com/api/AE#CommandLine-GetCommandLine)
+]]
 --- @return CommandLine
 function AE:GetCommandLine() end
 
@@ -833,12 +838,6 @@ function ButtonPanel:WidgetByName(name) end
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly) Indicates whether the object is destroyed (true) or not (false).
 --- @field type string (readonly) Specifies the object's type as a string, useful for type identification.
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
 --- @field fovY number Defines the vertical field of view in degrees
 --- @field transform Transform
 Camera = {}
@@ -990,9 +989,6 @@ This class is only available on client
 [View Documentation](https://docs.atomontage.com/api/Client)
 ]]
 --- @class Client
---- @field MasterVolume number Audio volume in range 0 - 1.
---- @field SoundVolume number Audio volume in range 0 - 1.
---- @field MusicVolume number Audio volume in range 0 - 1.
 --- @field clientID integer (readonly)
 --- @field userID string (readonly)
 --- @field mode ClientMode ClientMode enum: View=0, Edit=1, DevDebug=2.
@@ -1002,18 +998,10 @@ This class is only available on client
 --- @field initMode boolean (readonly)
 --- @field editMode boolean (readonly)
 --- @field playMode boolean (readonly)
---- @field masterVolume number
---- @field soundVolume number
---- @field musicVolume number
+--- @field masterVolume number Audio volume in range 0 - 1.
+--- @field soundVolume number Audio volume in range 0 - 1.
+--- @field musicVolume number Audio volume in range 0 - 1.
 Client = {}
-
---[[
-Returns [`CommandLine`](./commandLine.mdx)
-
-[View Documentation](https://docs.atomontage.com/api/Client#CommandLine-GetCommandLine)
-]]
---- @return CommandLine
-function Client:GetCommandLine() end
 
 --- @return string
 function Client:GetUserID() end
@@ -1519,19 +1507,24 @@ Returns [Hit](Hit).
 --- @return Hit[]
 function Collision:Raycast() end
 
---- @param ignoreTmp boolean
---- @param ignoreCommon boolean
---- @param precise boolean
+--- @param readColor boolean
+--- @param readNormal boolean
+--- @param readMaterial boolean
 --- @return Hit[]
-function Collision:Raycast(ignoreTmp, ignoreCommon, precise) end
+function Collision:Raycast(readColor, readNormal, readMaterial) end
 
 --- @param pos Vec3
 --- @param dir Vec3
---- @param ignoreTmp boolean?
---- @param ignoreCommon boolean?
---- @param precise boolean?
 --- @return Hit[]
-function Collision:Raycast(pos, dir, ignoreTmp, ignoreCommon, precise) end
+function Collision:Raycast(pos, dir) end
+
+--- @param pos Vec3
+--- @param dir Vec3
+--- @param readColor boolean?
+--- @param readNormal boolean?
+--- @param readMaterial boolean?
+--- @return Hit[]
+function Collision:Raycast(pos, dir, readColor, readNormal, readMaterial) end
 
 --- @param startPos Vec3
 --- @param endPos Vec3
@@ -1796,12 +1789,6 @@ All components inherit from this class. It is not meant to be instantiated direc
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
 Component = {}
 
 --[[
@@ -1815,13 +1802,13 @@ This is useful for saving settings, last player position, etc.
 To avoid naming conflicts with other montages, use a unique prefix for each game. For example, if your game is called "MyGame", you can use "MyGame/" as a prefix for all your keys.
 
 ```lua
-Config:SetVec3("MyGame/PlayerPosition", player.transform.pos)
+Config:SetVec3("MyGame/PlayerPosition", player.pos)
 ```
 
 ```lua
 local defaultPos = Vec3(0,0,0)
 local pos = Config:GetVec3("MyGame/PlayerPosition", defaultPos)
-player.transform.pos = pos
+player.pos = pos
 ```
 
 If you want to save a setting only for this montage include the montage id in the setting
@@ -2139,7 +2126,6 @@ Returned by [raycasts](Collision#table-Raycast).
 --- @field material string? (readonly)
 --- @field type HitType (readonly)
 --- @field obj Object?
---- @field Obj Object? (deprecated)
 Hit = {}
 
 --[[
@@ -3036,12 +3022,6 @@ function Material:SetProperty(name, vec) end
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
 --- @field resourceUsageMode ResourceUsage
 --- @field topology PrimitiveTopology
 --- @field vertexCount integer
@@ -3097,12 +3077,6 @@ function MeshData:AddShape(shape, color) end
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
 --- @field material Material
 MeshRenderer = {}
 
@@ -3135,6 +3109,7 @@ The object visible in the hierarchy. Every object has a transform and can have a
 --- @field right Vec3 (readonly)
 --- @field up Vec3 (readonly)
 --- @field forward Vec3 (readonly)
+--- @field transformFingerprint number (readonly) 64-bit value that changes when the object's global (world) position, rotation, or scale change — including motion caused by an ancestor moving. Useful for cheap change detection.
 --- @field name string
 --- @field active boolean Set the object to be active or inactive. Inactive objects are not updated or rendered. All its children also become inactive.
 --- @field activeInHierarchy boolean (readonly) Readonly. Check if the object is active in the scene. It may be inactive because a parent is inactive.
@@ -3150,21 +3125,6 @@ The object visible in the hierarchy. Every object has a transform and can have a
 --- @field voxelData VoxelData? (readonly)
 --- @field voxelRenderer VoxelRenderer? (readonly)
 --- @field rigidBody RigidBody? (readonly)
---- @field Pos Vec3 (deprecated)
---- @field Rot Quat (deprecated)
---- @field Scale number (deprecated)
---- @field Name string (deprecated)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Save boolean (deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Parent Object? (deprecated)
---- @field Children Object[] (readonly, deprecated)
---- @field SiblingIndex integer (deprecated)
---- @field Components Component[] (readonly, deprecated)
---- @field VoxelData VoxelData? (deprecated)
---- @field VoxelRenderer VoxelRenderer? (deprecated)
---- @field RigidBody RigidBody? (deprecated)
 Object = {}
 
 --- @param a Object
@@ -3281,6 +3241,11 @@ function Object:FindScript(name) end
 --- @return ScriptInstanceType
 function Object:FindScriptWithChildren(name) end
 
+--[[
+Recursively search this object and all descendants; return the first object matching by name (string) or by identity (Object).
+
+[View Documentation](https://docs.atomontage.com/api/Object#Object-FindObjectWithChildren-stringObject-find-boolean-includeInactive)
+]]
 --- @param find string|Object
 --- @param includeInactive boolean?
 --- @return Object?
@@ -3335,7 +3300,6 @@ Returned by [`Overlap()` functions](Collision#table-GetOverlap).
 --- @field center Vec3
 --- @field radius number
 --- @field obj Object
---- @field Obj Object (deprecated)
 --- @field shape Shape
 Overlap = {}
 
@@ -3942,12 +3906,6 @@ function Recti:Copy() end
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
 --- @field velocity Vec3
 --- @field angularVelocity Vec3
 --- @field mass number
@@ -3962,20 +3920,6 @@ function Recti:Copy() end
 --- @field simulate boolean
 --- @field centerOfMass Vec3
 --- @field gravityScale number
---- @field Velocity Vec3 (deprecated)
---- @field AngularVelocity Vec3 (deprecated)
---- @field Mass number (deprecated)
---- @field MassByObject boolean (deprecated)
---- @field Volume number (deprecated)
---- @field Inertia Vec3 (deprecated)
---- @field InertiaByObject boolean (deprecated)
---- @field InertiaMul number (deprecated)
---- @field Sleeping boolean (deprecated)
---- @field StartSleeping boolean (deprecated)
---- @field AllowSleeping boolean (deprecated)
---- @field Simulate boolean (deprecated)
---- @field CenterOfMass Vec3 (deprecated)
---- @field GravityScale number (deprecated)
 RigidBody = {}
 
 --- @param a RigidBody
@@ -4020,10 +3964,9 @@ function RigidBody:GetCollisions(eventType) end
 ]]
 --- @class Scene
 --- @field voxelDataResourceTemplateSizeThreshold integer
---- @field VoxelDataResourceTemplateSizeThreshold integer (deprecated)
---- @field SimulationPaused boolean
---- @field SimulationSpeed number
---- @field Gravity number
+--- @field simulationPaused boolean
+--- @field simulationSpeed number
+--- @field gravity number
 Scene = {}
 
 --[[
@@ -4042,7 +3985,7 @@ function self:Update()
     local speed = 10
     local move = Vec3.right
     --remember to multiply by delta time, since the time passed between each Update() is not constant
-    self.transform.pos = self.transform.pos + move * speed * Scene:GetDeltaTime() 
+    self.obj.pos = self.obj.pos + move * speed * Scene:GetDeltaTime() 
 end
 ```
 [View Documentation](https://docs.atomontage.com/api/Scene#number-GetDeltaTime)
@@ -4205,18 +4148,6 @@ function Scene:AddNewScriptFile(scriptName, forObject) end
 --- @return VoxelDB?
 function Scene:GetVoxelDB(db) end
 
---- @class TraceRayParams:table
---- @field Origin Vec3
---- @field Dir Vec3
---- @field TraceAtlas boolean
---- @field TraceCommon boolean
---- @field ForceComponents VoxelRenderer[]
---- @field IgnoreComponents VoxelRenderer[]
-
---- @param p1 TraceRayParams
---- @return Hit[]
-function Scene:TraceRay(p1) end
-
 --- @param name string
 --- @return boolean
 function Scene:IsNameValid(name) end
@@ -4301,12 +4232,6 @@ Script component. Not to be confused with the actual [lua table instance](Script
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
 --- @field instance ScriptInstance
 --- @field name string
 --- @field luaFile Asset
@@ -4315,11 +4240,6 @@ Script component. Not to be confused with the actual [lua table instance](Script
 --- @field syncToClients boolean
 --- @field priority integer
 --- @field varsTable VarTable (readonly)
---- @field Instance ScriptInstance (deprecated)
---- @field Name string (deprecated)
---- @field File string (deprecated)
---- @field SyncToClients boolean (deprecated)
---- @field Priority integer (deprecated)
 Script = {}
 
 --- @param a Script
@@ -4460,14 +4380,8 @@ end
 --- @field transform Transform The transform of the object this script is attached to
 --- @field onServer boolean Use this to run part of the code only on server or client```lua if self.onServer then    -- do something only on serverend```
 --- @field onClient boolean Use this to run part of the code only on server or client```lua if self.onClient then    -- do something only on clientend```import { render } from "react-dom"
---- @field Com Script (deprecated)
---- @field Component Script (deprecated)
 --- @field component Script (deprecated) The script component, separate from the lua table
---- @field Obj Object (deprecated)
 --- @field object Object (deprecated) The object this script is attached to
---- @field Transform Transform (deprecated)
---- @field OnServer boolean (deprecated)
---- @field OnClient boolean (deprecated)
 ScriptInstance = {}
 
 --[[
@@ -5119,20 +5033,6 @@ function ServerObject(idStr, name) end
 --- @field enableVoxelCacheDraw boolean
 --- @field enableVoxelObjectBoundsDraw boolean
 --- @field voxelCacheDrawDuration number
---- @field VoxelCacheWarningCount integer (deprecated)
---- @field EnableLuaVoxelOpCallstack boolean (deprecated)
---- @field EnableVoxelOpBoundsDraw boolean (deprecated)
---- @field VoxelOpBoundsDrawDuration number (deprecated)
---- @field VoxelOpBoundsShowVMask boolean (deprecated)
---- @field VoxelOpBoundsShowAlbedo boolean (deprecated)
---- @field VoxelOpBoundsShowColor boolean (deprecated)
---- @field VoxelOpBoundsShowNormal boolean (deprecated)
---- @field VoxelOpBoundsShowRoughness boolean (deprecated)
---- @field VoxelOpBoundsShowMetallicity boolean (deprecated)
---- @field VoxelOpBoundsShowMaterials boolean (deprecated)
---- @field EnableVoxelCacheDraw boolean (deprecated)
---- @field EnableVoxelObjectBoundsDraw boolean (deprecated)
---- @field VoxelCacheDrawDuration number (deprecated)
 ServerSceneSettings = {}
 
 --[[
@@ -5167,12 +5067,6 @@ Shape = {}
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
 --- @field cloudScale number
 --- @field cloudOffset number
 --- @field cloudSlope number
@@ -5316,12 +5210,6 @@ Every scene has only **one** static voxel data and can have multiple dynamic vox
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
 --- @field path string
 --- @field isLoaded boolean (readonly)
 StaticVoxelData = {}
@@ -5388,19 +5276,18 @@ Holds position, rotation, and scale
 [View Documentation](https://docs.atomontage.com/api/Transform)
 ]]
 --- @class Transform
---- @field obj Object (readonly)
---- @field localPos Vec3 The local position of the object relative to its parent
---- @field localScale number The local scale of the object relative to its parent
---- @field localRot Quat The local rotation of the object represented as a quaternion.
---- @field localEulerRot Vec3 The local rotation of the object represented as Euler angles.
---- @field pos Vec3 The global (world) position of the object
---- @field rot Quat The global (world) rotation of the object as a quaternion
---- @field eulerRot Vec3 The global (world) rotation of the object represented as Euler angles.
---- @field scale number The global (world) scale of the object.
---- @field fingerprint number (readonly) 64-bit value that changes when the global (world) position, rotation, or scale change — including motion caused by an ancestor moving. Useful for cheap change detection.
---- @field right Vec3 (readonly) The right direction vector of the object in world space.
---- @field up Vec3 (readonly) The right direction vector of the object in world space.
---- @field forward Vec3 (readonly) The forward direction vector of the object in world space.
+--- @field obj Object (readonly, deprecated)
+--- @field localPos Vec3 (deprecated) The local position of the object relative to its parent
+--- @field localScale number (deprecated) The local scale of the object relative to its parent
+--- @field localRot Quat (deprecated) The local rotation of the object represented as a quaternion.
+--- @field localEulerRot Vec3 (deprecated) The local rotation of the object represented as Euler angles.
+--- @field pos Vec3 (deprecated) The global (world) position of the object
+--- @field rot Quat (deprecated) The global (world) rotation of the object as a quaternion
+--- @field eulerRot Vec3 (deprecated) The global (world) rotation of the object represented as Euler angles.
+--- @field scale number (deprecated) The global (world) scale of the object.
+--- @field right Vec3 (readonly, deprecated) The right direction vector of the object in world space.
+--- @field up Vec3 (readonly, deprecated) The right direction vector of the object in world space.
+--- @field forward Vec3 (readonly, deprecated) The forward direction vector of the object in world space.
 Transform = {}
 
 --- @param a Transform
@@ -5414,6 +5301,7 @@ Transforms a local position to world space, allowing you to convert coordinates 
 
 [View Documentation](https://docs.atomontage.com/api/Transform#Vec3-LocalToWorld-Vec3-v)
 ]]
+--- @deprecated
 --- @param v Vec3
 --- @return Vec3
 function Transform:LocalToWorld(v) end
@@ -5423,14 +5311,17 @@ Converts a world position to local space, making it useful for determining an ob
 
 [View Documentation](https://docs.atomontage.com/api/Transform#Vec3-WorldToLocal-Vec3-v)
 ]]
+--- @deprecated
 --- @param v Vec3
 --- @return Vec3
 function Transform:WorldToLocal(v) end
 
+--- @deprecated
 --- @param v Vec3
 --- @return Vec3
 function Transform:LocalToWorldVec(v) end
 
+--- @deprecated
 --- @param v Vec3
 --- @return Vec3
 function Transform:WorldToLocalVec(v) end
@@ -5441,6 +5332,7 @@ Adjusts the object's rotation to look at a specified point in the world, alignin
 
 [View Documentation](https://docs.atomontage.com/api/Transform#nil-LookAt-Vec3-pos-Vec3-up)
 ]]
+--- @deprecated
 --- @param pos Vec3
 --- @param up Vec3?
 --- @return nil
@@ -7481,12 +7373,6 @@ function VoxelDB:GetNormal(vpos) end
 --- @return Vec3
 function VoxelDB:GetFilteredNormal(vpos) end
 
---- @param startPos Vec3
---- @param dir Vec3
---- @param maxDistance number
---- @return Hit?
-function VoxelDB:TraceRay(startPos, dir, maxDistance) end
-
 --- @param vpos Vec3
 --- @param radius number
 --- @return boolean
@@ -7698,13 +7584,6 @@ The data will only render if the object also has a `VoxelRender` component.
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
---- @field Size Vec3 (readonly, deprecated)
 --- @field size Vec3 (readonly)
 --- @field contentVersion integer (readonly) Monotonic counter incremented every time the underlying voxel content is invalidated (any edit that changes voxel presence). Cheap O(1) read for caching downstream computations like total volume.
 --- @field path string
@@ -7861,7 +7740,7 @@ local vd = ob:AddComponent("VoxelData")
 local vr = ob:AddComponent("VoxelRenderer")
 local vres = VoxelDataResource() --new empty voxel data
 vd.data = vres
-ob.transform.pos = Vec3(0, 30, 0)
+ob.pos = Vec3(0, 30, 0)
 
 --voxel edit    
 local ve = VoxelEdit()
@@ -7872,7 +7751,7 @@ ve.filter.forceList = { ob }
 
 --add sphere
 ve.color = Vec3(0,0.5,1)
-ve.shape = Sphere(ob.transform.pos, 1)
+ve.shape = Sphere(ob.pos, 1)
 ve:Add()
 ```
 
@@ -7894,9 +7773,9 @@ ve.filter.useNotStatic = false
 
 --select what data to copy and its pasted transformation
 ve.copyResource = copyFrom:GetComponentByType("VoxelData").data
-ve.copyDestinationPos = copyFrom.transform.pos
-ve.copyDestinationRot = copyFrom.transform.rot
-ve.copyDestinationScale = copyFrom.transform.scale
+ve.copyDestinationPos = copyFrom.pos
+ve.copyDestinationRot = copyFrom.rot
+ve.copyDestinationScale = copyFrom.scale
 ve:Copy()
 ```
 
@@ -7942,9 +7821,9 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 --- @field imageNormal Image
 --- @field imageUVTm Mat4
 --- @field imageUVClamp boolean
---- @field imageTriplanar boolean
---- @field imageNormalOverwrite boolean
---- @field imageProjectionFade boolean
+--- @field imageTriplanar boolean Triplanar projection — samples the image along world X/Y/Z so it covers every face, with the tiling grid anchored in world space. When false, the image is planar-projected along a single direction.
+--- @field imageNormalOverwrite boolean When true, the image's normal map replaces the surface normal (flattening to bare geometry if the texture has no normal); when false it blends into the existing surface normal.
+--- @field imageProjectionFade boolean Planar projection only: fade the albedo on faces angled away from the projection axis (decal-style, lands only on the facing face). Ignored for triplanar, which covers every face.
 --- @field imageNormalBlendPower number
 --- @field onProgress fun(progress:number) callback function. progress from 0-1. May not be called every frame. Is called after script updates 
 --- @field onFinished fun(info:RemoveCountInfo) callback function. onFinished is called after onProgress if it was last part
@@ -8102,12 +7981,6 @@ The data will only render if the object also has a `VoxelData` component with da
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
---- @field Active boolean (deprecated)
---- @field ActiveInHierarchy boolean (readonly, deprecated)
---- @field Object Object (readonly, deprecated)
---- @field Obj Object (readonly, deprecated)
---- @field IsDestroyed boolean (readonly, deprecated)
---- @field Type string (readonly, deprecated)
 --- @field syncToClients boolean
 --- @field enabled boolean
 --- @field prioritizeLod boolean Try to load higher LODs faster than those of other objects
@@ -8115,7 +7988,6 @@ The data will only render if the object also has a `VoxelData` component with da
 --- @field tintColor Color Render with a tint color
 --- @field receiveTransform boolean Receive transform(pos, rot scale) to render with from server. By default this is true. If you set this to false, you will need to manually set the transform of the object on the client side.This is useful for making objects respond immediately if something happened on the client side i.e. input
 --- @field lodBias number
---- @field LodBias number (deprecated)
 VoxelRenderer = {}
 
 --- @param a VoxelRenderer

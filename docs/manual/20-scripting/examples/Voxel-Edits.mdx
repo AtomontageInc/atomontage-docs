@@ -88,11 +88,11 @@ However both can be edited. To choose whether to edit the static or dynamic voxe
 local ob = Scene:CreateObject("Voxel Sphere")
 local vd = ob:AddComponent("VoxelData")
 local vr = ob:AddComponent("VoxelRenderer")
-ob.transform.pos = Vec3(0, 30, 0)
+ob.pos = Vec3(0, 30, 0)
 
 --add sphere
 local col = Vec3(0,0.5,1)
-local s = Sphere(ob.transform.pos, 1)
+local s = Sphere(ob.pos, 1)
 
 --using Force() to target the object only
 Vox:Add(s)

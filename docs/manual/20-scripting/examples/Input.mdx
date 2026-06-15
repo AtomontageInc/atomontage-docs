@@ -15,7 +15,7 @@ function self:Start()
     self.component.syncToClients = true
 
     local startPos = Vec3(0,20,0)
-    self.transform.pos = startPos
+    self.obj.pos = startPos
 
     --add VoxelData and VoxelRenderer component to this object and assign a file, you can also do this in the server hierarchy UI 
     self.vd = self.object:GetComponentByType("VoxelData") or self.object:AddComponent('VoxelData')
@@ -30,7 +30,7 @@ function self:Start()
 
         --if R pressed reset
         if key == "R" then
-            self.transform.pos = startPos
+            self.obj.pos = startPos
         end
     end)
 
@@ -68,7 +68,7 @@ function self:updateMovement(key, from)
     local speed = 10
     local move = self:getMovementInput()
     --remember to multiply by delta time, since the time passed between each Update() is not constant
-    self.transform.pos = self.transform.pos + move * speed * Scene:GetDeltaTime() 
+    self.obj.pos = self.obj.pos + move * speed * Scene:GetDeltaTime() 
 end
 
 return self

@@ -917,7 +917,24 @@ function genEmmy:writeMethods(file, className, finalMethods)
         if overrides and overrides[name] then
             -- emit the manual override once (in place of the auto-generated emission)
             if not emittedOverrides[name] then
-                file:write(overrides[name])
+                local ov = overrides[name]
+                -- overrides are freeform strings (may define a helper @class etc.), so the
+                -- auto @deprecated below is skipped. Inject it above the function's annotation
+                -- block (before @param/@return, matching the non-override path) — not before a
+                -- preceding @class, and not after @return.
+                if self:isMethodDeprecated(className, name) and not ov:find("@deprecated", 1, true) then
+                    local marker = "--- @deprecated\n"
+                    if ov:find("\n%-%-%- @param") then
+                        ov = ov:gsub("\n(%-%-%- @param)", "\n"..marker.."%1", 1)
+                    elseif ov:find("\n%-%-%- @vararg") then
+                        ov = ov:gsub("\n(%-%-%- @vararg)", "\n"..marker.."%1", 1)
+                    elseif ov:find("\n%-%-%- @return") then
+                        ov = ov:gsub("\n(%-%-%- @return)", "\n"..marker.."%1", 1)
+                    else
+                        ov = ov:gsub("\nfunction ", "\n"..marker.."function ", 1)
+                    end
+                end
+                file:write(ov)
                 emittedOverrides[name] = true
             end
             goto continue

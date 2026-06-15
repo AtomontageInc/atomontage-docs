@@ -26,8 +26,8 @@ end
 ```
 
 ```lua title="Cast a ray from the object's position forward 100m, ignore the object and all its children"
-local startPos = self.transform.pos
-local ray = self.transform.forward * 100
+local startPos = self.obj.pos
+local ray = self.obj.forward * 100
 local hit = Cast:Ray(startPos, ray):Ignore(self.object:WithChildren()):Run()
 if hit then
     deb:cross(hit.pos)
@@ -35,8 +35,8 @@ end
 ```
 
 ```lua title="Cast a ray from the object's position forward 100m, ignore static terrain, get all hits not just the first"
-local startPos = self.transform.pos
-local ray = self.transform.forward * 100
+local startPos = self.obj.pos
+local ray = self.obj.forward * 100
 local hits = Cast:Ray(startPos, ray):IgnoreStatic():RunAll()
 for _, hit in ipairs(hits) do
     deb:cross(hit.pos)

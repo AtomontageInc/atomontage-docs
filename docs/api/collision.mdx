@@ -20,9 +20,11 @@ Instead use `Cast:Ray()` and `Collide()`
 Use rayPos, rayDir, returns table of Hit values or empty table for no hit.
 Returns [Hit](Hit).
 
-### Hit[] Raycast(boolean ignoreTmp, boolean ignoreCommon, boolean precise) {#Hit-Raycast-boolean-ignoreTmp-boolean-ignoreCommon-boolean-precise}
+### Hit[] Raycast(boolean readColor, boolean readNormal, boolean readMaterial) {#Hit-Raycast-boolean-readColor-boolean-readNormal-boolean-readMaterial}
 
-### Hit[] Raycast(Vec3 pos, Vec3 dir, boolean? ignoreTmp, boolean? ignoreCommon, boolean? precise) {#Hit-Raycast-Vec3-pos-Vec3-dir-boolean-ignoreTmp-boolean-ignoreCommon-boolean-precise}
+### Hit[] Raycast(Vec3 pos, Vec3 dir) {#Hit-Raycast-Vec3-pos-Vec3-dir}
+
+### Hit[] Raycast(Vec3 pos, Vec3 dir, boolean? readColor, boolean? readNormal, boolean? readMaterial) {#Hit-Raycast-Vec3-pos-Vec3-dir-boolean-readColor-boolean-readNormal-boolean-readMaterial}
 
 ### table RaycastTo(Vec3 startPos, Vec3 endPos, boolean? readColor, boolean? readNormal, boolean? readMaterial) {#table-RaycastTo-Vec3-startPos-Vec3-endPos-boolean-readColor-boolean-readNormal-boolean-readMaterial}
 

@@ -96,12 +96,12 @@ end
 
 function self:updateSleeping()
     if not self.sleeping then return end
-    local p = self.transform.pos
+    local p = self.obj.pos
     local lp = self.lastPos or Vec3()
     if (p-lp):SqrLength() > 0.1 then
         self.sleeping = false
         self.vel = Vec3()
-        self.lastPos = self.transform.pos
+        self.lastPos = self.obj.pos
     end 
 end
 
@@ -111,7 +111,7 @@ function self:getGrounded()
 end
 
 function self:getDistToGround()
-    local pos = self.transform.pos
+    local pos = self.obj.pos
     local c = Collision()
     c.filter = Filter()
     c.filter.useNotStatic = false

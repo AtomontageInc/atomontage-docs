@@ -57,8 +57,8 @@ function self:createVoxelObject(pos, up)
     end
 
     --place the object
-    self.ob.transform.pos = pos
-    self.ob.transform.rot = Quat.LookAt(Vec3.forward, up)
+    self.ob.pos = pos
+    self.ob.rot = Quat.LookAt(Vec3.forward, up)
 end
 
 return self

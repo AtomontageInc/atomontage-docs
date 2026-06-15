@@ -65,12 +65,16 @@ get the object and all its children, descendants, does not returns destroyed obj
 Find attached script component lua table by name
 
 ### ScriptInstance FindScriptWithChildren(string name) {#ScriptInstance-FindScriptWithChildren-string-name}
+Recursively search this object and all descendants; return the first script with the given name.
 
 ### Object? FindObjectWithChildren(string|Object find, boolean? includeInactive) {#Object-FindObjectWithChildren-stringObject-find-boolean-includeInactive}
+Recursively search this object and all descendants; return the first object matching by name (string) or by identity (Object).
 
 ### Component? GetComponentWithChildren(string typeName, boolean? includeInactive) {#Component-GetComponentWithChildren-string-typeName-boolean-includeInactive}
+Recursively search this object and all descendants; return the first component of the given type.
 
 ### Component[] GetComponentsWithChildren(string typeName, boolean? includeInactive) {#Component-GetComponentsWithChildren-string-typeName-boolean-includeInactive}
+Recursively collect all components of the given type from this object and all descendants.
 
 ### boolean HasScript(string name) {#boolean-HasScript-string-name}
 
@@ -115,6 +119,9 @@ Volume of all the VoxelData components in the object and all its children
 
 ### Vec3 forward {#Vec3-forward}
 
+### number transformFingerprint {#number-transformFingerprint}
+64-bit value that changes when the object's global (world) position, rotation, or scale change — including motion caused by an ancestor moving. Useful for cheap change detection.
+
 ### string name {#string-name}
 
 ### boolean active {#boolean-active}
@@ -151,34 +158,4 @@ This is id is unique across clients and server
 ### VoxelRenderer? voxelRenderer {#VoxelRenderer-voxelRenderer}
 
 ### RigidBody? rigidBody {#RigidBody-rigidBody}
-
-### Vec3 Pos {#Vec3-Pos}
-
-### Quat Rot {#Quat-Rot}
-
-### number Scale {#number-Scale}
-
-### string Name {#string-Name}
-
-### boolean Active {#boolean-Active}
-
-### boolean ActiveInHierarchy {#boolean-ActiveInHierarchy}
-
-### boolean Save {#boolean-Save}
-
-### boolean IsDestroyed {#boolean-IsDestroyed}
-
-### Object? Parent {#Object-Parent}
-
-### Object[] Children {#Object-Children}
-
-### integer SiblingIndex {#integer-SiblingIndex}
-
-### Component[] Components {#Component-Components}
-
-### VoxelData? VoxelData {#VoxelData-VoxelData}
-
-### VoxelRenderer? VoxelRenderer {#VoxelRenderer-VoxelRenderer}
-
-### RigidBody? RigidBody {#RigidBody-RigidBody}
 
