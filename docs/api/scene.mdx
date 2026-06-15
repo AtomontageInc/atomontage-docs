@@ -80,6 +80,7 @@ Flags the object for deletion. The object will not actually be destroyed until t
 ### boolean CanMoveObject(Object obj, Object newParentObj) {#boolean-CanMoveObject-Object-obj-Object-newParentObj}
 
 ### Material? CreateMaterial(string path) {#Material-CreateMaterial-string-path}
+Gets the shared [`Material`](./material.mdx) the renderer actually draws with (the cached instance, not a copy) — use it to drive live shader uniforms via [`Material:SetProperty`](./material.mdx#nil-SetProperty-string-name-Vec3Vec4-vec).
 
 ### Camera GetActiveCamera() {#Camera-GetActiveCamera}
 Returns the currently active (rendering) camera.

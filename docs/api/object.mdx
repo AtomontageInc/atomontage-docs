@@ -147,7 +147,11 @@ This is id is unique across clients and server
 
 ### Object[] children {#Object-children}
 
+### integer subtreeVersion {#integer-subtreeVersion}
+Monotonic counter bumped on this object and all of its ancestors whenever a child is added, removed, or reordered anywhere in its subtree (parent/unparent/reorder). Does NOT change for transform edits (use [`transformFingerprint`](#number-transformFingerprint)) or component add/remove. Cheap O(1) check for invalidating caches derived from the child hierarchy, e.g. `WithChildren()`.
+
 ### integer siblingIndex {#integer-siblingIndex}
+This object's position among its parent's children.
 
 ### boolean isPrefabObject {#boolean-isPrefabObject}
 

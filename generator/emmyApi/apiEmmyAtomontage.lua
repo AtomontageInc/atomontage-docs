@@ -3119,7 +3119,8 @@ The object visible in the hierarchy. Every object has a transform and can have a
 --- @field id string (readonly) This is id is unique across clients and server
 --- @field parent Object?
 --- @field children Object[] (readonly)
---- @field siblingIndex integer
+--- @field subtreeVersion integer (readonly) Monotonic counter bumped on this object and all of its ancestors whenever a child is added, removed, or reordered anywhere in its subtree (parent/unparent/reorder). Does NOT change for transform edits (use [`transformFingerprint`](#number-transformFingerprint)) or component add/remove. Cheap O(1) check for invalidating caches derived from the child hierarchy, e.g. `WithChildren()`.
+--- @field siblingIndex integer This object's position among its parent's children.
 --- @field isPrefabObject boolean (readonly)
 --- @field components Component[] (readonly)
 --- @field voxelData VoxelData? (readonly)
@@ -4118,6 +4119,11 @@ function Scene:MoveObjectToRoot(obj) end
 --- @return boolean
 function Scene:CanMoveObject(obj, newParentObj) end
 
+--[[
+Gets the shared [`Material`](./material.mdx) the renderer actually draws with (the cached instance, not a copy) — use it to drive live shader uniforms via [`Material:SetProperty`](./material.mdx#nil-SetProperty-string-name-Vec3Vec4-vec).
+
+[View Documentation](https://docs.atomontage.com/api/Scene#Material-CreateMaterial-string-path)
+]]
 --- @param path string
 --- @return Material?
 function Scene:CreateMaterial(path) end
@@ -7286,10 +7292,11 @@ function VoxelDB:ToWorld(voxelPos) end
 --- @return boolean
 function VoxelDB:SetUnitVoxelDim(unit) end
 
+--- @deprecated
 --- @param vpos Vec3i
 --- @param value boolean
 --- @return nil
-function VoxelDB:SetMask_deprecated(vpos, value) end
+function VoxelDB:SetMask(vpos, value) end
 
 --- @param vpos Vec3i
 --- @return boolean
