@@ -9,13 +9,7 @@ This class is only available on client
 
 ## Methods
 
-### string GetUserID() {#string-GetUserID}
-
 ### integer GetID() {#integer-GetID}
-
-### nil SetShowWindows(boolean show) {#nil-SetShowWindows-boolean-show}
-
-### boolean GetShowWindows() {#boolean-GetShowWindows}
 
 ### nil OpenScriptFile(string fileName, integer? lineNumber) {#nil-OpenScriptFile-string-fileName-integer-lineNumber}
 
@@ -56,10 +50,6 @@ Disconnected
 Time for a network message to travel from client to server and back
 
 
-### number GetLogValue(string name, number? defaultValue) {#number-GetLogValue-string-name-number-defaultValue}
-
-### nil SetLogValue(string name, number value) {#nil-SetLogValue-string-name-number-value}
-
 ### table GetMainDispatcherStats() {#table-GetMainDispatcherStats}
 
 ### table GetRenderStats() {#table-GetRenderStats}
@@ -68,14 +58,9 @@ Time for a network message to travel from client to server and back
 
 ### nil SetRenderStatsEnabled(boolean enable) {#nil-SetRenderStatsEnabled-boolean-enable}
 
-### number GetFPS() {#number-GetFPS}
-
 ### nil ConnectToServer() {#nil-ConnectToServer}
 
 ### boolean opened OpenFolder(string path) {#boolean-opened-OpenFolder-string-path}
-
-### nil Log(string message) {#nil-Log-string-message}
-Log a message to file. In most cases you wanna use print() for console output
 
 ### boolean DevMode() {#boolean-DevMode}
 
@@ -234,8 +219,6 @@ Draw a camera-facing textured quad in world space. Client-side, call every frame
 ### nil DrawBillboards(table billboards) {#nil-DrawBillboards-table-billboards}
 Batch-draw multiple billboards from a table of descriptors.
 
-### boolean ToggleFullScreen() {#boolean-ToggleFullScreen}
-
 ## Properties
 
 ### integer clientID {#integer-clientID}
@@ -251,11 +234,7 @@ ClientMode enum: View=0, Edit=1, DevDebug=2.
 
 ### string sysInfo {#string-sysInfo}
 
-### boolean initMode {#boolean-initMode}
-
-### boolean editMode {#boolean-editMode}
-
-### boolean playMode {#boolean-playMode}
+### boolean inInitScene {#boolean-inInitScene}
 
 ### number masterVolume {#number-masterVolume}
 Audio volume in range 0 - 1.

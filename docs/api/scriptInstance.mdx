@@ -101,7 +101,7 @@ function self:Start()
         --if left mouse button pressed create a ray from mouse position and direction
         if button == 1 then
             local mpos = Input:MousePosPerc()
-            local tf = self.cam.object.transform
+            local tf = self.cam.object
             local pos = tf.pos + tf.forward * 1.5
 
             --call this function on all clients with these two parameters
@@ -171,9 +171,6 @@ Script active state changed through object or component. Never called before Sta
 ### Object obj {#Object-obj}
 
 ### Script com {#Script-com}
-
-### Transform transform {#Transform-transform}
-The transform of the object this script is attached to
 
 ### boolean onServer {#boolean-onServer}
 Use this to run part of the code only on server or client

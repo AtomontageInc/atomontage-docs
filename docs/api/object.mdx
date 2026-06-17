@@ -15,8 +15,10 @@ The object visible in the hierarchy. Every object has a transform and can have a
 ## Methods
 
 ### Vec3 LocalToWorld(Vec3 point) {#Vec3-LocalToWorld-Vec3-point}
+Transforms a local position to world space, allowing you to convert coordinates relative to an object into global coordinates.
 
 ### Vec3 WorldToLocal(Vec3 point) {#Vec3-WorldToLocal-Vec3-point}
+Converts a world position to local space, making it useful for determining an object's position relative to another object.
 
 ### Vec3 LocalToWorldVec(Vec3 vec) {#Vec3-LocalToWorldVec-Vec3-vec}
 
@@ -30,13 +32,13 @@ Get child object by name
 
 ### Script AddScript(string fileName, boolean? sync) {#Script-AddScript-string-fileName-boolean-sync}
 
-### MeshData AddMeshData() {#MeshData-AddMeshData}
+### Mesh AddMesh() {#Mesh-AddMesh}
 
 ### VoxelData? AddVoxelData(string fileName) {#VoxelData-AddVoxelData-string-fileName}
 
 ### StaticVoxelData? AddStaticVoxelData(string fileName) {#StaticVoxelData-AddStaticVoxelData-string-fileName}
 
-### VoxelRenderer AddVoxelRenderer() {#VoxelRenderer-AddVoxelRenderer}
+### VoxelData AddVoxelRenderer() {#VoxelData-AddVoxelRenderer}
 
 ### Camera AddCamera() {#Camera-AddCamera}
 
@@ -92,6 +94,7 @@ Volume of all the VoxelData components in the object and all its children
 ## Properties
 
 ### Vec3 pos {#Vec3-pos}
+The global (world) position of the object
 
 ### number posX {#number-posX}
 
@@ -100,24 +103,34 @@ Volume of all the VoxelData components in the object and all its children
 ### number posZ {#number-posZ}
 
 ### Quat rot {#Quat-rot}
+The global (world) rotation of the object as a quaternion
 
 ### Vec3 eulerRot {#Vec3-eulerRot}
+The global (world) rotation of the object represented as Euler angles.
 
 ### number scale {#number-scale}
+The global (world) scale of the object.
 
 ### Vec3 localPos {#Vec3-localPos}
+The local position of the object relative to its parent
 
 ### Quat localRot {#Quat-localRot}
+The local rotation of the object represented as a quaternion.
 
 ### Vec3 localEulerRot {#Vec3-localEulerRot}
+The local rotation of the object represented as Euler angles.
 
 ### number localScale {#number-localScale}
+The local scale of the object relative to its parent
 
 ### Vec3 right {#Vec3-right}
+The right direction vector of the object in world space.
 
 ### Vec3 up {#Vec3-up}
+The up direction vector of the object in world space.
 
 ### Vec3 forward {#Vec3-forward}
+The forward direction vector of the object in world space.
 
 ### number transformFingerprint {#number-transformFingerprint}
 64-bit value that changes when the object's global (world) position, rotation, or scale change — including motion caused by an ancestor moving. Useful for cheap change detection.
@@ -133,9 +146,6 @@ Readonly. Check if the object is active in the scene. It may be inactive because
 
 ### boolean save {#boolean-save}
 Save this object in the hierarchy. If not saved it will be deleted after lua reset or server restart
-
-### Transform transform {#Transform-transform}
-Get the transform to modify the position, rotation and scale of the object
 
 ### boolean isDestroyed {#boolean-isDestroyed}
 True if the object was destroyed. Note that references to this object will still be valid 
@@ -159,7 +169,7 @@ This object's position among its parent's children.
 
 ### VoxelData? voxelData {#VoxelData-voxelData}
 
-### VoxelRenderer? voxelRenderer {#VoxelRenderer-voxelRenderer}
+### VoxelData? voxelRenderer {#VoxelData-voxelRenderer}
 
 ### RigidBody? rigidBody {#RigidBody-rigidBody}
 

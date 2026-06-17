@@ -1027,6 +1027,9 @@ function genEmmy:convertToEmmyLuaType(strType)
     -- genDocs escapes `<`/`>` to HTML entities for MDX rendering; undo that here so
     -- EmmyLua generic types like `table<string,number>` come through unescaped.
     strType = strType:gsub("&lt;", "<"):gsub("&gt;", ">")
+    -- the bindings expose callback fields with the bare type `fun` (no signature); bare `fun`
+    -- is not a valid sumneko/EmmyLua type, so normalize it to the callable `fun()`.
+    if strType == "fun" then strType = "fun()" end
     return strType
 end
 

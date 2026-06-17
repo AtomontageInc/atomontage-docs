@@ -84,10 +84,9 @@ Every scene has only **one** static voxel data and can have multiple dynamic vox
 However both can be edited. To choose whether to edit the static or dynamic voxel data, use the `Force` and `Ignore` functions.
  
 ```lua title="Creating dynamic voxel data attached to an object"
---create an object with voxel data and renderer
+--create an object with voxel data (renders itself)
 local ob = Scene:CreateObject("Voxel Sphere")
 local vd = ob:AddComponent("VoxelData")
-local vr = ob:AddComponent("VoxelRenderer")
 ob.pos = Vec3(0, 30, 0)
 
 --add sphere

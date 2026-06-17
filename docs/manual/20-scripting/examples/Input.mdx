@@ -4,7 +4,7 @@ A short example of how to use the event driven input system to move an object ar
 
 The object transform for rendering is streamed from server to clients. Because of this the movement is delayed on the client side.
 A more advanced script would assign a single owner to the script
-who can move the object and not receive the rendered position from the server via [`VoxelRenderer.receiveTransform = false`](docs\api\voxelRenderer.mdx#boolean-receiveTransform)
+who can move the object and not receive the rendered position from the server via [`VoxelData.receiveTransform = false`](docs\api\voxelRenderer.mdx#boolean-receiveTransform)
 
 ```lua
 local self = {}
@@ -17,9 +17,8 @@ function self:Start()
     local startPos = Vec3(0,20,0)
     self.obj.pos = startPos
 
-    --add VoxelData and VoxelRenderer component to this object and assign a file, you can also do this in the server hierarchy UI 
+    --add a VoxelData component to this object (it both stores and renders the voxels) and assign a file, you can also do this in the server hierarchy UI 
     self.vd = self.object:GetComponentByType("VoxelData") or self.object:AddComponent('VoxelData')
-    self.vr = self.object:GetComponentByType("VoxelRenderer") or self.object:AddComponent('VoxelRenderer')
     if self.vd.path == "" then
         self.vd.path = "Emoji_Blank_Face.am"
     end

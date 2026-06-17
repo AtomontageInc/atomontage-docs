@@ -23,7 +23,6 @@ self.height = 0.5
 function self:Attach()
     self.component.syncToClients = true
 
-    self.vr = self.object:GetComponentByType("VoxelRenderer")
     local vd = self.object:GetComponentByType("VoxelData")
     self.vd = vd and vd.data
 
@@ -67,7 +66,7 @@ function self:updatePhysics()
         return
     end
 
-    local tf = self.transform
+    local tf = self.obj
     local dt = Scene:GetDeltaTime()
 
     --add gravity 
@@ -85,7 +84,7 @@ end
 --simple raycast down
 function self:checkCollisionsSimple()
     if self:getGrounded() then
-        local tf = self.transform
+        local tf = self.obj
         local dist = self:getDistToGround()
         local underground = self.height * 0.5 - dist --dist is 0-0.5
         tf.pos = tf.pos + underground * Vec3.up

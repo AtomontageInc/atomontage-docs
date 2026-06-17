@@ -42,10 +42,9 @@ Every scene has only **one** static voxel data and can have multiple dynamic vox
 However both can be edited. To choose whether to edit the static or dynamic voxel data, use the `filter` property.
  
 ```lua title="Creating dynamic voxel data attached to an object"
---create an object with voxel data and renderer
+--create an object with voxel data (renders itself)
 local ob = Scene:CreateObject("Voxel Sphere")
 local vd = ob:AddComponent("VoxelData")
-local vr = ob:AddComponent("VoxelRenderer")
 local vres = VoxelDataResource() --new empty voxel data
 vd.data = vres
 ob.pos = Vec3(0, 30, 0)
@@ -73,7 +72,7 @@ local ve = VoxelEdit()
 
 --make a box fitting the target to copy from
 local b = Box()
-local center, size = copyFrom:GetComponentByType("VoxelRenderer"):GetBounds()
+local center, size = copyFrom:GetComponentByType("VoxelData"):GetBounds()
 b.pos = center
 b.size = size
 ve.shape = b
@@ -166,9 +165,9 @@ if shape is nil the operation will match all targets
 ### boolean clampToMinVoxelSize {#boolean-clampToMinVoxelSize}
 if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least size of voxel size of target. This can interfere with your box size if it's too small.
 
-### Transform copySourceTr {#Transform-copySourceTr}
+### Object copySourceTr {#Object-copySourceTr}
 
-### Transform copyDestinationTr {#Transform-copyDestinationTr}
+### Object copyDestinationTr {#Object-copyDestinationTr}
 
 ### Vec3 copyDestinationPos {#Vec3-copyDestinationPos}
 

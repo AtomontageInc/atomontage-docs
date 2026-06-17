@@ -339,14 +339,12 @@ Callbacks = {}
 
 --- @alias componentType
 ---| '"Camera"'
----| '"MeshData"'
----| '"MeshRenderer"'
+---| '"Mesh"'
 ---| '"RigidBody"'
 ---| '"Script"'
 ---| '"Sky"'
 ---| '"StaticVoxelData"'
 ---| '"VoxelData"'
----| '"VoxelRenderer"'
 
 --[[
 `Client`
@@ -453,6 +451,9 @@ function AE:TypeInt(typeName) end
 
 --- @return table
 function AE:GetAELuaBindings() end
+
+--- @return boolean
+function AE:ToggleFullScreen() end
 
 --[[
 `Client`
@@ -714,24 +715,41 @@ function Box(pos, rot, size) end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field text string
 --- @field textAlign Vec2
 --- @field multiLine boolean
@@ -742,6 +760,10 @@ function Box(pos, rot, size) end
 --- @field iconMargin Vec2
 --- @field closeWindow boolean
 Button = {}
+
+--- @param properties table
+--- @return Widget
+function Button:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -799,27 +821,48 @@ function Button:WidgetByName(name) end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field buttonType UIButtonType
 --- @field value boolean
 ButtonPanel = {}
+
+--- @param properties table
+--- @return Widget
+function ButtonPanel:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -839,7 +882,6 @@ function ButtonPanel:WidgetByName(name) end
 --- @field isDestroyed boolean (readonly) Indicates whether the object is destroyed (true) or not (false).
 --- @field type string (readonly) Specifies the object's type as a string, useful for type identification.
 --- @field fovY number Defines the vertical field of view in degrees
---- @field transform Transform
 Camera = {}
 
 --- @param a Camera
@@ -952,29 +994,50 @@ function Capsule(pos1, pos2, radius1, radius2) end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field text string
 --- @field value boolean
 --- @field checkboxType string
 --- @field switchHeight number
 Checkbox = {}
+
+--- @param properties table
+--- @return Widget
+function Checkbox:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -995,26 +1058,14 @@ This class is only available on client
 --- @field isMaker boolean (readonly)
 --- @field platform string (readonly)
 --- @field sysInfo string (readonly)
---- @field initMode boolean (readonly)
---- @field editMode boolean (readonly)
---- @field playMode boolean (readonly)
+--- @field inInitScene boolean (readonly)
 --- @field masterVolume number Audio volume in range 0 - 1.
 --- @field soundVolume number Audio volume in range 0 - 1.
 --- @field musicVolume number Audio volume in range 0 - 1.
 Client = {}
 
---- @return string
-function Client:GetUserID() end
-
 --- @return integer
 function Client:GetID() end
-
---- @param show boolean
---- @return nil
-function Client:SetShowWindows(show) end
-
---- @return boolean
-function Client:GetShowWindows() end
 
 --- @param fileName string
 --- @param lineNumber integer?
@@ -1086,16 +1137,6 @@ Time for a network message to travel from client to server and back
 --- @return integer
 function Client:GetPing() end
 
---- @param name string
---- @param defaultValue number?
---- @return number
-function Client:GetLogValue(name, defaultValue) end
-
---- @param name string
---- @param value number
---- @return nil
-function Client:SetLogValue(name, value) end
-
 --- @return table
 function Client:GetMainDispatcherStats() end
 
@@ -1109,24 +1150,12 @@ function Client:GetRenderStatsEnabled() end
 --- @return nil
 function Client:SetRenderStatsEnabled(enable) end
 
---- @return number
-function Client:GetFPS() end
-
 --- @return nil
 function Client:ConnectToServer() end
 
 --- @param path string
 --- @return boolean opened
 function Client:OpenFolder(path) end
-
---[[
-Log a message to file. In most cases you wanna use print() for console output
-
-[View Documentation](https://docs.atomontage.com/api/Client#nil-Log-string-message)
-]]
---- @param message string
---- @return nil
-function Client:Log(message) end
 
 --- @return boolean
 function Client:DevMode() end
@@ -1472,9 +1501,6 @@ Batch-draw multiple billboards from a table of descriptors.
 --- @return nil
 function Client:DrawBillboards(billboards) end
 
---- @return boolean
-function Client:ToggleFullScreen() end
-
 --[[
 `Client`
 `Server`
@@ -1694,26 +1720,47 @@ function Color:Copy() end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field value Color
 Colorbox = {}
+
+--- @param properties table
+--- @return Widget
+function Colorbox:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -1775,9 +1822,7 @@ All components inherit from this class. It is not meant to be instantiated direc
 * [Camera](Camera)
 * [VoxelData](VoxelData)
 * [StaticVoxelData](StaticVoxelData)
-* [VoxelRenderer](VoxelRenderer)
-* [MeshData](MeshRenderer)
-* [MeshRenderer](MeshRenderer)
+* [Mesh](Mesh)
 * [Sky](Sky)
 
 [View Documentation](https://docs.atomontage.com/api/Component)
@@ -2036,6 +2081,123 @@ function Gamepad:RumbleTriggers(leftRumble, rightRumble, duration) end
 `Client`
 `Server`
 
+[View Documentation](https://docs.atomontage.com/api/Graph)
+]]
+--- @class Graph
+--- @field type string (readonly)
+--- @field id integer (readonly)
+--- @field destroyed boolean (readonly)
+--- @field parent Widget (readonly)
+--- @field window Window (readonly)
+--- @field children table (readonly)
+--- @field childCount integer (readonly)
+--- @field hasChildren boolean (readonly)
+--- @field next Widget (readonly)
+--- @field prev Widget (readonly)
+--- @field isWindow boolean (readonly)
+--- @field isContainer boolean (readonly)
+--- @field isSelected boolean (readonly)
+--- @field name string
+--- @field tooltip string
+--- @field visible boolean
+--- @field enabled boolean
+--- @field size Vec2
+--- @field sizing string
+--- @field sizingX string
+--- @field sizingY string
+--- @field pos Vec2
+--- @field posType string
+--- @field overflow boolean
+--- @field endLine boolean
+--- @field siblingIndex integer
+--- @field padding Vec2
+--- @field paddingMode string
+--- @field rounding number
+--- @field roundingMode string
+--- @field roundCorners integer
+--- @field glyphFade boolean
+--- @field margin Vec2
+--- @field marginMode string
+--- @field gap Vec2
+--- @field alignItems string
+--- @field alignSelf string
+--- @field justifyContent string
+--- @field mp Vec2
+--- @field bgFrame boolean
+--- @field bgColor Color
+--- @field borderColor Color
+--- @field textColor Color
+--- @field fontSize number
+--- @field fontBold boolean
+--- @field fontName string
+--- @field textAlign Vec2
+--- @field intVar integer
+--- @field showNoValue boolean
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
+--- @field maxValue number
+--- @field maxBars integer
+--- @field barFill number
+--- @field bgColor Color
+Graph = {}
+
+--- @param properties table
+--- @return Widget
+function Graph:Set(properties) end
+
+--- @param name string
+--- @return Widget
+function Graph:WidgetByName(name) end
+
+--- @param value number
+--- @param color Color
+--- @return nil
+function Graph:Push(value, color) end
+
+--- @return nil
+function Graph:Clear() end
+
+--- @param value number
+--- @param color Color
+--- @return nil
+function Graph:AddThreshold(value, color) end
+
+--- @return nil
+function Graph:ClearThresholds() end
+
+--[[
+`Client`
+`Server`
+
 [View Documentation](https://docs.atomontage.com/api/Header)
 ]]
 --- @class Header
@@ -2084,27 +2246,48 @@ function Gamepad:RumbleTriggers(leftRumble, rightRumble, duration) end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field text string
 --- @field collapsed boolean
 Header = {}
+
+--- @param properties table
+--- @return Widget
+function Header:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -2427,30 +2610,51 @@ function Input:GetActiveGamepad() end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field value string
 --- @field range Range
 --- @field inputType UIInputType
 --- @field multiLine boolean
 --- @field textAlign Vec2
 Inputbox = {}
+
+--- @param properties table
+--- @return Widget
+function Inputbox:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -2508,29 +2712,50 @@ function Inputbox:WidgetByName(name) end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field text string
 --- @field labelType UILabelType
 --- @field multiLine boolean
 --- @field textAlign Vec2
 Label = {}
+
+--- @param properties table
+--- @return Widget
+function Label:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -3013,9 +3238,9 @@ function Material:SetProperty(name, vec) end
 `Client`
 `Server`
 
-[View Documentation](https://docs.atomontage.com/api/MeshData)
+[View Documentation](https://docs.atomontage.com/api/Mesh)
 ]]
---- @class MeshData
+--- @class Mesh
 --- @field active boolean
 --- @field activeInHierarchy boolean (readonly)
 --- @field object Object (readonly)
@@ -3026,64 +3251,44 @@ function Material:SetProperty(name, vec) end
 --- @field topology PrimitiveTopology
 --- @field vertexCount integer
 --- @field indexCount integer
-MeshData = {}
+--- @field material Material
+Mesh = {}
 
---- @param a MeshData
---- @param b MeshData
+--- @param a Mesh
+--- @param b Mesh
 --- @return boolean
-function MeshData:__eq(a, b) end
+function Mesh:__eq(a, b) end
 
 --- @param topology PrimitiveTopology?
 --- @return nil
-function MeshData:ClearShape(topology) end
+function Mesh:ClearShape(topology) end
 
 --- @param pos Vec3
 --- @param uv Vec2?
 --- @param color Color?
 --- @return integer
-function MeshData:AddVertex(pos, uv, color) end
+function Mesh:AddVertex(pos, uv, color) end
 
 --- @param pos Vec3
 --- @param color Color
 --- @return integer
-function MeshData:AddVertex(pos, color) end
+function Mesh:AddVertex(pos, color) end
 
 --- @param a integer
 --- @param b integer?
 --- @param c integer?
 --- @return nil
-function MeshData:AddIndex(a, b, c) end
+function Mesh:AddIndex(a, b, c) end
 
 --[[
 Adds a Shape (Box/Sphere/Capsule/Cylinder/Polyhedron) to the mesh as triangles or lines, tinted by `color`.
 
-[View Documentation](https://docs.atomontage.com/api/MeshData#nil-AddShape-Shape-shape-Color-color)
+[View Documentation](https://docs.atomontage.com/api/Mesh#nil-AddShape-Shape-shape-Color-color)
 ]]
 --- @param shape Shape
 --- @param color Color
 --- @return nil
-function MeshData:AddShape(shape, color) end
-
---[[
-`Client`
-`Server`
-
-[View Documentation](https://docs.atomontage.com/api/MeshRenderer)
-]]
---- @class MeshRenderer
---- @field active boolean
---- @field activeInHierarchy boolean (readonly)
---- @field object Object (readonly)
---- @field obj Object (readonly)
---- @field isDestroyed boolean (readonly)
---- @field type string (readonly)
---- @field material Material
-MeshRenderer = {}
-
---- @param a MeshRenderer
---- @param b MeshRenderer
---- @return boolean
-function MeshRenderer:__eq(a, b) end
+function Mesh:AddShape(shape, color) end
 
 --[[
 `Client`
@@ -3095,26 +3300,25 @@ The object visible in the hierarchy. Every object has a transform and can have a
 [View Documentation](https://docs.atomontage.com/api/Object)
 ]]
 --- @class Object
---- @field pos Vec3
+--- @field pos Vec3 The global (world) position of the object
 --- @field posX number
 --- @field posY number
 --- @field posZ number
---- @field rot Quat
---- @field eulerRot Vec3
---- @field scale number
---- @field localPos Vec3
---- @field localRot Quat
---- @field localEulerRot Vec3
---- @field localScale number
---- @field right Vec3 (readonly)
---- @field up Vec3 (readonly)
---- @field forward Vec3 (readonly)
+--- @field rot Quat The global (world) rotation of the object as a quaternion
+--- @field eulerRot Vec3 The global (world) rotation of the object represented as Euler angles.
+--- @field scale number The global (world) scale of the object.
+--- @field localPos Vec3 The local position of the object relative to its parent
+--- @field localRot Quat The local rotation of the object represented as a quaternion.
+--- @field localEulerRot Vec3 The local rotation of the object represented as Euler angles.
+--- @field localScale number The local scale of the object relative to its parent
+--- @field right Vec3 (readonly) The right direction vector of the object in world space.
+--- @field up Vec3 (readonly) The up direction vector of the object in world space.
+--- @field forward Vec3 (readonly) The forward direction vector of the object in world space.
 --- @field transformFingerprint number (readonly) 64-bit value that changes when the object's global (world) position, rotation, or scale change — including motion caused by an ancestor moving. Useful for cheap change detection.
 --- @field name string
 --- @field active boolean Set the object to be active or inactive. Inactive objects are not updated or rendered. All its children also become inactive.
 --- @field activeInHierarchy boolean (readonly) Readonly. Check if the object is active in the scene. It may be inactive because a parent is inactive.
 --- @field save boolean Save this object in the hierarchy. If not saved it will be deleted after lua reset or server restart
---- @field transform Transform (readonly) Get the transform to modify the position, rotation and scale of the object
 --- @field isDestroyed boolean (readonly) True if the object was destroyed. Note that references to this object will still be valid 
 --- @field id string (readonly) This is id is unique across clients and server
 --- @field parent Object?
@@ -3124,7 +3328,7 @@ The object visible in the hierarchy. Every object has a transform and can have a
 --- @field isPrefabObject boolean (readonly)
 --- @field components Component[] (readonly)
 --- @field voxelData VoxelData? (readonly)
---- @field voxelRenderer VoxelRenderer? (readonly)
+--- @field voxelRenderer VoxelData? (readonly)
 --- @field rigidBody RigidBody? (readonly)
 Object = {}
 
@@ -3133,10 +3337,20 @@ Object = {}
 --- @return boolean
 function Object:__eq(a, b) end
 
+--[[
+Transforms a local position to world space, allowing you to convert coordinates relative to an object into global coordinates.
+
+[View Documentation](https://docs.atomontage.com/api/Object#Vec3-LocalToWorld-Vec3-point)
+]]
 --- @param point Vec3
 --- @return Vec3
 function Object:LocalToWorld(point) end
 
+--[[
+Converts a world position to local space, making it useful for determining an object's position relative to another object.
+
+[View Documentation](https://docs.atomontage.com/api/Object#Vec3-WorldToLocal-Vec3-point)
+]]
 --- @param point Vec3
 --- @return Vec3
 function Object:WorldToLocal(point) end
@@ -3173,8 +3387,8 @@ function Object:GetChild(name) end
 --- @return Script
 function Object:AddScript(fileName, sync) end
 
---- @return MeshData
-function Object:AddMeshData() end
+--- @return Mesh
+function Object:AddMesh() end
 
 --- @param fileName string
 --- @return VoxelData?
@@ -3184,7 +3398,7 @@ function Object:AddVoxelData(fileName) end
 --- @return StaticVoxelData?
 function Object:AddStaticVoxelData(fileName) end
 
---- @return VoxelRenderer
+--- @return VoxelData
 function Object:AddVoxelRenderer() end
 
 --- @return Camera
@@ -3356,24 +3570,41 @@ Overlap = {}
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field scroll boolean
 --- @field scrollX boolean
 --- @field scrollY boolean
@@ -3384,6 +3615,10 @@ Overlap = {}
 --- @field glyph string
 --- @field glyphScaleMode string
 Panel = {}
+
+--- @param properties table
+--- @return Widget
+function Panel:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -4383,7 +4618,6 @@ end
 --- @class ScriptInstance
 --- @field obj Object
 --- @field com Script
---- @field transform Transform The transform of the object this script is attached to
 --- @field onServer boolean Use this to run part of the code only on server or client```lua if self.onServer then    -- do something only on serverend```
 --- @field onClient boolean Use this to run part of the code only on server or client```lua if self.onClient then    -- do something only on clientend```import { render } from "react-dom"
 --- @field component Script (deprecated) The script component, separate from the lua table
@@ -4413,7 +4647,7 @@ function self:Start()
         --if left mouse button pressed create a ray from mouse position and direction
         if button == 1 then
             local mpos = Input:MousePosPerc()
-            local tf = self.cam.object.transform
+            local tf = self.cam.object
             local pos = tf.pos + tf.forward * 1.5
 
             --call this function on all clients with these two parameters
@@ -4592,28 +4826,49 @@ function ScriptInstance:RPC(funcName, ...) end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field value integer
 --- @field valueStr string
 --- @field values table
 Selectbox = {}
+
+--- @param properties table
+--- @return Widget
+function Selectbox:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -4671,25 +4926,46 @@ function Selectbox:WidgetByName(name) end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 Separator = {}
+
+--- @param properties table
+--- @return Widget
+function Separator:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -4705,9 +4981,7 @@ This class is only available on server
 ]]
 --- @class Server
 --- @field clientID integer (readonly)
---- @field initMode boolean
---- @field editMode boolean
---- @field playMode boolean
+--- @field inInitScene boolean
 --- @field modeChangeReloadGeom boolean Whether toggling [`editMode`](#boolean-editMode) (the Edit/Play switch) reloads voxel geometry.
 --- @field settings ServerSceneSettings (readonly)
 Server = {}
@@ -5045,7 +5319,7 @@ ServerSceneSettings = {}
 `Client`
 `Server`
 
-For [voxel edits](VoxelEdit#userdata-shape), [collisions](Collision#Shape-shape) and [rendering](MeshData#nil-AddShape-Shape-Vec4)
+For [voxel edits](VoxelEdit#userdata-shape), [collisions](Collision#Shape-shape) and [rendering](Mesh#nil-AddShape-Shape-Color-color)
 
 All shapes inherit from this class. It is not meant to be instantiated directly.
 * [Box](Box)
@@ -5148,30 +5422,51 @@ function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field value number
 --- @field scalars integer
 --- @field sliderType UISliderType
 --- @field range Vec2
 --- @field integer boolean
 Slider = {}
+
+--- @param properties table
+--- @return Widget
+function Slider:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -5272,77 +5567,6 @@ Texture = {}
 --- @field fixedFrame number (readonly)
 --- @field fps number (readonly)
 Time = {}
-
---[[
-`Client`
-`Server`
-
-Holds position, rotation, and scale 
-
-[View Documentation](https://docs.atomontage.com/api/Transform)
-]]
---- @class Transform
---- @field obj Object (readonly, deprecated)
---- @field localPos Vec3 (deprecated) The local position of the object relative to its parent
---- @field localScale number (deprecated) The local scale of the object relative to its parent
---- @field localRot Quat (deprecated) The local rotation of the object represented as a quaternion.
---- @field localEulerRot Vec3 (deprecated) The local rotation of the object represented as Euler angles.
---- @field pos Vec3 (deprecated) The global (world) position of the object
---- @field rot Quat (deprecated) The global (world) rotation of the object as a quaternion
---- @field eulerRot Vec3 (deprecated) The global (world) rotation of the object represented as Euler angles.
---- @field scale number (deprecated) The global (world) scale of the object.
---- @field right Vec3 (readonly, deprecated) The right direction vector of the object in world space.
---- @field up Vec3 (readonly, deprecated) The right direction vector of the object in world space.
---- @field forward Vec3 (readonly, deprecated) The forward direction vector of the object in world space.
-Transform = {}
-
---- @param a Transform
---- @param b Transform
---- @return boolean
-function Transform:__eq(a, b) end
-
---[[
-Transforms a local position to world space, allowing you to convert coordinates relative to an object into global coordinates.
-
-
-[View Documentation](https://docs.atomontage.com/api/Transform#Vec3-LocalToWorld-Vec3-v)
-]]
---- @deprecated
---- @param v Vec3
---- @return Vec3
-function Transform:LocalToWorld(v) end
-
---[[
-Converts a world position to local space, making it useful for determining an object's position relative to another object.
-
-[View Documentation](https://docs.atomontage.com/api/Transform#Vec3-WorldToLocal-Vec3-v)
-]]
---- @deprecated
---- @param v Vec3
---- @return Vec3
-function Transform:WorldToLocal(v) end
-
---- @deprecated
---- @param v Vec3
---- @return Vec3
-function Transform:LocalToWorldVec(v) end
-
---- @deprecated
---- @param v Vec3
---- @return Vec3
-function Transform:WorldToLocalVec(v) end
-
---[[
-Adjusts the object's rotation to look at a specified point in the world, aligning it with the target position.
-
-
-[View Documentation](https://docs.atomontage.com/api/Transform#nil-LookAt-Vec3-pos-Vec3-up)
-]]
---- @deprecated
---- @param pos Vec3
---- @param up Vec3?
---- @return nil
-function Transform:LookAt(pos, up) end
 
 --[[
 `Client`
@@ -7221,30 +7445,51 @@ function Vec4i:Dot(other) end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field scalars integer
 --- @field integer boolean
 --- @field value Vec2|Vec3|Vec4|Vec2i|Vec3i|Vec4i
 --- @field inputsPadding Vec2
 --- @field inputsPaddingMode UIPropertyMode
 Vectorbox = {}
+
+--- @param properties table
+--- @return Widget
+function Vectorbox:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -7544,7 +7789,7 @@ function VoxelDB:Save(filePath, compression, quality) end
 --- @param pos Vec3
 --- @param radiusVoxels integer
 --- @param lod integer
---- @param vr VoxelRenderer?
+--- @param vr VoxelData?
 --- @return table
 function VoxelDB:InspectNormals(pos, radiusVoxels, lod, vr) end
 
@@ -7553,7 +7798,7 @@ function VoxelDB:InspectNormals(pos, radiusVoxels, lod, vr) end
 --- @param axis integer
 --- @param layers string[]
 --- @param lod integer
---- @param vr VoxelRenderer?
+--- @param vr VoxelData?
 --- @return VoxelInspectData?
 function VoxelDB:Inspect(pos, size, axis, layers, lod, vr) end
 
@@ -7598,6 +7843,13 @@ The data will only render if the object also has a `VoxelRender` component.
 --- @field data VoxelDataResource The voxel data resource that this voxel data is using
 --- @field save boolean Marks the voxel data to be persisted on save; it does not write any voxels by itself.
 --- @field editable boolean
+--- @field syncToClients boolean
+--- @field enabled boolean
+--- @field prioritizeLod boolean Try to load higher LODs faster than those of other objects
+--- @field outline boolean Draw an outline around this object
+--- @field tintColor Color Render with a tint color
+--- @field receiveTransform boolean Receive transform(pos, rot scale) to render with from server. By default this is true.If you set this to false, you will need to manually set the transform of the object on the client side.This is useful for making objects respond immediately if something happened on the client side i.e. input
+--- @field lodBias number
 VoxelData = {}
 
 --- @param a VoxelData
@@ -7741,10 +7993,9 @@ Every scene has only **one** static voxel data and can have multiple dynamic vox
 However both can be edited. To choose whether to edit the static or dynamic voxel data, use the `filter` property.
  
 ```lua
---create an object with voxel data and renderer
+--create an object with voxel data (renders itself)
 local ob = Scene:CreateObject("Voxel Sphere")
 local vd = ob:AddComponent("VoxelData")
-local vr = ob:AddComponent("VoxelRenderer")
 local vres = VoxelDataResource() --new empty voxel data
 vd.data = vres
 ob.pos = Vec3(0, 30, 0)
@@ -7772,7 +8023,7 @@ local ve = VoxelEdit()
 
 --make a box fitting the target to copy from
 local b = Box()
-local center, size = copyFrom:GetComponentByType("VoxelRenderer"):GetBounds()
+local center, size = copyFrom:GetComponentByType("VoxelData"):GetBounds()
 b.pos = center
 b.size = size
 ve.shape = b
@@ -7799,8 +8050,8 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 --- @field filter Filter
 --- @field shape Shape if shape is nil the operation will match all targets 
 --- @field clampToMinVoxelSize boolean if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least size of voxel size of target. This can interfere with your box size if it's too small.
---- @field copySourceTr Transform
---- @field copyDestinationTr Transform
+--- @field copySourceTr Object
+--- @field copyDestinationTr Object
 --- @field copyDestinationPos Vec3
 --- @field copyDestinationRot Quat
 --- @field copyDestinationScale number
@@ -7977,46 +8228,6 @@ function VoxelInspectData:GetColors() end
 `Client`
 `Server`
 
-The data will only render if the object also has a `VoxelData` component with data assigned.
-
-[View Documentation](https://docs.atomontage.com/api/VoxelRenderer)
-]]
---- @class VoxelRenderer
---- @field active boolean
---- @field activeInHierarchy boolean (readonly)
---- @field object Object (readonly)
---- @field obj Object (readonly)
---- @field isDestroyed boolean (readonly)
---- @field type string (readonly)
---- @field syncToClients boolean
---- @field enabled boolean
---- @field prioritizeLod boolean Try to load higher LODs faster than those of other objects
---- @field outline boolean Draw an outline around this object
---- @field tintColor Color Render with a tint color
---- @field receiveTransform boolean Receive transform(pos, rot scale) to render with from server. By default this is true. If you set this to false, you will need to manually set the transform of the object on the client side.This is useful for making objects respond immediately if something happened on the client side i.e. input
---- @field lodBias number
-VoxelRenderer = {}
-
---- @param a VoxelRenderer
---- @param b VoxelRenderer
---- @return boolean
-function VoxelRenderer:__eq(a, b) end
-
---[[
-World position and size of AABB (axis-aligned bounding box) of the object
-
-[View Documentation](https://docs.atomontage.com/api/VoxelRenderer#Vec3-center-Vec3-size-GetAABounds)
-]]
---- @return Vec3 center, Vec3 size
-function VoxelRenderer:GetAABounds() end
-
---- @return Vec3 center, Quat rot, Vec3 size
-function VoxelRenderer:GetBounds() end
-
---[[
-`Client`
-`Server`
-
 [View Documentation](https://docs.atomontage.com/api/Widget)
 ]]
 --- @class Widget
@@ -8065,25 +8276,46 @@ function VoxelRenderer:GetBounds() end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 Widget = {}
+
+--- @param properties table
+--- @return Widget
+function Widget:Set(properties) end
 
 --- @param name string
 --- @return Widget
@@ -8141,24 +8373,41 @@ function Widget:WidgetByName(name) end
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
+--- @field fontName string
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onPress fun
---- @field onPressStart fun
---- @field onPressCancel fun
---- @field onMouseMove fun
---- @field onHover fun
---- @field onHoverEnd fun
---- @field onFocus fun
---- @field onFocusEnd fun
---- @field onKeyDown fun
---- @field onKeyUp fun
---- @field onValueChange fun
---- @field onDragStart fun
---- @field onDragOver fun
---- @field onDragLeave fun
---- @field onDragEnd fun
+--- @field onHoverEx fun()
+--- @field onHoverEndEx fun()
+--- @field onFocusEx fun()
+--- @field onFocusEndEx fun()
+--- @field onPressStartEx fun()
+--- @field onPressCancelEx fun()
+--- @field onPressEx fun()
+--- @field onRightPressEx fun()
+--- @field onMouseMoveEx fun()
+--- @field onKeyDownEx fun()
+--- @field onKeyUpEx fun()
+--- @field onValueChangeEx fun()
+--- @field onDragStartEx fun()
+--- @field onDragOverEx fun()
+--- @field onDragLeaveEx fun()
+--- @field onDragEndEx fun()
+--- @field onPress fun()
+--- @field onPressStart fun()
+--- @field onPressCancel fun()
+--- @field onMouseMove fun()
+--- @field onHover fun()
+--- @field onHoverEnd fun()
+--- @field onFocus fun()
+--- @field onFocusEnd fun()
+--- @field onKeyDown fun()
+--- @field onKeyUp fun()
+--- @field onValueChange fun()
+--- @field onDragStart fun()
+--- @field onDragOver fun()
+--- @field onDragLeave fun()
+--- @field onDragEnd fun()
 --- @field luaFile Asset
 --- @field header boolean
 --- @field text string
@@ -8169,10 +8418,15 @@ function Widget:WidgetByName(name) end
 --- @field stayOnTop boolean
 --- @field resizable boolean
 --- @field noInput boolean
+--- @field noHide boolean
 --- @field borders string
 --- @field enableShadow boolean
 --- @field obj table
 Window = {}
+
+--- @param properties table
+--- @return Widget
+function Window:Set(properties) end
 
 --- @param name string
 --- @return Widget

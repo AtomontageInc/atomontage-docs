@@ -15,7 +15,7 @@ function self:Start()
         if self.onServer then return end
         if button == 1 then
             --if left mouse button pressed create a ray from camera position pointing straight forward
-            local tf = self.cam.object.transform
+            local tf = self.cam.object
             local pos = tf.pos + tf.forward * 3
 
             --call serverCreateObject with camera position and ray on server
@@ -51,7 +51,6 @@ function self:createVoxelObject(pos, up)
     if not self.ob then
         local ob = Scene:CreateObject("Spawned Object")
         local vd = ob:AddComponent('VoxelData')
-        ob:AddComponent('VoxelRenderer')
         vd.path = "Emoji_Blank_Face.am"
         self.ob = ob
     end

@@ -1,6 +1,6 @@
 ---
-title: Window
-id: Window
+title: Graph
+id: Graph
 ---
 `Client`
 `Server`
@@ -11,9 +11,13 @@ id: Window
 
 ### Widget WidgetByName(string name) {#Widget-WidgetByName-string-name}
 
-### nil Close() {#nil-Close}
+### nil Push(number value, Color color) {#nil-Push-number-value-Color-color}
 
-### boolean IsPopup() {#boolean-IsPopup}
+### nil Clear() {#nil-Clear}
+
+### nil AddThreshold(number value, Color color) {#nil-AddThreshold-number-value-Color-color}
+
+### nil ClearThresholds() {#nil-ClearThresholds}
 
 ## Properties
 
@@ -177,31 +181,11 @@ id: Window
 
 ### fun onDragEnd {#fun-onDragEnd}
 
-### Asset luaFile {#Asset-luaFile}
+### number maxValue {#number-maxValue}
 
-### boolean header {#boolean-header}
+### integer maxBars {#integer-maxBars}
 
-### string text {#string-text}
+### number barFill {#number-barFill}
 
-### boolean scroll {#boolean-scroll}
-
-### boolean scrollX {#boolean-scrollX}
-
-### boolean scrollY {#boolean-scrollY}
-
-### boolean stayOnBottom {#boolean-stayOnBottom}
-
-### boolean stayOnTop {#boolean-stayOnTop}
-
-### boolean resizable {#boolean-resizable}
-
-### boolean noInput {#boolean-noInput}
-
-### boolean noHide {#boolean-noHide}
-
-### string borders {#string-borders}
-
-### boolean enableShadow {#boolean-enableShadow}
-
-### table obj {#table-obj}
+### Color bgColor {#Color-bgColor}
 
