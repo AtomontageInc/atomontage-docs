@@ -353,6 +353,7 @@ Callbacks = {}
 [View Documentation](https://docs.atomontage.com/api/AE)
 ]]
 --- @class AE
+--- @field clientID number (readonly)
 AE = {}
 
 --- @param fromId number
@@ -441,16 +442,31 @@ function AE:GetAssets() end
 --- @return string[]
 function AE:GetAssetSources() end
 
---- @param id string
---- @return Asset?
-function AE:GetAssetById(id) end
+--- @param asset Asset
+--- @return string
+function AE:AssetPathInMontage(asset) end
+
+--- @param name string
+--- @return Asset
+function AE:GetBuiltinMaterial(name) end
+
+--- @param image Asset
+--- @return Asset
+function AE:GetTextureForImage(image) end
 
 --- @param typeName string
 --- @return integer
 function AE:TypeInt(typeName) end
 
+--- @param enumName string
+--- @return string[]
+function AE:GetEnumValues(enumName) end
+
 --- @return table
 function AE:GetAELuaBindings() end
+
+--- @return table, table
+function AE:GetMemoryUsage() end
 
 --- @return boolean
 function AE:ToggleFullScreen() end
@@ -476,7 +492,7 @@ function AnyVar:IsAsset(type) end
 
 --- @param type string?
 --- @return boolean
-function AnyVar:IsServerAsset(type) end
+function AnyVar:IsAssetLink(type) end
 
 --- @return boolean
 function AnyVar:IsServerObject() end
@@ -501,7 +517,6 @@ function AnyVar:IsComponent() end
 --- @field type integer
 --- @field typeStr string
 --- @field deleted boolean
---- @field id string
 --- @field filepath string
 --- @field canReferenceAssets boolean
 Asset = {}
@@ -526,7 +541,6 @@ function Asset:GetAssetsReferencingAsset(asset) end
 --- @field asset Asset
 --- @field assetType string (readonly)
 --- @field assetName string (readonly)
---- @field assetId string (readonly)
 AssetLink = {}
 
 --- @return AssetLink
@@ -543,7 +557,61 @@ function AssetLink(asset) end
 --[[
 `Client`
 
-Returned by [`Client:PlayMusic()`](./client.mdx#AudioMusic-PlayMusic-string-number-booleanean)
+[View Documentation](https://docs.atomontage.com/api/Audio)
+]]
+--- @class Audio
+--- @field masterVolume number
+--- @field soundVolume number
+--- @field musicVolume number
+Audio = {}
+
+--- @param sound string|Asset
+--- @param position Vec3?
+--- @param volume number?
+--- @param loop boolean?
+--- @return AudioSource
+function Audio:PlaySound(sound, position, volume, loop) end
+
+--- @param sound string|Asset
+--- @param position Vec3?
+--- @param volume number?
+--- @param loop boolean?
+--- @return AudioSource
+function Audio:PlaySoundRelative(sound, position, volume, loop) end
+
+--- @param musicFile string
+--- @param volume number?
+--- @param loop boolean?
+--- @return AudioMusic
+function Audio:PlayMusic(musicFile, volume, loop) end
+
+--- @param musicFile string
+--- @param volume number?
+--- @param loop boolean?
+--- @return AudioMusic
+function Audio:PrepareMusic(musicFile, volume, loop) end
+
+--- @param musicFile string
+--- @return boolean
+function Audio:HasMusic(musicFile) end
+
+--- @param musicFile string
+--- @return nil
+function Audio:GetMusicFromServer(musicFile) end
+
+--- @return nil
+function Audio:PauseAudio() end
+
+--- @return nil
+function Audio:ResumeAudio() end
+
+--- @return nil
+function Audio:StopAudio() end
+
+--[[
+`Client`
+
+Returned by [`Client:PlayMusic()`](./client.mdx#AudioMusic-PlayMusic-string-musicFile-number-volume-booleanean-loop)
 
 [View Documentation](https://docs.atomontage.com/api/AudioMusic)
 ]]
@@ -585,7 +653,7 @@ function AudioMusic:Stop() end
 --[[
 `Client`
 
-Returned by [`Client:PlaySound()`](./client.mdx#AudioSource-PlaySound-string-Vec3-number-booleanean)
+Returned by [`Client:PlaySound()`](./client.mdx#AudioSource-PlaySound-string-soundPath-Vec3-position-number-volume-booleanean-loop)
 
 [View Documentation](https://docs.atomontage.com/api/AudioSource)
 ]]
@@ -881,6 +949,7 @@ function ButtonPanel:WidgetByName(name) end
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly) Indicates whether the object is destroyed (true) or not (false).
 --- @field type string (readonly) Specifies the object's type as a string, useful for type identification.
+--- @field onePerObject boolean (readonly)
 --- @field fovY number Defines the vertical field of view in degrees
 Camera = {}
 
@@ -910,6 +979,10 @@ function Camera:WorldToScreen(worldPos) end
 --- @param worldPos Vec3
 --- @return Vec3
 function Camera:WorldToScreen3f(worldPos) end
+
+--- @param worldPos Vec3
+--- @return boolean
+function Camera:IsPointVisible(worldPos) end
 
 --[[
 `Client`
@@ -1052,17 +1125,21 @@ This class is only available on client
 [View Documentation](https://docs.atomontage.com/api/Client)
 ]]
 --- @class Client
---- @field clientID integer (readonly)
---- @field userID string (readonly)
---- @field mode ClientMode ClientMode enum: View=0, Edit=1, DevDebug=2.
---- @field isMaker boolean (readonly)
+--- @field permission ClientPermission
 --- @field platform string (readonly)
 --- @field sysInfo string (readonly)
---- @field inInitScene boolean (readonly)
 --- @field masterVolume number Audio volume in range 0 - 1.
 --- @field soundVolume number Audio volume in range 0 - 1.
 --- @field musicVolume number Audio volume in range 0 - 1.
 Client = {}
+
+--[[
+True while the client is in Init mode (the editor's edit mode), as opposed to live/play.
+
+[View Documentation](https://docs.atomontage.com/api/Client#boolean-IsInitMode)
+]]
+--- @return boolean
+function Client:IsInitMode() end
 
 --- @return integer
 function Client:GetID() end
@@ -1280,9 +1357,6 @@ function Client:IsDownloadingFiles() end
 function Client:Restart() end
 
 --- @return nil
-function Client:ChooseImage() end
-
---- @return nil
 function Client:ToggleChannelRendering() end
 
 --- @return integer
@@ -1296,29 +1370,6 @@ function Client:GetRenderChannelOpacity(which) end
 --- @param value number
 --- @return nil
 function Client:SetRenderChannelOpacity(which, value) end
-
---- @return nil
-function Client:LoadEntityPath() end
-
---- @return nil
-function Client:SaveEntityPath() end
-
---- @return nil
-function Client:PlayEntityPath() end
-
---- @return nil
-function Client:ClearEntityPath() end
-
---- @return nil
-function Client:AddEntityPathWaypoint() end
-
---- @return Vec4[]?
-function Client:GetEntityPath() end
-
---- @param name string
---- @param attachTimestamp boolean
---- @return nil
-function Client:TakeScreenshot(name, attachTimestamp) end
 
 --- @return boolean
 function Client:IsMobile() end
@@ -1817,7 +1868,6 @@ function CommandLine:GetAll() end
 `Server`
 
 All components inherit from this class. It is not meant to be instantiated directly.
-* [Transform](Transform)
 * [Script](Script)
 * [Camera](Camera)
 * [VoxelData](VoxelData)
@@ -1834,6 +1884,7 @@ All components inherit from this class. It is not meant to be instantiated direc
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
+--- @field onePerObject boolean (readonly)
 Component = {}
 
 --[[
@@ -2297,7 +2348,7 @@ function Header:WidgetByName(name) end
 `Client`
 `Server`
 
-Returned by [raycasts](Collision#table-Raycast).
+Returned by [raycasts](Collision#Hit-Raycast).
 
 [View Documentation](https://docs.atomontage.com/api/Hit)
 ]]
@@ -3247,6 +3298,7 @@ function Material:SetProperty(name, vec) end
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
+--- @field onePerObject boolean (readonly)
 --- @field resourceUsageMode ResourceUsage
 --- @field topology PrimitiveTopology
 --- @field vertexCount integer
@@ -3390,9 +3442,8 @@ function Object:AddScript(fileName, sync) end
 --- @return Mesh
 function Object:AddMesh() end
 
---- @param fileName string
 --- @return VoxelData?
-function Object:AddVoxelData(fileName) end
+function Object:AddVoxelData() end
 
 --- @param fileName string
 --- @return StaticVoxelData?
@@ -3500,14 +3551,11 @@ function Object:GetScriptUpdateTime() end
 --- @return integer
 function Object:GetRefCount() end
 
---- @return PhysSimEvent[]
-function Object:GetPhysEvents() end
-
 --[[
 `Client`
 `Server`
 
-Returned by [`Overlap()` functions](Collision#table-GetOverlap).
+Returned by [`Overlap()` functions](Collision#Overlap-GetOverlap-Shape-shape).
 
 [View Documentation](https://docs.atomontage.com/api/Overlap)
 ]]
@@ -3608,6 +3656,8 @@ Overlap = {}
 --- @field scroll boolean
 --- @field scrollX boolean
 --- @field scrollY boolean
+--- @field scrollPosY number
+--- @field scrollSpaceY number
 --- @field textureColor Color
 --- @field texture Asset
 --- @field textureScaleMode string
@@ -3994,6 +4044,46 @@ function Quat.LookAt(dir, up) end
 `Client`
 `Server`
 
+[View Documentation](https://docs.atomontage.com/api/Random)
+]]
+--- @class Random
+Random = {}
+
+--- @param maxAngle number
+--- @return Quat
+function Random:Quat(maxAngle) end
+
+--- @param diameter number
+--- @return Vec3
+function Random:OnSphere(diameter) end
+
+--- @param diameter number
+--- @return Vec3
+function Random:InSphere(diameter) end
+
+--- @param diameter number
+--- @return Vec3
+function Random:OnCircle(diameter) end
+
+--- @param diameter number
+--- @return Vec3
+function Random:InCircle(diameter) end
+
+--- @return Vec3
+function Random:Vec3() end
+
+--- @param dimsOrBox Vec3|Box
+--- @return Vec3
+function Random:OnBox(dimsOrBox) end
+
+--- @param dimsOrBox Vec3|Box
+--- @return Vec3
+function Random:InBox(dimsOrBox) end
+
+--[[
+`Client`
+`Server`
+
 [View Documentation](https://docs.atomontage.com/api/Range)
 ]]
 --- @class Range
@@ -4142,6 +4232,7 @@ function Recti:Copy() end
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
+--- @field onePerObject boolean (readonly)
 --- @field velocity Vec3
 --- @field angularVelocity Vec3
 --- @field mass number
@@ -4206,6 +4297,15 @@ function RigidBody:GetCollisions(eventType) end
 Scene = {}
 
 --[[
+Gets the shared [`Material`](./material.mdx) the renderer actually draws with (the cached instance, not a copy) — use it to drive live shader uniforms via [`Material:SetProperty`](./material.mdx#nil-SetProperty-string-name-Vec3Vec4-vec).
+
+[View Documentation](https://docs.atomontage.com/api/Scene#Material-CreateMaterial-string-path)
+]]
+--- @param path string
+--- @return Material?
+function Scene:CreateMaterial(path) end
+
+--[[
 Simulation time in seconds; use this instead of the sandboxed `os.time`.
 
 [View Documentation](https://docs.atomontage.com/api/Scene#number-GetTime)
@@ -4260,7 +4360,7 @@ For naming we recommend to:
 local ob = Scene:CreateObject("Player Controller 1")
 ```
 
-Also see [`Scene:MakeNameValid`](#string-MakeNameValid-string)
+Also see [`Scene:MakeNameValid`](#string-MakeNameValid-string-name)
 
 
 [View Documentation](https://docs.atomontage.com/api/Scene#Object-CreateObject-string-name-Object-parentObj-boolean-save-boolean-selectInEditor)
@@ -4298,6 +4398,10 @@ function Scene:GetObjectByName(name) end
 --- @param id string
 --- @return Object
 function Scene:GetObjectById(id) end
+
+--- @param typeName string
+--- @return boolean
+function Scene:IsComponentOnePerObject(typeName) end
 
 --- @return Object[]
 function Scene:GetRootObjects() end
@@ -4355,15 +4459,6 @@ function Scene:MoveObjectToRoot(obj) end
 function Scene:CanMoveObject(obj, newParentObj) end
 
 --[[
-Gets the shared [`Material`](./material.mdx) the renderer actually draws with (the cached instance, not a copy) — use it to drive live shader uniforms via [`Material:SetProperty`](./material.mdx#nil-SetProperty-string-name-Vec3Vec4-vec).
-
-[View Documentation](https://docs.atomontage.com/api/Scene#Material-CreateMaterial-string-path)
-]]
---- @param path string
---- @return Material?
-function Scene:CreateMaterial(path) end
-
---[[
 Returns the currently active (rendering) camera.
 
 [View Documentation](https://docs.atomontage.com/api/Scene#Camera-GetActiveCamera)
@@ -4379,11 +4474,6 @@ Makes the given camera the active view.
 --- @param cam Camera
 --- @return nil
 function Scene:SetActiveCamera(cam) end
-
---- @param scriptName string
---- @param forObject Object
---- @return string
-function Scene:AddNewScriptFile(scriptName, forObject) end
 
 --- @param db string
 --- @return VoxelDB?
@@ -4406,9 +4496,6 @@ function Scene:ResetLogCountersDif() end
 --- @param obj Object
 --- @return boolean
 function Scene:ResetPrefab(obj) end
-
---- @return nil
-function Scene:ResetAllPrefabs() end
 
 --- @param obj Object
 --- @return nil
@@ -4473,6 +4560,7 @@ Script component. Not to be confused with the actual [lua table instance](Script
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
+--- @field onePerObject boolean (readonly)
 --- @field instance ScriptInstance
 --- @field name string
 --- @field luaFile Asset
@@ -4494,9 +4582,9 @@ function Script:__eq(a, b) end
 function Script:setSerializeVar(key, value) end
 
 --- @param key string
---- @param assetId string
+--- @param link AssetLink
 --- @return nil
-function Script:setSerializeVarAsset(key, assetId) end
+function Script:setSerializeVarAsset(key, link) end
 
 --- @param funcName string
 --- @vararg any
@@ -4620,8 +4708,8 @@ end
 --- @field com Script
 --- @field onServer boolean Use this to run part of the code only on server or client```lua if self.onServer then    -- do something only on serverend```
 --- @field onClient boolean Use this to run part of the code only on server or client```lua if self.onClient then    -- do something only on clientend```import { render } from "react-dom"
---- @field component Script (deprecated) The script component, separate from the lua table
---- @field object Object (deprecated) The object this script is attached to
+--- @field component Script The script component, separate from the lua table
+--- @field object Object The object this script is attached to
 ScriptInstance = {}
 
 --[[
@@ -4981,16 +5069,37 @@ This class is only available on server
 ]]
 --- @class Server
 --- @field clientID integer (readonly)
---- @field inInitScene boolean
---- @field modeChangeReloadGeom boolean Whether toggling [`editMode`](#boolean-editMode) (the Edit/Play switch) reloads voxel geometry.
 --- @field settings ServerSceneSettings (readonly)
 Server = {}
 
+--[[
+True while the server is in Init mode (editing); false in Live mode (play).
+
+[View Documentation](https://docs.atomontage.com/api/Server#boolean-IsInitMode)
+]]
+--- @return boolean
+function Server:IsInitMode() end
+
+--[[
+Switch the server into Init mode (editing). If `reloadGeom` is true, voxel geometry is reloaded on the mode change.
+
+[View Documentation](https://docs.atomontage.com/api/Server#nil-EnterInitMode-boolean-reloadGeom)
+]]
+--- @param reloadGeom boolean?
+--- @return nil
+function Server:EnterInitMode(reloadGeom) end
+
+--[[
+Switch the server into Live mode (play). If `reloadGeom` is true, voxel geometry is reloaded on the mode change.
+
+[View Documentation](https://docs.atomontage.com/api/Server#nil-EnterLiveMode-boolean-reloadGeom)
+]]
+--- @param reloadGeom boolean?
+--- @return nil
+function Server:EnterLiveMode(reloadGeom) end
+
 --- @return integer[]
 function Server:GetClients() end
-
---- @return string[]
-function Server:GetUsersID() end
 
 --- @param clientID integer
 --- @return integer
@@ -5011,47 +5120,6 @@ Re-runs all server Lua scripts from scratch. The entire Lua state is wiped — n
 ]]
 --- @return nil
 function Server:LuaReset() end
-
---- @return string[]
-function Server:GetLuaFilesList() end
-
---- @return Asset[] assets, string[] paths
-function Server:GetMontageLuaAssets() end
-
---[[
-Voxel files in the Montage/Voxels, those you saved in your montage and they are not necessary uploaded to the cloud already. local montage assets
-
-[View Documentation](https://docs.atomontage.com/api/Server#string-GetVoxelFilesList)
-]]
---- @return string[]
-function Server:GetVoxelFilesList() end
-
---[[
-Assets in cloud of maker that made this montage
-
-[View Documentation](https://docs.atomontage.com/api/Server#string-GetMakerAssetsList)
-]]
---- @return string[]
-function Server:GetMakerAssetsList() end
-
---[[
-Common, those we provide cloud with as free to use
-
-[View Documentation](https://docs.atomontage.com/api/Server#string-GetCommonAssetsList)
-]]
---- @return string[]
-function Server:GetCommonAssetsList() end
-
---[[
-Common scenes
-
-[View Documentation](https://docs.atomontage.com/api/Server#string-GetCommonScenesList)
-]]
---- @return string[]
-function Server:GetCommonScenesList() end
-
---- @return table[]
-function Server:GetPrefabsList() end
 
 --- @param prefab Asset
 --- @param newName string?
@@ -5109,9 +5177,6 @@ function Server:BackupMontage() end
 --- @return boolean
 function Server:DevMode() end
 
---- @return string
-function Server:GetDateTime() end
-
 --- @return integer
 function Server:GetMemoryUsage() end
 
@@ -5146,7 +5211,7 @@ function Server:GetPing(clientID) end
 
 --- @param fileLua File
 --- @param subPath string
---- @return boolean
+--- @return Asset
 function Server:MoveFileToMontageVoxelsFolder(fileLua, subPath) end
 
 --- @param fileLua File
@@ -5229,34 +5294,6 @@ function Server:GenLuaApi(api) end
 `Client`
 `Server`
 
-[View Documentation](https://docs.atomontage.com/api/ServerAsset)
-]]
---- @class ServerAsset
---- @field id string (readonly)
---- @field type integer (readonly)
---- @field typeStr string (readonly)
---- @field name string (readonly)
-ServerAsset = {}
-
---- @return ServerAsset
-function ServerAsset() end
-
---- @param id string
---- @param type integer
---- @param name string
---- @return ServerAsset
-function ServerAsset(id, type, name) end
-
---- @param idStr string
---- @param type integer
---- @param name string
---- @return ServerAsset
-function ServerAsset(idStr, type, name) end
-
---[[
-`Client`
-`Server`
-
 [View Documentation](https://docs.atomontage.com/api/ServerComponent)
 ]]
 --- @class ServerComponent
@@ -5319,7 +5356,7 @@ ServerSceneSettings = {}
 `Client`
 `Server`
 
-For [voxel edits](VoxelEdit#userdata-shape), [collisions](Collision#Shape-shape) and [rendering](Mesh#nil-AddShape-Shape-Color-color)
+For [voxel edits](VoxelEdit#Shape-shape), [collisions](Collision#Shape-shape) and [rendering](Mesh#nil-AddShape-Shape-shape-Color-color)
 
 All shapes inherit from this class. It is not meant to be instantiated directly.
 * [Box](Box)
@@ -5347,6 +5384,7 @@ Shape = {}
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
+--- @field onePerObject boolean (readonly)
 --- @field cloudScale number
 --- @field cloudOffset number
 --- @field cloudSlope number
@@ -5511,6 +5549,7 @@ Every scene has only **one** static voxel data and can have multiple dynamic vox
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
+--- @field onePerObject boolean (readonly)
 --- @field path string
 --- @field isLoaded boolean (readonly)
 StaticVoxelData = {}
@@ -5519,19 +5558,6 @@ StaticVoxelData = {}
 --- @param b StaticVoxelData
 --- @return boolean
 function StaticVoxelData:__eq(a, b) end
-
---[[
-`Client`
-`Server`
-
-[View Documentation](https://docs.atomontage.com/api/Sys)
-]]
---- @class Sys
-Sys = {}
-
---- @param enumName string
---- @return string[]
-function Sys:GetEnumValues(enumName) end
 
 --[[
 `Client`
@@ -5664,6 +5690,10 @@ function UI:SelectWidget(widget) end
 --- @param widget Widget
 --- @return nil
 function UI:FocusWidget(widget) end
+
+--- @param widget Widget?
+--- @return nil
+function UI:SetKeyboardFocus(widget) end
 
 --- @param widget Widget
 --- @param target Widget
@@ -7836,10 +7866,10 @@ The data will only render if the object also has a `VoxelRender` component.
 --- @field obj Object (readonly)
 --- @field isDestroyed boolean (readonly)
 --- @field type string (readonly)
+--- @field onePerObject boolean (readonly)
 --- @field size Vec3 (readonly)
 --- @field contentVersion integer (readonly) Monotonic counter incremented every time the underlying voxel content is invalidated (any edit that changes voxel presence). Cheap O(1) read for caching downstream computations like total volume.
 --- @field path string
---- @field originalPath string (readonly)
 --- @field data VoxelDataResource The voxel data resource that this voxel data is using
 --- @field save boolean Marks the voxel data to be persisted on save; it does not write any voxels by itself.
 --- @field editable boolean
@@ -7850,6 +7880,7 @@ The data will only render if the object also has a `VoxelRender` component.
 --- @field tintColor Color Render with a tint color
 --- @field receiveTransform boolean Receive transform(pos, rot scale) to render with from server. By default this is true.If you set this to false, you will need to manually set the transform of the object on the client side.This is useful for making objects respond immediately if something happened on the client side i.e. input
 --- @field lodBias number
+--- @field asset Asset
 VoxelData = {}
 
 --- @param a VoxelData
@@ -8058,11 +8089,14 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 --- @field copySourcePos Vec3
 --- @field copySourceRot Quat
 --- @field copySourceScale number
---- @field copyResource VoxelDataResource
---- @field roughness number
+--- @field copyResource VoxelData
+--- @field colorEnable boolean
+--- @field normalEnable boolean
 --- @field roughnessEnable boolean
---- @field metallicity number
 --- @field metallicityEnable boolean
+--- @field materialEnable boolean
+--- @field roughness number
+--- @field metallicity number
 --- @field removeType RemoveType
 --- @field removeHardness number
 --- @field useMaterialColor boolean
@@ -8188,17 +8222,17 @@ function VoxelEdit:SetMaterial(materialName, matData) end
 --- @return nil
 function VoxelEdit:SetStaticSceneMaterial(materialName, roughness, metallicity) end
 
---- @param vdr VoxelDataResource
+--- @param vd VoxelData
 --- @param materialName string
 --- @return nil
-function VoxelEdit:SetVoxelDataResourceMaterial(vdr, materialName) end
+function VoxelEdit:SetVoxelDataResourceMaterial(vd, materialName) end
 
---- @param vdr VoxelDataResource
+--- @param vd VoxelData
 --- @param destMaterialName string
 --- @param srcMaterialName string
 --- @param clearSourceMat boolean
 --- @return nil
-function VoxelEdit:ReplaceVoxelDataResourceMaterial(vdr, destMaterialName, srcMaterialName, clearSourceMat) end
+function VoxelEdit:ReplaceVoxelDataResourceMaterial(vd, destMaterialName, srcMaterialName, clearSourceMat) end
 
 --- @return nil
 function VoxelEdit:BackupSurfaceAttributes() end
@@ -8411,6 +8445,7 @@ function Widget:WidgetByName(name) end
 --- @field luaFile Asset
 --- @field header boolean
 --- @field text string
+--- @field icon string
 --- @field scroll boolean
 --- @field scrollX boolean
 --- @field scrollY boolean
@@ -8475,11 +8510,11 @@ BlendMode = {
 	Luminosity = 25,
 }
 
---- @enum ClientMode
-ClientMode = {
+--- @enum ClientPermission
+ClientPermission = {
 	View = 0,
-	Edit = 1,
-	DevDebug = 2,
+	DevDebug = 1,
+	Edit = 2,
 }
 
 --- @enum CopyOperation

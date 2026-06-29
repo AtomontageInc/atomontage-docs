@@ -1,0 +1,34 @@
+---
+title: Audio
+id: Audio
+---
+`Client`
+
+## Methods
+
+### AudioSource PlaySound(string|Asset sound, Vec3? position, number? volume, boolean? loop) {#AudioSource-PlaySound-stringAsset-sound-Vec3-position-number-volume-boolean-loop}
+
+### AudioSource PlaySoundRelative(string|Asset sound, Vec3? position, number? volume, boolean? loop) {#AudioSource-PlaySoundRelative-stringAsset-sound-Vec3-position-number-volume-boolean-loop}
+
+### AudioMusic PlayMusic(string musicFile, number? volume, boolean? loop) {#AudioMusic-PlayMusic-string-musicFile-number-volume-boolean-loop}
+
+### AudioMusic PrepareMusic(string musicFile, number? volume, boolean? loop) {#AudioMusic-PrepareMusic-string-musicFile-number-volume-boolean-loop}
+
+### boolean HasMusic(string musicFile) {#boolean-HasMusic-string-musicFile}
+
+### nil GetMusicFromServer(string musicFile) {#nil-GetMusicFromServer-string-musicFile}
+
+### nil PauseAudio() {#nil-PauseAudio}
+
+### nil ResumeAudio() {#nil-ResumeAudio}
+
+### nil StopAudio() {#nil-StopAudio}
+
+## Properties
+
+### number masterVolume {#number-masterVolume}
+
+### number soundVolume {#number-soundVolume}
+
+### number musicVolume {#number-musicVolume}
+

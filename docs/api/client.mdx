@@ -9,6 +9,9 @@ This class is only available on client
 
 ## Methods
 
+### boolean IsInitMode() {#boolean-IsInitMode}
+True while the client is in Init mode (the editor's edit mode), as opposed to live/play.
+
 ### integer GetID() {#integer-GetID}
 
 ### nil OpenScriptFile(string fileName, integer? lineNumber) {#nil-OpenScriptFile-string-fileName-integer-lineNumber}
@@ -126,8 +129,6 @@ Time for a network message to travel from client to server and back
 
 ### nil Restart() {#nil-Restart}
 
-### nil ChooseImage() {#nil-ChooseImage}
-
 ### nil ToggleChannelRendering() {#nil-ToggleChannelRendering}
 
 ### integer GetRenderChannelsCount() {#integer-GetRenderChannelsCount}
@@ -135,20 +136,6 @@ Time for a network message to travel from client to server and back
 ### number GetRenderChannelOpacity(integer which) {#number-GetRenderChannelOpacity-integer-which}
 
 ### nil SetRenderChannelOpacity(integer which, number value) {#nil-SetRenderChannelOpacity-integer-which-number-value}
-
-### nil LoadEntityPath() {#nil-LoadEntityPath}
-
-### nil SaveEntityPath() {#nil-SaveEntityPath}
-
-### nil PlayEntityPath() {#nil-PlayEntityPath}
-
-### nil ClearEntityPath() {#nil-ClearEntityPath}
-
-### nil AddEntityPathWaypoint() {#nil-AddEntityPathWaypoint}
-
-### Vec4[]? GetEntityPath() {#Vec4-GetEntityPath}
-
-### nil TakeScreenshot(string name, boolean attachTimestamp) {#nil-TakeScreenshot-string-name-boolean-attachTimestamp}
 
 ### boolean IsMobile() {#boolean-IsMobile}
 
@@ -221,20 +208,11 @@ Batch-draw multiple billboards from a table of descriptors.
 
 ## Properties
 
-### integer clientID {#integer-clientID}
-
-### string userID {#string-userID}
-
-### ClientMode mode {#ClientMode-mode}
-ClientMode enum: View=0, Edit=1, DevDebug=2.
-
-### boolean isMaker {#boolean-isMaker}
+### ClientPermission permission {#ClientPermission-permission}
 
 ### string platform {#string-platform}
 
 ### string sysInfo {#string-sysInfo}
-
-### boolean inInitScene {#boolean-inInitScene}
 
 ### number masterVolume {#number-masterVolume}
 Audio volume in range 0 - 1.

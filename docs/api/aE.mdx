@@ -50,11 +50,23 @@ Lists all engine profiler timer **names** under a prefix — use it to discover 
 
 ### string[] GetAssetSources() {#string-GetAssetSources}
 
-### Asset? GetAssetById(string id) {#Asset-GetAssetById-string-id}
+### string AssetPathInMontage(Asset asset) {#string-AssetPathInMontage-Asset-asset}
+
+### Asset GetBuiltinMaterial(string name) {#Asset-GetBuiltinMaterial-string-name}
+
+### Asset GetTextureForImage(Asset image) {#Asset-GetTextureForImage-Asset-image}
 
 ### integer TypeInt(string typeName) {#integer-TypeInt-string-typeName}
 
+### string[] GetEnumValues(string enumName) {#string-GetEnumValues-string-enumName}
+
 ### table GetAELuaBindings() {#table-GetAELuaBindings}
 
+### table, table GetMemoryUsage() {#table-table-GetMemoryUsage}
+
 ### boolean ToggleFullScreen() {#boolean-ToggleFullScreen}
+
+## Properties
+
+### number clientID {#number-clientID}
 

@@ -9,9 +9,16 @@ This class is only available on server
 
 ## Methods
 
-### integer[] GetClients() {#integer-GetClients}
+### boolean IsInitMode() {#boolean-IsInitMode}
+True while the server is in Init mode (editing); false in Live mode (play).
 
-### string[] GetUsersID() {#string-GetUsersID}
+### nil EnterInitMode(boolean? reloadGeom) {#nil-EnterInitMode-boolean-reloadGeom}
+Switch the server into Init mode (editing). If `reloadGeom` is true, voxel geometry is reloaded on the mode change.
+
+### nil EnterLiveMode(boolean? reloadGeom) {#nil-EnterLiveMode-boolean-reloadGeom}
+Switch the server into Live mode (play). If `reloadGeom` is true, voxel geometry is reloaded on the mode change.
+
+### integer[] GetClients() {#integer-GetClients}
 
 ### integer GetUserID(integer clientID) {#integer-GetUserID-integer-clientID}
 
@@ -21,24 +28,6 @@ This class is only available on server
 
 ### nil LuaReset() {#nil-LuaReset}
 Re-runs all server Lua scripts from scratch. The entire Lua state is wiped — no tables, globals, or per-script `self` data survive — then every script reloads. Does not reload scene geometry.
-
-### string[] GetLuaFilesList() {#string-GetLuaFilesList}
-
-### Asset[] assets, string[] paths GetMontageLuaAssets() {#Asset-assets-string-paths-GetMontageLuaAssets}
-
-### string[] GetVoxelFilesList() {#string-GetVoxelFilesList}
-Voxel files in the Montage/Voxels, those you saved in your montage and they are not necessary uploaded to the cloud already. local montage assets
-
-### string[] GetMakerAssetsList() {#string-GetMakerAssetsList}
-Assets in cloud of maker that made this montage
-
-### string[] GetCommonAssetsList() {#string-GetCommonAssetsList}
-Common, those we provide cloud with as free to use
-
-### string[] GetCommonScenesList() {#string-GetCommonScenesList}
-Common scenes
-
-### table[] GetPrefabsList() {#table-GetPrefabsList}
 
 ### Object InsertPrefab(Asset prefab, string? newName, boolean? setSave) {#Object-InsertPrefab-Asset-prefab-string-newName-boolean-setSave}
 
@@ -65,8 +54,6 @@ Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaRe
 
 ### boolean DevMode() {#boolean-DevMode}
 
-### string GetDateTime() {#string-GetDateTime}
-
 ### integer GetMemoryUsage() {#integer-GetMemoryUsage}
 
 ### table GetErrors() {#table-GetErrors}
@@ -81,7 +68,7 @@ Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaRe
 
 ### integer GetPing(integer clientID) {#integer-GetPing-integer-clientID}
 
-### boolean MoveFileToMontageVoxelsFolder(File fileLua, string subPath) {#boolean-MoveFileToMontageVoxelsFolder-File-fileLua-string-subPath}
+### Asset MoveFileToMontageVoxelsFolder(File fileLua, string subPath) {#Asset-MoveFileToMontageVoxelsFolder-File-fileLua-string-subPath}
 
 ### nil MakeUrlForFile(File fileLua, fun(progress:number) eventUpdate, fun(success:boolean, url:string) eventFinish) {#nil-MakeUrlForFile-File-fileLua-fun-progressnumber-eventUpdate-fun-successboolean-urlstring-eventFinish}
 
@@ -122,11 +109,6 @@ Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaRe
 ## Properties
 
 ### integer clientID {#integer-clientID}
-
-### boolean inInitScene {#boolean-inInitScene}
-
-### boolean modeChangeReloadGeom {#boolean-modeChangeReloadGeom}
-Whether switching between Edit and Play mode reloads voxel geometry.
 
 ### ServerSceneSettings settings {#ServerSceneSettings-settings}
 

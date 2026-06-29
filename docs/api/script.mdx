@@ -15,7 +15,7 @@ Script component. Not to be confused with the actual [lua table instance](Script
 
 ### nil setSerializeVar(string key, any value) {#nil-setSerializeVar-string-key-any-value}
 
-### nil setSerializeVarAsset(string key, string assetId) {#nil-setSerializeVarAsset-string-key-string-assetId}
+### nil setSerializeVarAsset(string key, AssetLink link) {#nil-setSerializeVarAsset-string-key-AssetLink-link}
 
 ### integer RPC(string funcName, ... args) {#integer-RPC-string-funcName-args}
 
@@ -45,6 +45,8 @@ Microseconds of this script's last `Start` call (string, µs).
 ### boolean isDestroyed {#boolean-isDestroyed}
 
 ### string type {#string-type}
+
+### boolean onePerObject {#boolean-onePerObject}
 
 ### ScriptInstance instance {#ScriptInstance-instance}
 

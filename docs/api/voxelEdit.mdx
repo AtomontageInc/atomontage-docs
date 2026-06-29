@@ -138,9 +138,9 @@ parameters specify "cone" - two positions and end radius
 
 ### nil SetStaticSceneMaterial(string materialName, number roughness, number metallicity) {#nil-SetStaticSceneMaterial-string-materialName-number-roughness-number-metallicity}
 
-### nil SetVoxelDataResourceMaterial(VoxelDataResource vdr, string materialName) {#nil-SetVoxelDataResourceMaterial-VoxelDataResource-vdr-string-materialName}
+### nil SetVoxelDataResourceMaterial(VoxelData vd, string materialName) {#nil-SetVoxelDataResourceMaterial-VoxelData-vd-string-materialName}
 
-### nil ReplaceVoxelDataResourceMaterial(VoxelDataResource vdr, string destMaterialName, string srcMaterialName, boolean clearSourceMat) {#nil-ReplaceVoxelDataResourceMaterial-VoxelDataResource-vdr-string-destMaterialName-string-srcMaterialName-boolean-clearSourceMat}
+### nil ReplaceVoxelDataResourceMaterial(VoxelData vd, string destMaterialName, string srcMaterialName, boolean clearSourceMat) {#nil-ReplaceVoxelDataResourceMaterial-VoxelData-vd-string-destMaterialName-string-srcMaterialName-boolean-clearSourceMat}
 
 ### nil BackupSurfaceAttributes() {#nil-BackupSurfaceAttributes}
 
@@ -181,15 +181,21 @@ if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least
 
 ### number copySourceScale {#number-copySourceScale}
 
-### VoxelDataResource copyResource {#VoxelDataResource-copyResource}
+### VoxelData copyResource {#VoxelData-copyResource}
 
-### number roughness {#number-roughness}
+### boolean colorEnable {#boolean-colorEnable}
+
+### boolean normalEnable {#boolean-normalEnable}
 
 ### boolean roughnessEnable {#boolean-roughnessEnable}
 
-### number metallicity {#number-metallicity}
-
 ### boolean metallicityEnable {#boolean-metallicityEnable}
+
+### boolean materialEnable {#boolean-materialEnable}
+
+### number roughness {#number-roughness}
+
+### number metallicity {#number-metallicity}
 
 ### RemoveType removeType {#RemoveType-removeType}
 

@@ -7,6 +7,9 @@ id: Scene
 
 ## Methods
 
+### Material? CreateMaterial(string path) {#Material-CreateMaterial-string-path}
+Gets the shared [`Material`](./material.mdx) the renderer actually draws with (the cached instance, not a copy) — use it to drive live shader uniforms via [`Material:SetProperty`](./material.mdx#nil-SetProperty-string-name-Vec3Vec4-vec).
+
 ### number GetTime() {#number-GetTime}
 Simulation time in seconds; use this instead of the sandboxed `os.time`.
 
@@ -55,6 +58,8 @@ Flags the object for deletion. The object will not actually be destroyed until t
 
 ### Object GetObjectById(string id) {#Object-GetObjectById-string-id}
 
+### boolean IsComponentOnePerObject(string typeName) {#boolean-IsComponentOnePerObject-string-typeName}
+
 ### Object[] GetRootObjects() {#Object-GetRootObjects}
 
 ### Object[] GetAllObjects() {#Object-GetAllObjects}
@@ -79,16 +84,11 @@ Flags the object for deletion. The object will not actually be destroyed until t
 
 ### boolean CanMoveObject(Object obj, Object newParentObj) {#boolean-CanMoveObject-Object-obj-Object-newParentObj}
 
-### Material? CreateMaterial(string path) {#Material-CreateMaterial-string-path}
-Gets the shared [`Material`](./material.mdx) the renderer actually draws with (the cached instance, not a copy) — use it to drive live shader uniforms via [`Material:SetProperty`](./material.mdx#nil-SetProperty-string-name-Vec3Vec4-vec).
-
 ### Camera GetActiveCamera() {#Camera-GetActiveCamera}
 Returns the currently active (rendering) camera.
 
 ### nil SetActiveCamera(Camera cam) {#nil-SetActiveCamera-Camera-cam}
 Makes the given camera the active view.
-
-### string AddNewScriptFile(string scriptName, Object forObject) {#string-AddNewScriptFile-string-scriptName-Object-forObject}
 
 ### VoxelDB? GetVoxelDB(string db) {#VoxelDB-GetVoxelDB-string-db}
 
@@ -101,8 +101,6 @@ Makes the given camera the active view.
 ### nil ResetLogCountersDif() {#nil-ResetLogCountersDif}
 
 ### boolean ResetPrefab(Object obj) {#boolean-ResetPrefab-Object-obj}
-
-### nil ResetAllPrefabs() {#nil-ResetAllPrefabs}
 
 ### nil UnpackPrefab(Object obj) {#nil-UnpackPrefab-Object-obj}
 
