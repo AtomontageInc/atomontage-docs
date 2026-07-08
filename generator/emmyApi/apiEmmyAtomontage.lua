@@ -468,6 +468,12 @@ function AE:GetAELuaBindings() end
 --- @return table, table
 function AE:GetMemoryUsage() end
 
+--- @return nil
+function AE:ReloadGeometry() end
+
+--- @return nil
+function AE:AEVV_InvalidateData() end
+
 --- @return boolean
 function AE:ToggleFullScreen() end
 
@@ -518,6 +524,7 @@ function AnyVar:IsComponent() end
 --- @field typeStr string
 --- @field deleted boolean
 --- @field filepath string
+--- @field relpath string
 --- @field canReferenceAssets boolean
 Asset = {}
 
@@ -541,6 +548,7 @@ function Asset:GetAssetsReferencingAsset(asset) end
 --- @field asset Asset
 --- @field assetType string (readonly)
 --- @field assetName string (readonly)
+--- @field isMissing boolean (readonly)
 AssetLink = {}
 
 --- @return AssetLink
@@ -1128,9 +1136,9 @@ This class is only available on client
 --- @field permission ClientPermission
 --- @field platform string (readonly)
 --- @field sysInfo string (readonly)
---- @field masterVolume number Audio volume in range 0 - 1.
---- @field soundVolume number Audio volume in range 0 - 1.
---- @field musicVolume number Audio volume in range 0 - 1.
+--- @field masterVolume number (deprecated) Audio volume in range 0 - 1.
+--- @field soundVolume number (deprecated) Audio volume in range 0 - 1.
+--- @field musicVolume number (deprecated) Audio volume in range 0 - 1.
 Client = {}
 
 --[[
@@ -1233,9 +1241,6 @@ function Client:ConnectToServer() end
 --- @param path string
 --- @return boolean opened
 function Client:OpenFolder(path) end
-
---- @return boolean
-function Client:DevMode() end
 
 --- @return boolean
 function Client:GetNetworkThrottlingNow() end
@@ -1356,6 +1361,9 @@ function Client:IsDownloadingFiles() end
 --- @return nil
 function Client:Restart() end
 
+--- @return string
+function Client:ReloadShaders() end
+
 --- @return nil
 function Client:ToggleChannelRendering() end
 
@@ -1436,6 +1444,7 @@ Returns [AudioSource](./audioSource.mdx)
 
 [View Documentation](https://docs.atomontage.com/api/Client#AudioSource-PlaySound-string-soundPath-Vec3-position-number-volume-boolean-loop)
 ]]
+--- @deprecated
 --- @param soundPath string
 --- @param position Vec3?
 --- @param volume number?
@@ -1449,22 +1458,26 @@ Returns [AudioMusic](./audioMusic.mdx)
 
 [View Documentation](https://docs.atomontage.com/api/Client#AudioMusic-PlayMusic-string-musicFile-number-volume-boolean-loop)
 ]]
+--- @deprecated
 --- @param musicFile string
 --- @param volume number?
 --- @param loop boolean?
 --- @return AudioMusic
 function Client:PlayMusic(musicFile, volume, loop) end
 
+--- @deprecated
 --- @param musicFile string
 --- @param volume number?
 --- @param loop boolean?
 --- @return AudioMusic
 function Client:PrepareMusic(musicFile, volume, loop) end
 
+--- @deprecated
 --- @param musicFile string
 --- @return boolean
 function Client:HasMusic(musicFile) end
 
+--- @deprecated
 --- @param musicFile string
 --- @return nil
 function Client:GetMusicFromServer(musicFile) end
@@ -1474,6 +1487,7 @@ Pause all playing sounds and music
 
 [View Documentation](https://docs.atomontage.com/api/Client#nil-PauseAudio)
 ]]
+--- @deprecated
 --- @return nil
 function Client:PauseAudio() end
 
@@ -1482,9 +1496,11 @@ Resume all paused sounds and music
 
 [View Documentation](https://docs.atomontage.com/api/Client#nil-ResumeAudio)
 ]]
+--- @deprecated
 --- @return nil
 function Client:ResumeAudio() end
 
+--- @deprecated
 --- @return nil
 function Client:StopAudio() end
 
@@ -2701,6 +2717,7 @@ function Input:GetActiveGamepad() end
 --- @field inputType UIInputType
 --- @field multiLine boolean
 --- @field textAlign Vec2
+--- @field decimals integer
 Inputbox = {}
 
 --- @param properties table
@@ -3550,6 +3567,9 @@ function Object:GetScriptUpdateTime() end
 
 --- @return integer
 function Object:GetRefCount() end
+
+--- @return nil
+function Object:Destroy() end
 
 --[[
 `Client`
@@ -5174,9 +5194,6 @@ function Server:ResetSceneToInitState(reloadTerrain) end
 --- @return nil
 function Server:BackupMontage() end
 
---- @return boolean
-function Server:DevMode() end
-
 --- @return integer
 function Server:GetMemoryUsage() end
 
@@ -5224,10 +5241,13 @@ function Server:MakeUrlForFile(fileLua, eventUpdate, eventFinish) end
 function Server:GetStreamingStats() end
 
 --- @return table
-function Server:GetMainDispatcherStats() end
+function Server:GetVolumeDbInfo() end
 
---- @return nil
-function Server:Restart() end
+--- @return table
+function Server:GetVolumeDbStats() end
+
+--- @return table
+function Server:GetMainDispatcherStats() end
 
 --- @param name string
 --- @param props table
@@ -5285,10 +5305,6 @@ function Server:ShowAllNormalsPerBT(lodI) end
 
 --- @return nil
 function Server:PBRTranscodeToPBR0Ver1() end
-
---- @param api string
---- @return nil
-function Server:GenLuaApi(api) end
 
 --[[
 `Client`
@@ -5683,6 +5699,9 @@ function UI:DeleteWidgets(parent) end
 --- @return Widget
 function UI:SelectedWidget() end
 
+--- @return Widget
+function UI:HoveredWidget() end
+
 --- @param widget Widget
 --- @return nil
 function UI:SelectWidget(widget) end
@@ -5741,8 +5760,9 @@ function UI:OpenWindow(window, focus, animate) end
 --- @return nil
 function UI:CloseWindow(window) end
 
+--- @param except Window?
 --- @return nil
-function UI:CloseAllWindows() end
+function UI:CloseAllWindows(except) end
 
 --- @return nil
 function UI:ClosePopups() end
@@ -7515,6 +7535,7 @@ function Vec4i:Dot(other) end
 --- @field value Vec2|Vec3|Vec4|Vec2i|Vec3i|Vec4i
 --- @field inputsPadding Vec2
 --- @field inputsPaddingMode UIPropertyMode
+--- @field decimals integer
 Vectorbox = {}
 
 --- @param properties table
@@ -7869,7 +7890,6 @@ The data will only render if the object also has a `VoxelRender` component.
 --- @field onePerObject boolean (readonly)
 --- @field size Vec3 (readonly)
 --- @field contentVersion integer (readonly) Monotonic counter incremented every time the underlying voxel content is invalidated (any edit that changes voxel presence). Cheap O(1) read for caching downstream computations like total volume.
---- @field path string
 --- @field data VoxelDataResource The voxel data resource that this voxel data is using
 --- @field save boolean Marks the voxel data to be persisted on save; it does not write any voxels by itself.
 --- @field editable boolean
@@ -7903,10 +7923,6 @@ function VoxelData:GetAABounds() end
 
 --- @return Vec3 center, Quat rot, Vec3 size
 function VoxelData:GetBounds() end
-
---- @param path string
---- @return boolean success, string usedPath
-function VoxelData:SetPath(path) end
 
 --[[
 `Client`
@@ -7954,11 +7970,11 @@ function VoxelDataResource() end
 save voxel data in AM file
 second parameter controls if file will be overwritten
 
-[View Documentation](https://docs.atomontage.com/api/VoxelDataResource#string-Save-string-path-boolean-overwrite)
+[View Documentation](https://docs.atomontage.com/api/VoxelDataResource#Asset-Save-string-path-boolean-overwrite)
 ]]
 --- @param path string
 --- @param overwrite boolean
---- @return string
+--- @return Asset
 function VoxelDataResource:Save(path, overwrite) end
 
 --[[
@@ -8473,6 +8489,44 @@ function Window:Close() end
 --- @return boolean
 function Window:IsPopup() end
 
+--- @param name string
+--- @return Asset
+function Window:GetAsset(name) end
+
+--- @param index integer
+--- @return Asset
+function Window:GetAssetByIndex(index) end
+
+--- @return integer
+function Window:GetAssetCount() end
+
+--- @param name string
+--- @param asset Asset
+--- @return nil
+function Window:AddAsset(name, asset) end
+
+--- @param index integer
+--- @param asset Asset
+--- @return nil
+function Window:SetAssetByIndex(index, asset) end
+
+--- @param index integer
+--- @param name string
+--- @return nil
+function Window:SetAssetNameByIndex(index, name) end
+
+--- @param index integer
+--- @return nil
+function Window:RemoveAssetByIndex(index) end
+
+--- @param fromIndex integer
+--- @param toIndex integer
+--- @return nil
+function Window:MoveAsset(fromIndex, toIndex) end
+
+--- @return table
+function Window:GetAssets() end
+
 --[[
 
 Used by [VoxelEdit](../VoxelEdit#BlendMode-blendMode)
@@ -8770,6 +8824,7 @@ UISizeType = {
 	ByContent = 0,
 	Percent = 1,
 	Units = 2,
+	Ratio = 3,
 }
 
 --- @enum UISliderType

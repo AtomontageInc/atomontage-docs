@@ -21,8 +21,6 @@ Returns the world-space axis-aligned bounds (center, size). Affected by the obje
 
 ### Vec3 center, Quat rot, Vec3 size GetBounds() {#Vec3-center-Quat-rot-Vec3-size-GetBounds}
 
-### boolean success, string usedPath SetPath(string path) {#boolean-success-string-usedPath-SetPath-string-path}
-
 ## Properties
 
 ### boolean active {#boolean-active}
@@ -43,8 +41,6 @@ Returns the world-space axis-aligned bounds (center, size). Affected by the obje
 
 ### integer contentVersion {#integer-contentVersion}
 Monotonic counter incremented every time the underlying voxel content is invalidated (any edit that changes voxel presence). Cheap O(1) read for caching downstream computations like total volume.
-
-### string path {#string-path}
 
 ### VoxelDataResource data {#VoxelDataResource-data}
 The voxel data resource that this voxel data is using
