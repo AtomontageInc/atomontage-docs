@@ -346,6 +346,8 @@ Callbacks = {}
 ---| '"StaticVoxelData"'
 ---| '"VoxelData"'
 
+--- @alias opTarget Shape|Object|Object[]
+
 --[[
 `Client`
 `Server`
@@ -1022,6 +1024,39 @@ Capsule between two points
 --- @param radius2 number?
 --- @return Capsule
 function Capsule(pos1, pos2, radius1, radius2) end
+
+--[[
+`Client`
+`Server`
+
+`Cast` creates raycasts. `Cast:Ray(origin, direction)` returns a [`Raycast`](./raycast.mdx) you then run:
+
+```lua
+local hit = Cast:Ray(obj.pos, obj.rot * Vec3.forward * 100)
+              :Ignore(self.obj)   -- optional: skip objects
+              :Run()              -- first hit (or :RunAll() for every hit along the ray)
+if hit then print(hit.pos) end
+```
+
+For hot loops (100+ casts/frame) prefer [`Collision:Raycast`](./collision.mdx) directly.
+
+[View Documentation](https://docs.atomontage.com/api/Cast)
+]]
+--- @class Cast
+Cast = {}
+
+--[[
+Create a raycast. Reuse the returned Raycast object (mutate startPos/ray) to avoid per-call overhead.
+Caching only helps significantly when the filter is stable — calling Ignore()/Force() invalidates
+the internal cache, so re-adding the same ignore list every frame saves only the table alloc.
+For hot loops (100+ casts/frame), prefer native Collision:Raycast() directly (~25% faster).
+
+[View Documentation](https://docs.atomontage.com/api/Cast#Raycast-Ray-Vec3-startPos-Vec3-ray)
+]]
+--- @param startPos Vec3
+--- @param ray Vec3
+--- @return Raycast
+function Cast:Ray(startPos, ray) end
 
 --[[
 `Client`
@@ -2148,6 +2183,50 @@ function Gamepad:RumbleTriggers(leftRumble, rightRumble, duration) end
 `Client`
 `Server`
 
+[View Documentation](https://docs.atomontage.com/api/Global)
+]]
+--[[
+shoud be Scene:FindObjectsWithTag
+
+[View Documentation](https://docs.atomontage.com/api/Global#Object-FindObjectsWithTag-string-tag)
+]]
+--- @param tag string
+--- @return Object[]
+function FindObjectsWithTag(tag) end
+
+--- @param shape Shape
+--- @return OpCollide
+function Collide(shape) end
+
+--[[
+doesnt really work idk why, need this in engine
+
+[View Documentation](https://docs.atomontage.com/api/Global#number-widthPx-TextWidth-string-text-number-size)
+]]
+--- @param text string
+--- @param size number?
+--- @return number widthPx
+function TextWidth(text, size) end
+
+--[[
+draw text for one frame on client
+
+[View Documentation](https://docs.atomontage.com/api/Global#nil-Text-string-text-Vec2Vec3-posPerc-Vec2-pivot-Vec2-pixelOffset-Vec4-color-number-size-Vec4-colorOutline)
+]]
+--- @param text string
+--- @param posPerc Vec2|Vec3
+--- @param pivot Vec2?
+--- @param pixelOffset Vec2?
+--- @param color Vec4?
+--- @param size number?
+--- @param colorOutline Vec4?
+--- @return nil
+function Text(text, posPerc, pivot, pixelOffset, color, size, colorOutline) end
+
+--[[
+`Client`
+`Server`
+
 [View Documentation](https://docs.atomontage.com/api/Graph)
 ]]
 --- @class Graph
@@ -2727,6 +2806,90 @@ function Inputbox:Set(properties) end
 --- @param name string
 --- @return Widget
 function Inputbox:WidgetByName(name) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/InteractionFilter)
+]]
+--- @class InteractionFilter
+InteractionFilter = {}
+
+--[[
+ignore objects(s)
+
+[View Documentation](https://docs.atomontage.com/api/InteractionFilter#self-Ignore-ObjectObjectnil-ignore)
+]]
+--- @param ignore Object|Object[]|nil
+--- @return self
+function InteractionFilter:Ignore(ignore) end
+
+--[[
+Replace the force list entirely with the given object(s). Unlike Force() which appends, this overwrites.
+Perf: on cached ops, changing force/ignore triggers an expensive C++ filter update on next Run().
+If the same list is passed again, the update is skipped. For best perf with cached ops, keep
+separate pre-cached ops per target (e.g. one for static, one per dynamic object) instead of
+calling SetForce with different objects each frame.
+
+[View Documentation](https://docs.atomontage.com/api/InteractionFilter#InteractionFilter-SetForce-ObjectObject-force)
+]]
+--- @param force Object|Object[]
+--- @return InteractionFilter
+function InteractionFilter:SetForce(force) end
+
+--[[
+Replace the ignore list entirely with the given object(s). Unlike Ignore() which appends, this overwrites.
+Perf: see SetForce comment above.
+
+[View Documentation](https://docs.atomontage.com/api/InteractionFilter#InteractionFilter-SetIgnore-ObjectObject-ignore)
+]]
+--- @param ignore Object|Object[]
+--- @return InteractionFilter
+function InteractionFilter:SetIgnore(ignore) end
+
+--- @param force Object|Object[]|nil
+--- @return InteractionFilter
+function InteractionFilter:Force(force) end
+
+--- @return InteractionFilter
+function InteractionFilter:ForceStatic() end
+
+--- @return InteractionFilter
+function InteractionFilter:IgnoreStatic() end
+
+--[[
+Perf: tags prevent filter caching and force containsStatic scan each Run()
+
+[View Documentation](https://docs.atomontage.com/api/InteractionFilter#InteractionFilter-IgnoreTag-stringstringnil-ignore)
+]]
+--- @param ignore string|string[]|nil
+--- @return InteractionFilter
+function InteractionFilter:IgnoreTag(ignore) end
+
+--[[
+Perf: tags prevent filter caching and force containsStatic scan each Run()
+
+[View Documentation](https://docs.atomontage.com/api/InteractionFilter#InteractionFilter-ForceTag-stringstringnil-force)
+]]
+--- @param force string|string[]|nil
+--- @return InteractionFilter
+function InteractionFilter:ForceTag(force) end
+
+--[[
+Single Run-time entry point: build the Filter on first call, sync it on subsequent calls.
+Tag-resolved object membership is re-checked each call (via applyTagsToFilter's listsEqual gate),
+so the cached Filter stays correct even as scene tags change, without reassigning filter.forceList
+or filter.ignoreList when the resolved set hasn't actually changed.
+Pass a builtin ignore tag (e.g. "No Voxel Paint", "No Voxel Change") to merge it with user-set
+ignoreTags without mutating self.ignoreTags. The merged list is cached and only rebuilt when
+user ignoreTags change (via IgnoreTag()).
+
+[View Documentation](https://docs.atomontage.com/api/InteractionFilter#Filter-prepareFilter-string-builtinIgnoreTag)
+]]
+--- @param builtinIgnoreTag string?
+--- @return Filter
+function InteractionFilter:prepareFilter(builtinIgnoreTag) end
 
 --[[
 `Client`
@@ -3571,6 +3734,367 @@ function Object:GetRefCount() end
 --- @return nil
 function Object:Destroy() end
 
+--- @param find string|Object
+--- @return Object?
+function Object:FindObjectInParents(find) end
+
+--- @generic ScriptInstanceType: ScriptInstance
+--- @param name `ScriptInstanceType`
+--- @return ScriptInstanceType
+function Object:FindScriptInParents(name) end
+
+--- @param tag string
+--- @return nil
+function Object:AddTag(tag) end
+
+--- @param tag string
+--- @return nil
+function Object:RemoveTag(tag) end
+
+--- @param tag string
+--- @return boolean
+function Object:HasTag(tag) end
+
+--- @return string[]
+function Object:GetTags() end
+
+--[[
+find first tag matching string
+[View Documentation](https://docs.atomontage.com/api/Object#nil-FindTag-any-tag)
+]]
+--- @param tag any
+--- @return nil
+function Object:FindTag(tag) end
+
+--[[
+find tag in parents in order
+[View Documentation](https://docs.atomontage.com/api/Object#string-tag-Object-FindTagWithParents-string-tag)
+]]
+--- @param tag string
+--- @return string tag, Object
+function Object:FindTagWithParents(tag) end
+
+--[[
+`Client`
+`Server`
+
+The voxel **add** operation, returned by [`Vox:Add(target)`](./vox.mdx#OpAdd-Add-opTarget-target). Configure it with the chain (inherited from [`OpBase`](./opBase.mdx)), then call `:Run()`. See [`Vox`](./vox.mdx) for the pattern.
+
+[View Documentation](https://docs.atomontage.com/api/OpAdd)
+]]
+--- @class OpAdd : OpBaseColored
+OpAdd = {}
+
+--[[
+`Client`
+`Server`
+
+Base class for the [`Vox`](./vox.mdx) operation builders ([`OpAdd`](./opAdd.mdx), [`OpRemove`](./opRemove.mdx), [`OpPaint`](./opPaint.mdx), [`OpCopy`](./opCopy.mdx), …). You don't use it directly — its chain methods (`Force`, `Ignore`, `OnFinished`, `Run`, …) are inherited by all of them. See [`Vox`](./vox.mdx) for the usage pattern.
+
+[View Documentation](https://docs.atomontage.com/api/OpBase)
+]]
+--- @class OpBase : InteractionFilter
+OpBase = {}
+
+--[[
+Set the target shape/object(s) for this operation. Updates the cached VoxelEdit shape in-place if already built.
+
+[View Documentation](https://docs.atomontage.com/api/OpBase#OpBase-Target-opTarget-target)
+]]
+--- @param target opTarget
+--- @return OpBase
+function OpBase:Target(target) end
+
+--[[
+Callback function. `OnFinished` is called after `OnProgress` if it was last part
+
+[View Documentation](https://docs.atomontage.com/api/OpBase#nil-OnFinished-function-onFinished)
+]]
+--- @param onFinished function
+--- @return nil
+function OpBase:OnFinished(onFinished) end
+
+--[[
+Callback function. May not be called every frame. Is called after script updates
+
+[View Documentation](https://docs.atomontage.com/api/OpBase#nil-OnProgress-fun-onProgress)
+]]
+--- @param onProgress fun()
+--- @return nil
+function OpBase:OnProgress(onProgress) end
+
+--- @param onError function
+--- @return nil
+function OpBase:OnError(onError) end
+
+--- @return OpBase
+function OpBase:Draw() end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/OpBaseColored)
+]]
+--- @class OpBaseColored : OpBaseTextured
+OpBaseColored = {}
+
+--- @param r Vec3|number
+--- @param g number?
+--- @param b number?
+--- @return OpBaseColored
+function OpBaseColored:Color(r, g, b) end
+
+--[[
+Apply a voxel material. How it interacts with Color/Texture:
+- textured materials (stone/concrete/bedrock/sand/flesh/bone) always show their texture, ignoring Color
+- metals stay reflective; other (untextured) materials take your Color if set, else their own albedo
+- a Texture image overrides Color too, unless you set a Color which then tints it
+
+[View Documentation](https://docs.atomontage.com/api/OpBaseColored#nil-Material-materialName-mat)
+]]
+--- @param mat materialName
+--- @return nil
+function OpBaseColored:Material(mat) end
+
+--- @param metallicity number
+--- @return OpBaseColored
+function OpBaseColored:Metallicity(metallicity) end
+
+--- @param roughness number
+--- @return OpBaseColored
+function OpBaseColored:Roughness(roughness) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/OpBaseMaterials)
+]]
+--- @class OpBaseMaterials : OpBaseColored
+OpBaseMaterials = {}
+
+--- @param ignore materialName|materialName[]
+--- @return self
+function OpBaseMaterials:IgnoreMaterial(ignore) end
+
+--- @param names materialName|materialName[]
+--- @return self
+function OpBaseMaterials:ForceMaterial(names) end
+
+--- @param maxHardness number|materialName|nil
+--- @return self
+function OpBaseMaterials:MaxHardness(maxHardness) end
+
+--- @param minHardness number|materialName
+--- @return self
+function OpBaseMaterials:MinHardness(minHardness) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/OpBaseTextured)
+]]
+--- @class OpBaseTextured : OpBase
+OpBaseTextured = {}
+
+--[[
+Project an image onto the voxels (works on Add/Paint/Remove). The image replaces color; set a
+Color to tint it. Projected along `dir` (planar): lands only on the face toward `dir`, fading out on
+angled faces (decal-style). Use TriplanarTexture to cover every face without fading instead.
+
+[View Documentation](https://docs.atomontage.com/api/OpBaseTextured#OpBaseTextured-Texture-string-tex-Vec3-dir-number-scale-stringbooleannil-normal)
+]]
+--- @param tex string?
+--- @param dir Vec3
+--- @param scale number?
+--- @param normal string|boolean|nil
+--- @return OpBaseTextured
+function OpBaseTextured:Texture(tex, dir, scale, normal) end
+
+--[[
+Texture voxels from all three world axes, blended by surface normal (works on Add/Paint/Remove).
+The image replaces color; set a Color to tint it.
+
+[View Documentation](https://docs.atomontage.com/api/OpBaseTextured#OpBaseTextured-TriplanarTexture-string-tex-Vec3-anchor-number-scale-stringbooleannil-normal)
+]]
+--- @param tex string?
+--- @param anchor Vec3?
+--- @param scale number?
+--- @param normal string|boolean|nil
+--- @return OpBaseTextured
+function OpBaseTextured:TriplanarTexture(tex, anchor, scale, normal) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/OpCollide)
+]]
+--- @class OpCollide : InteractionFilter
+--- @field Ignore fun(op:OpCollide, ignore: Object|Object[]?): OpCollide
+--- @field Force fun(op:OpCollide, force: Object|Object[]?): OpCollide
+--- @field ForceStatic fun(op:OpCollide): OpCollide
+--- @field IgnoreStatic fun(op:OpCollide): OpCollide
+--- @field ForceTag fun(op:OpCollide, tag: string|string[]): OpCollide
+--- @field IgnoreTag fun(op:OpCollide, tag: string|string[]): OpCollide
+OpCollide = {}
+
+--- @return OpCollide
+function OpCollide:Draw() end
+
+--- @return Overlap[]
+function OpCollide:Run() end
+
+--[[
+`Client`
+`Server`
+
+The voxel **copy** operation, returned by [`Vox:Copy(target)`](./vox.mdx#OpCopy-Copy-opTarget-target). Configure it with the chain (inherited from [`OpBase`](./opBase.mdx)), then call `:Run()`. See [`Vox`](./vox.mdx) for the pattern.
+
+[View Documentation](https://docs.atomontage.com/api/OpCopy)
+]]
+--- @class OpCopy : OpBase
+--- @field target opTarget
+OpCopy = {}
+
+--[[
+Select the object to copy to.
+source before Run() to relocate. To add: plumb args through Run() into copyAtShape (ve.copyDestination*).
+
+[View Documentation](https://docs.atomontage.com/api/OpCopy#OpCopy-To-ObjectObject-to)
+]]
+--- @param to Object|Object[]
+--- @return OpCopy
+function OpCopy:To(to) end
+
+--- @return OpCopy
+function OpCopy:ToStatic() end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/OpDeflate)
+]]
+--- @class OpDeflate : OpBaseTextured
+OpDeflate = {}
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/OpInflate)
+]]
+--- @class OpInflate : OpBaseTextured
+OpInflate = {}
+
+--[[
+`Client`
+`Server`
+
+The voxel **paint** operation, returned by [`Vox:Paint(target)`](./vox.mdx#OpPaint-Paint-opTarget-target). Configure it with the chain (inherited from [`OpBase`](./opBase.mdx)), then call `:Run()`. See [`Vox`](./vox.mdx) for the pattern.
+
+[View Documentation](https://docs.atomontage.com/api/OpPaint)
+]]
+--- @class OpPaint : OpBaseColored
+OpPaint = {}
+
+--- @param r Vec3|Vec4|number
+--- @param g number?
+--- @param b number?
+--- @param a number?
+--- @return OpPaint
+function OpPaint:Color(r, g, b, a) end
+
+--[[
+Various blend modes which you may know from Photoshop. See a list of explanations
+[here](https://photoshoptrainingchannel.com/blending-modes-explained/#normal-blending-modes)
+
+[View Documentation](https://docs.atomontage.com/api/OpPaint#OpPaint-BlendMode-BlendMode-blendMode)
+]]
+--- @param blendMode BlendMode
+--- @return OpPaint
+function OpPaint:BlendMode(blendMode) end
+
+--[[
+blend radius ratio, how much the paint will blend out from the edge of the shape, 1 is no blend
+
+[View Documentation](https://docs.atomontage.com/api/OpPaint#OpPaint-Hardness-number-hardness)
+]]
+--- @param hardness number
+--- @return OpPaint
+function OpPaint:Hardness(hardness) end
+
+--[[
+`Client`
+`Server`
+
+The voxel **remove** operation, returned by [`Vox:Remove(target)`](./vox.mdx#OpRemove-Remove-opTarget-target). Configure it with the chain (inherited from [`OpBase`](./opBase.mdx)), then call `:Run()`. See [`Vox`](./vox.mdx) for the pattern.
+
+[View Documentation](https://docs.atomontage.com/api/OpRemove)
+]]
+--- @class OpRemove : OpBaseTextured
+OpRemove = {}
+
+--[[
+Callback function. `OnFinished` is called after `OnProgress` if it was last part
+
+[View Documentation](https://docs.atomontage.com/api/OpRemove#OpRemove-OnFinished-fun-onFinished)
+]]
+--- @param onFinished fun()
+--- @return OpRemove
+function OpRemove:OnFinished(onFinished) end
+
+--[[
+count volume of material removed, result is returned in OnFished
+
+[View Documentation](https://docs.atomontage.com/api/OpRemove#OpRemove-CountMaterial-materialNamematerialNamenil-countMat)
+]]
+--- @param countMat materialName|materialName[]|nil
+--- @return OpRemove
+function OpRemove:CountMaterial(countMat) end
+
+--- @param strength number?
+--- @return OpRemove
+function OpRemove:SoftRemovalStrength(strength) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/OpSmoothen)
+]]
+--- @class OpSmoothen : OpBaseTextured
+OpSmoothen = {}
+
+--[[
+`Client`
+`Server`
+
+A [`Vox`](./vox.mdx) voxel-operation builder. Configure it with the chain (inherited from [`OpBase`](./opBase.mdx)), then call `:Run()`. See [`Vox`](./vox.mdx) for the pattern.
+
+[View Documentation](https://docs.atomontage.com/api/OpSubtract)
+]]
+--- @class OpSubtract : OpBaseMaterials
+--- @field target Object|Object[]
+--- @field destinationPos Vec3
+--- @field destinationRot Quat
+--- @field destinationScale Vec3
+OpSubtract = {}
+
+--[[
+apply the color of the subtracted object
+
+[View Documentation](https://docs.atomontage.com/api/OpSubtract#OpSubtract-UseColor)
+]]
+--- @return OpSubtract
+function OpSubtract:UseColor() end
+
+--- @return nil
+function OpSubtract:Run() end
+
 --[[
 `Client`
 `Server`
@@ -4101,6 +4625,26 @@ function Random:OnBox(dimsOrBox) end
 function Random:InBox(dimsOrBox) end
 
 --[[
+Fisher-Yates shuffle. Stays in Lua: table swaps via sol2 are slower than native Lua bytecode.
+
+[View Documentation](https://docs.atomontage.com/api/Random#table-Shuffle-table-tbl)
+]]
+--- @param tbl table
+--- @return table
+function Random:Shuffle(tbl) end
+
+--- @param min number?
+--- @param max number?
+--- @return number
+function Random:Number(min, max) end
+
+--- @param min number?
+--- @param max number?
+--- @param deviationChance number?
+--- @return number
+function Random:RangeWithDistribution(min, max, deviationChance) end
+
+--[[
 `Client`
 `Server`
 
@@ -4145,6 +4689,45 @@ function Rangei(a, b) end
 
 --- @return Rangei
 function Rangei:Copy() end
+
+--[[
+`Client`
+`Server`
+
+A raycast builder — you don't construct it directly, you get one from [`Cast:Ray(origin, direction)`](./cast.mdx#Raycast-Ray-Vec3-startPos-Vec3-ray). Chain filters (`Ignore`/`Force`) and options (`WithColor`/`WithNormal`/…), then call [`:Run()`](#Hit-Run) for the first hit or [`:RunAll()`](#Hit-RunAll) for all hits:
+
+```lua
+local hit = Cast:Ray(pos, dir):Ignore(self.obj):Run()
+```
+
+[View Documentation](https://docs.atomontage.com/api/Raycast)
+]]
+--- @class Raycast : InteractionFilter
+--- @field Ignore fun(op: Raycast, ignore: Object|Object[]?): Raycast
+--- @field Force fun(op: Raycast, force: Object|Object[]?): Raycast
+--- @field ForceStatic fun(op: Raycast): Raycast
+--- @field IgnoreStatic fun(op: Raycast): Raycast
+--- @field ForceTag fun(op: Raycast, tag: string|string[]): Raycast
+--- @field IgnoreTag fun(op: Raycast, tag: string|string[]): Raycast
+Raycast = {}
+
+--- @return Raycast
+function Raycast:WithColor() end
+
+--- @return Raycast
+function Raycast:WithNormal() end
+
+--- @return Raycast
+function Raycast:WithMaterial() end
+
+--- @return Raycast
+function Raycast:Draw() end
+
+--- @return Hit[]
+function Raycast:RunAll() end
+
+--- @return Hit
+function Raycast:Run() end
 
 --[[
 `Client`
@@ -7547,6 +8130,86 @@ function Vectorbox:Set(properties) end
 function Vectorbox:WidgetByName(name) end
 
 --[[
+`Client`
+`Server`
+
+`Vox` is the entry point for all voxel edits. Each method returns an operation *builder* — [`OpAdd`](./opAdd.mdx), [`OpRemove`](./opRemove.mdx), [`OpPaint`](./opPaint.mdx), [`OpCopy`](./opCopy.mdx), [`OpSubtract`](./opSubtract.mdx) — which you configure with a fluent chain and finalize with `:Run()`:
+
+```lua
+Vox:Add(Sphere(pos, 2))   -- operation + shape (see Shape)
+   :Force(ob)             -- limit to one object (by default ops affect everything)
+   :Run()                 -- schedules the edit; it commits a frame or more later
+```
+
+`:Run()` is asynchronous — chain [`:OnFinished(fn)`](./opBase.mdx#nil-OnFinished-function-onFinished) to run code once the edit actually lands. Full walkthrough: [Voxel Edits](/manual/scripting/examples/Voxel-Edits).
+
+[View Documentation](https://docs.atomontage.com/api/Vox)
+]]
+--- @class Vox
+Vox = {}
+
+--[[
+Remove a shape from something
+
+[View Documentation](https://docs.atomontage.com/api/Vox#OpRemove-Remove-opTarget-target)
+]]
+--- @param target opTarget
+--- @return OpRemove
+function Vox:Remove(target) end
+
+--[[
+Add voxels. If Vox:Add is called with just a shape (no Force/ForceTag), every Run() does a
+collision overlap at the current shape to discover what to add onto — this is required since
+objects can move between runs. If a force list is set (via object target, Force, or ForceTag),
+the overlap is skipped and filter.forceList is used directly. Prefer Force() when the target
+is known; it's cheaper and avoids per-Run allocation churn from the overlap query.
+
+[View Documentation](https://docs.atomontage.com/api/Vox#OpAdd-Add-opTarget-target)
+]]
+--- @param target opTarget
+--- @return OpAdd
+function Vox:Add(target) end
+
+--[[
+Change the color of surface voxels
+
+[View Documentation](https://docs.atomontage.com/api/Vox#OpPaint-Paint-opTarget-target)
+]]
+--- @param target opTarget
+--- @return OpPaint
+function Vox:Paint(target) end
+
+--[[
+Copy voxels from somewhere to an object
+
+[View Documentation](https://docs.atomontage.com/api/Vox#OpCopy-Copy-opTarget-target)
+]]
+--- @param target opTarget
+--- @return OpCopy
+function Vox:Copy(target) end
+
+--[[
+Subtract the exact shape of the object passed from something
+
+[View Documentation](https://docs.atomontage.com/api/Vox#OpSubtract-Subtract-ObjectObject-subtractObject)
+]]
+--- @param subtractObject Object|Object[]
+--- @return OpSubtract
+function Vox:Subtract(subtractObject) end
+
+--- @param target opTarget
+--- @return OpInflate
+function Vox:Inflate(target) end
+
+--- @param target opTarget
+--- @return OpDeflate
+function Vox:Deflate(target) end
+
+--- @param target opTarget
+--- @return OpSmoothen
+function Vox:Smoothen(target) end
+
+--[[
 `Server`
 
 :::warning Deprecated
@@ -8526,6 +9189,180 @@ function Window:MoveAsset(fromIndex, toIndex) end
 
 --- @return table
 function Window:GetAssets() end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/util)
+]]
+--- @class util
+util = {}
+
+--[[
+Call function once after time
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-schedule-number-time-fun-func-any)
+]]
+--- @param time number
+--- @param func fun()
+--- @param ... any
+--- @return nil
+function util:schedule(time, func, ...) end
+
+--[[
+Call function every frame until time passed.
+Passes paramter t (0-1) for time passed to function, last call always finishes with 1 
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-scheduleUpdate-number-time-fun-func-any)
+]]
+--- @param time number
+--- @param func fun()
+--- @param ... any
+--- @return nil
+function util:scheduleUpdate(time, func, ...) end
+
+--[[
+Changes in this table are synced from server to clients.
+New clients connecting receive all current values in the networked table
+
+[View Documentation](https://docs.atomontage.com/api/util#table-makeNetworkedTable-ScriptInstance-script-table-tab-boolean-allowPrediction)
+]]
+--- @param script ScriptInstance
+--- @param tab table?
+--- @param allowPrediction boolean?
+--- @return table
+function util:makeNetworkedTable(script, tab, allowPrediction) end
+
+--[[
+returns Vec3 or Vec4 with alpha depending on length of hex value
+
+[View Documentation](https://docs.atomontage.com/api/util#Vec3Vec4-hexToRgb-string-hex)
+]]
+--- @param hex string
+--- @return Vec3|Vec4
+function util:hexToRgb(hex) end
+
+--- @param hex string
+--- @param alpha number?
+--- @return Vec4
+function util:hexToRgba(hex, alpha) end
+
+--- @param rgb Vec3
+--- @param a ?number
+--- @return Vec4
+function util:toRgba(rgb, a) end
+
+--- @param rgba Vec4
+--- @return Vec3
+function util:toRgb(rgba) end
+
+--- @param hue number
+--- @param saturation number
+--- @param value number
+--- @return Vec3
+function util:hsvToRgb(hue, saturation, value) end
+
+--- @param hue number
+--- @param saturation number
+--- @param value number
+--- @param alpha number?
+--- @return Vec4
+function util:hsvToRgba(hue, saturation, value, alpha) end
+
+--- @param color Vec3|Vec4
+--- @return nil
+function util:rgbToHsv(color) end
+
+--[[
+CIELAB color space (also known as L*a*b*) is a perceptually uniform color space
+designed to approximate human vision. It consists of three components:
+L* (lightness), a* (green-red), and b* (blue-yellow).
+This color space is useful for color comparisons and manipulations.
+good for smooth color transitions and fades
+
+[View Documentation](https://docs.atomontage.com/api/util#number-L-number-a-number-b-rgbToLab-Vec3Vec4-color)
+]]
+--- @param color Vec3|Vec4
+--- @return number L, number a, number b
+function util:rgbToLab(color) end
+
+--[[
+https://www.lua.org/pil/13.4.5.html
+
+[View Documentation](https://docs.atomontage.com/api/util#table-readOnly-table-t)
+]]
+--- @param t table
+--- @return table
+function util:readOnly(t) end
+
+--[[
+compare tables and others shallow
+
+[View Documentation](https://docs.atomontage.com/api/util#boolean-shallowEquals-any-t1-any-t2)
+]]
+--- @param t1 any
+--- @param t2 any
+--- @return boolean
+function util:shallowEquals(t1, t2) end
+
+--[[
+this can be called 1000s of times per frame, should be disabled in release somehow
+assert value type
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-assertType-any-value-stringShapeany-number-errorDepth)
+]]
+--- @param value any
+--- @param ... string|"Shape"|any
+--- @param errorDepth number?
+--- @return nil
+function util:assertType(value, ..., errorDepth) end
+
+--[[
+debug func
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-trackChanges-any-tbl)
+]]
+--- @param tbl any
+--- @return nil
+function util:trackChanges(tbl) end
+
+--[[
+One-shot / chained timer. Any call resets the clock; named calls print since the previous call.
+GC is paused for each segment and collected between segments — never accumulates indefinitely.
+After printing, tPart is re-snapped so print overhead is excluded from the next segment.
+Usage:
+  util:prof("start")  -- first call inits clock (tPart was nil), no output
+  util:prof("part1")  -- prints µs + KB since "start"
+  util:prof("part2")  -- prints µs + KB since "part1"
+  util:prof()         -- resets clock silently
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-prof-any-name)
+]]
+--- @param name any
+--- @return nil
+function util:prof(name) end
+
+--[[
+profile and group measurements of each string passed together for this frame
+GC is paused on first call per frame and restarted in profFlush, so alloc deltas are exact.
+g = &#123;[1]=accumulated_time, [2]=call_count, [3]=accumulated_KB&#125; — integer keys use array part, faster than string fields
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-profGr-any-name)
+]]
+--- @param name any
+--- @return nil
+function util:profGr(name) end
+
+--[[
+Spin for a given number of microseconds (busy-wait). Useful for testing the profiler.
+Usage: util:expensive(500) -- burn ~500µs
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-expensive-any-us)
+]]
+--- @param us any
+--- @return nil
+function util:expensive(us) end
 
 --[[
 

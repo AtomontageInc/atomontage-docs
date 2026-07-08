@@ -1,0 +1,20 @@
+---
+title: OpPaint
+id: OpPaint
+---
+`Client`
+`Server`
+
+The voxel **paint** operation, returned by [`Vox:Paint(target)`](./vox.mdx#OpPaint-Paint-opTarget-target). Configure it with the chain (inherited from [`OpBase`](./opBase.mdx)), then call `:Run()`. See [`Vox`](./vox.mdx) for the pattern.
+
+## Methods
+
+### OpPaint Color(Vec3|Vec4|number r, number? g, number? b, number? a) {#OpPaint-Color-Vec3Vec4number-r-number-g-number-b-number-a}
+
+### OpPaint BlendMode(BlendMode blendMode) {#OpPaint-BlendMode-BlendMode-blendMode}
+Various blend modes which you may know from Photoshop. See a list of explanations
+[here](https://photoshoptrainingchannel.com/blending-modes-explained/#normal-blending-modes)
+
+### OpPaint Hardness(number hardness) {#OpPaint-Hardness-number-hardness}
+blend radius ratio, how much the paint will blend out from the edge of the shape, 1 is no blend
+

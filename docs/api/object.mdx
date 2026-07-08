@@ -91,6 +91,22 @@ Volume of all the VoxelData components in the object and all its children
 
 ### nil Destroy() {#nil-Destroy}
 
+### Object? FindObjectInParents(string|Object find) {#Object-FindObjectInParents-stringObject-find}
+
+### ScriptInstance? FindScriptInParents(string name) {#ScriptInstance-FindScriptInParents-string-name}
+
+### nil AddTag(string tag) {#nil-AddTag-string-tag}
+
+### nil RemoveTag(string tag) {#nil-RemoveTag-string-tag}
+
+### boolean HasTag(string tag) {#boolean-HasTag-string-tag}
+
+### string[] GetTags() {#string-GetTags}
+
+### nil FindTag(any tag) {#nil-FindTag-any-tag}
+find first tag matching string
+### string tag, Object FindTagWithParents(string tag) {#string-tag-Object-FindTagWithParents-string-tag}
+find tag in parents in order
 ## Properties
 
 ### Vec3 pos {#Vec3-pos}

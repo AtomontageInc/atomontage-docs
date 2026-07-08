@@ -1,0 +1,18 @@
+---
+title: OpBaseTextured
+id: OpBaseTextured
+---
+`Client`
+`Server`
+
+## Methods
+
+### OpBaseTextured Texture(string? tex, Vec3 dir, number? scale, string|boolean|nil normal) {#OpBaseTextured-Texture-string-tex-Vec3-dir-number-scale-stringbooleannil-normal}
+Project an image onto the voxels (works on Add/Paint/Remove). The image replaces color; set a
+Color to tint it. Projected along `dir` (planar): lands only on the face toward `dir`, fading out on
+angled faces (decal-style). Use TriplanarTexture to cover every face without fading instead.
+
+### OpBaseTextured TriplanarTexture(string? tex, Vec3? anchor, number? scale, string|boolean|nil normal) {#OpBaseTextured-TriplanarTexture-string-tex-Vec3-anchor-number-scale-stringbooleannil-normal}
+Texture voxels from all three world axes, blended by surface normal (works on Add/Paint/Remove).
+The image replaces color; set a Color to tint it.
+

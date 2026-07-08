@@ -740,13 +740,20 @@ function genEmmy:addEnum(file, name, intro, finalRows)
 end
 
 --generate emmy annotation for one class
-function genEmmy:generateEmmyLua(file, name, intro, finalMethods, finalProperties)
-    local className = util:firstToUpper(name)
+function genEmmy:generateEmmyLua(file, name, intro, finalMethods, finalProperties, realName, extends)
+    -- use the real binding name (preserves casing: `util` stays lowercase, `Object`/`Random` unchanged)
+    local className = realName or util:firstToUpper(name)
     local docsPath = ""
     self:writeClassHeader(file, className, intro, docsPath)
-    file:write("--- @class ",className, "\n")
+    -- "Global" is the synthetic bucket for real global functions — emit them bare, not under a class
+    local isGlobal = className == "Global"
+    if not isGlobal then
+        file:write("--- @class ", className, extends and (" : " .. extends) or "", "\n")
+    end
     self:writeOperators(file, className, finalMethods)
-    self:writeProps(file, className, finalProperties)
+    if not isGlobal then
+        self:writeProps(file, className, finalProperties)
+    end
     self:writeMethods(file, className, finalMethods)
 end
 
@@ -983,7 +990,8 @@ function genEmmy:writeMethods(file, className, finalMethods)
 
         local paramNamesStr = table.concat(paramNames, ", ")
         file:write("--- @return ", returnType, "\n")
-        if (isConstructor) then
+        if (isConstructor) or className == "Global" then
+            -- constructor, or a real global function (no receiver)
             file:write("function ", name, "(", paramNamesStr, ") end", "\n\n")
         else
             if name == "new" then

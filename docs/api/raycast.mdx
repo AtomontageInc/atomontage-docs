@@ -1,0 +1,41 @@
+---
+title: Raycast
+id: Raycast
+---
+`Client`
+`Server`
+
+A raycast builder — you don't construct it directly, you get one from [`Cast:Ray(origin, direction)`](./cast.mdx#Raycast-Ray-Vec3-startPos-Vec3-ray). Chain filters (`Ignore`/`Force`) and options (`WithColor`/`WithNormal`/…), then call [`:Run()`](#Hit-Run) for the first hit or [`:RunAll()`](#Hit-RunAll) for all hits:
+
+```lua
+local hit = Cast:Ray(pos, dir):Ignore(self.obj):Run()
+```
+
+## Methods
+
+### Raycast WithColor() {#Raycast-WithColor}
+
+### Raycast WithNormal() {#Raycast-WithNormal}
+
+### Raycast WithMaterial() {#Raycast-WithMaterial}
+
+### Raycast Draw() {#Raycast-Draw}
+
+### Hit[] RunAll() {#Hit-RunAll}
+
+### Hit Run() {#Hit-Run}
+
+## Properties
+
+### fun(op: Raycast, ignore: Object|Object[]?): Raycast Ignore {#fun-op-Raycast-ignore-ObjectObject-Raycast-Ignore}
+
+### fun(op: Raycast, force: Object|Object[]?): Raycast Force {#fun-op-Raycast-force-ObjectObject-Raycast-Force}
+
+### fun(op: Raycast): Raycast ForceStatic {#fun-op-Raycast-Raycast-ForceStatic}
+
+### fun(op: Raycast): Raycast IgnoreStatic {#fun-op-Raycast-Raycast-IgnoreStatic}
+
+### fun(op: Raycast, tag: string|string[]): Raycast ForceTag {#fun-op-Raycast-tag-stringstring-Raycast-ForceTag}
+
+### fun(op: Raycast, tag: string|string[]): Raycast IgnoreTag {#fun-op-Raycast-tag-stringstring-Raycast-IgnoreTag}
+

@@ -1,0 +1,24 @@
+---
+title: OpBase
+id: OpBase
+---
+`Client`
+`Server`
+
+Base class for the [`Vox`](./vox.mdx) operation builders ([`OpAdd`](./opAdd.mdx), [`OpRemove`](./opRemove.mdx), [`OpPaint`](./opPaint.mdx), [`OpCopy`](./opCopy.mdx), …). You don't use it directly — its chain methods (`Force`, `Ignore`, `OnFinished`, `Run`, …) are inherited by all of them. See [`Vox`](./vox.mdx) for the usage pattern.
+
+## Methods
+
+### OpBase Target(opTarget target) {#OpBase-Target-opTarget-target}
+Set the target shape/object(s) for this operation. Updates the cached VoxelEdit shape in-place if already built.
+
+### nil OnFinished(function onFinished) {#nil-OnFinished-function-onFinished}
+Callback function. `OnFinished` is called after `OnProgress` if it was last part
+
+### nil OnProgress(fun onProgress) {#nil-OnProgress-fun-onProgress}
+Callback function. May not be called every frame. Is called after script updates
+
+### nil OnError(function onError) {#nil-OnError-function-onError}
+
+### OpBase Draw() {#OpBase-Draw}
+

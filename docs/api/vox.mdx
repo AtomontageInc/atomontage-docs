@@ -1,0 +1,44 @@
+---
+title: Vox
+id: Vox
+---
+`Client`
+`Server`
+
+`Vox` is the entry point for all voxel edits. Each method returns an operation *builder* — [`OpAdd`](./opAdd.mdx), [`OpRemove`](./opRemove.mdx), [`OpPaint`](./opPaint.mdx), [`OpCopy`](./opCopy.mdx), [`OpSubtract`](./opSubtract.mdx) — which you configure with a fluent chain and finalize with `:Run()`:
+
+```lua
+Vox:Add(Sphere(pos, 2))   -- operation + shape (see Shape)
+   :Force(ob)             -- limit to one object (by default ops affect everything)
+   :Run()                 -- schedules the edit; it commits a frame or more later
+```
+
+`:Run()` is asynchronous — chain [`:OnFinished(fn)`](./opBase.mdx#nil-OnFinished-function-onFinished) to run code once the edit actually lands. Full walkthrough: [Voxel Edits](/manual/scripting/examples/Voxel-Edits).
+
+## Methods
+
+### OpRemove Remove(opTarget target) {#OpRemove-Remove-opTarget-target}
+Remove a shape from something
+
+### OpAdd Add(opTarget target) {#OpAdd-Add-opTarget-target}
+Add voxels. If Vox:Add is called with just a shape (no Force/ForceTag), every Run() does a
+collision overlap at the current shape to discover what to add onto — this is required since
+objects can move between runs. If a force list is set (via object target, Force, or ForceTag),
+the overlap is skipped and filter.forceList is used directly. Prefer Force() when the target
+is known; it's cheaper and avoids per-Run allocation churn from the overlap query.
+
+### OpPaint Paint(opTarget target) {#OpPaint-Paint-opTarget-target}
+Change the color of surface voxels
+
+### OpCopy Copy(opTarget target) {#OpCopy-Copy-opTarget-target}
+Copy voxels from somewhere to an object
+
+### OpSubtract Subtract(Object|Object[] subtractObject) {#OpSubtract-Subtract-ObjectObject-subtractObject}
+Subtract the exact shape of the object passed from something
+
+### OpInflate Inflate(opTarget target) {#OpInflate-Inflate-opTarget-target}
+
+### OpDeflate Deflate(opTarget target) {#OpDeflate-Deflate-opTarget-target}
+
+### OpSmoothen Smoothen(opTarget target) {#OpSmoothen-Smoothen-opTarget-target}
+

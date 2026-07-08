@@ -1,0 +1,19 @@
+---
+title: OpRemove
+id: OpRemove
+---
+`Client`
+`Server`
+
+The voxel **remove** operation, returned by [`Vox:Remove(target)`](./vox.mdx#OpRemove-Remove-opTarget-target). Configure it with the chain (inherited from [`OpBase`](./opBase.mdx)), then call `:Run()`. See [`Vox`](./vox.mdx) for the pattern.
+
+## Methods
+
+### OpRemove OnFinished(fun onFinished) {#OpRemove-OnFinished-fun-onFinished}
+Callback function. `OnFinished` is called after `OnProgress` if it was last part
+
+### OpRemove CountMaterial(materialName|materialName[]|nil countMat) {#OpRemove-CountMaterial-materialNamematerialNamenil-countMat}
+count volume of material removed, result is returned in OnFished
+
+### OpRemove SoftRemovalStrength(number? strength) {#OpRemove-SoftRemovalStrength-number-strength}
+

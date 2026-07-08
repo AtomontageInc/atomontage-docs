@@ -1,0 +1,21 @@
+---
+title: OpCopy
+id: OpCopy
+---
+`Client`
+`Server`
+
+The voxel **copy** operation, returned by [`Vox:Copy(target)`](./vox.mdx#OpCopy-Copy-opTarget-target). Configure it with the chain (inherited from [`OpBase`](./opBase.mdx)), then call `:Run()`. See [`Vox`](./vox.mdx) for the pattern.
+
+## Methods
+
+### OpCopy To(Object|Object[] to) {#OpCopy-To-ObjectObject-to}
+Select the object to copy to.
+source before Run() to relocate. To add: plumb args through Run() into copyAtShape (ve.copyDestination*).
+
+### OpCopy ToStatic() {#OpCopy-ToStatic}
+
+## Properties
+
+### opTarget target {#opTarget-target}
+

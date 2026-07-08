@@ -1,0 +1,21 @@
+---
+title: OpBaseColored
+id: OpBaseColored
+---
+`Client`
+`Server`
+
+## Methods
+
+### OpBaseColored Color(Vec3|number r, number? g, number? b) {#OpBaseColored-Color-Vec3number-r-number-g-number-b}
+
+### nil Material(materialName mat) {#nil-Material-materialName-mat}
+Apply a voxel material. How it interacts with Color/Texture:
+- textured materials (stone/concrete/bedrock/sand/flesh/bone) always show their texture, ignoring Color
+- metals stay reflective; other (untextured) materials take your Color if set, else their own albedo
+- a Texture image overrides Color too, unless you set a Color which then tints it
+
+### OpBaseColored Metallicity(number metallicity) {#OpBaseColored-Metallicity-number-metallicity}
+
+### OpBaseColored Roughness(number roughness) {#OpBaseColored-Roughness-number-roughness}
+

@@ -1,0 +1,26 @@
+---
+title: Cast
+id: Cast
+---
+`Client`
+`Server`
+
+`Cast` creates raycasts. `Cast:Ray(origin, direction)` returns a [`Raycast`](./raycast.mdx) you then run:
+
+```lua
+local hit = Cast:Ray(obj.pos, obj.rot * Vec3.forward * 100)
+              :Ignore(self.obj)   -- optional: skip objects
+              :Run()              -- first hit (or :RunAll() for every hit along the ray)
+if hit then print(hit.pos) end
+```
+
+For hot loops (100+ casts/frame) prefer [`Collision:Raycast`](./collision.mdx) directly.
+
+## Methods
+
+### Raycast Ray(Vec3 startPos, Vec3 ray) {#Raycast-Ray-Vec3-startPos-Vec3-ray}
+Create a raycast. Reuse the returned Raycast object (mutate startPos/ray) to avoid per-call overhead.
+Caching only helps significantly when the filter is stable — calling Ignore()/Force() invalidates
+the internal cache, so re-adding the same ignore list every frame saves only the table alloc.
+For hot loops (100+ casts/frame), prefer native Collision:Raycast() directly (~25% faster).
+

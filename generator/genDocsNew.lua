@@ -26,8 +26,13 @@ local fun, err = load(bindingsSerialized)
 if err then error(err) end
 local _Bindings = fun()
 
+--merge in the Lua-side API (annotated engine system scripts not in the C++ bindings dump)
+local genLuaProto = require("generator.genLuaProto")
+genLuaProto:mergeInto(_Bindings)
+
 
 local fileEmmyLua = genEmmy:createFile(_Bindings)
+genLuaProto:writeAliases(fileEmmyLua)   --emit @alias defs (opTarget, ...) referenced by Lua-proto types
 
 function genDocs:gen()
     --make directory
@@ -76,7 +81,7 @@ function genDocs:gen()
         local class = _Bindings.Classes[nameOrig]
         local name = util:firstToLower(nameOrig)
         fileNamesClasses[name] = nil
-        genDocs:generateClassFile(name, class)
+        genDocs:generateClassFile(name, class, nameOrig)
     end
 
     --itterate sorted by ABC
@@ -110,7 +115,7 @@ function genDocs:gen()
     fileEmmyLua:close()
 end
 
-function genDocs:generateClassFile(name, class)
+function genDocs:generateClassFile(name, class, nameOrig)
     local onClient, onServer = class.onClient, class.onServer
     local filename = docsLocation..name..".mdx"
     if not util:file_exists(filename) then
@@ -142,7 +147,7 @@ function genDocs:generateClassFile(name, class)
 
     --TODO if adding new class auto generated info is not there yet and not included in emmy file
     --use final entries for emmy generator
-    genEmmy:generateEmmyLua(fileEmmyLua, name, intro, finalMethods, finalProperties)
+    genEmmy:generateEmmyLua(fileEmmyLua, name, intro, finalMethods, finalProperties, nameOrig, class.extends)
     
     --write to file
     local file = io.open(filename, "w")
@@ -209,22 +214,28 @@ end
 function genDocs:getFinalFunctionEntries(currentEntriesInfo, newEntriesInfo, className)
     newEntriesInfo = newEntriesInfo or {}
     local newEntriesStr = {}
-    
+    local protoDescriptions = {}
+
     --get values, conert to this table
     local updatedMethods = {}
     for i, info in ipairs(newEntriesInfo) do
         local name = genDocs:genFunctionEntry(info)
         table.insert(newEntriesStr, name)
         updatedMethods[name] = true
+        --Lua-proto entries carry their own description; seed the mdx body from it (C++ entries don't)
+        if info.isLuaProto and info.description and info.description ~= "" then
+            protoDescriptions[name] = info.description
+        end
     end
 
-    local finalEntries = genDocs:getFinalEntries(currentEntriesInfo, newEntriesStr, className, updatedMethods)
+    local finalEntries = genDocs:getFinalEntries(currentEntriesInfo, newEntriesStr, className, updatedMethods, protoDescriptions)
     return finalEntries
 end
 
 function genDocs:getFinalPropEntries(currentEntriesInfo, newEntriesInfo, className)
     newEntriesInfo = newEntriesInfo or {}
     local newEntriesStr = {}
+    local protoDescriptions = {}
 
     --get values, conert to this table
     local updatedProps = {}
@@ -232,9 +243,12 @@ function genDocs:getFinalPropEntries(currentEntriesInfo, newEntriesInfo, classNa
         local name = genDocs:genPropEntry(info)
         table.insert(newEntriesStr, name)
         updatedProps[name] = true
+        if info.isLuaProto and info.description and info.description ~= "" then
+            protoDescriptions[name] = info.description
+        end
     end
 
-    local finalEntries = genDocs:getFinalEntries(currentEntriesInfo, newEntriesStr, className, updatedProps)
+    local finalEntries = genDocs:getFinalEntries(currentEntriesInfo, newEntriesStr, className, updatedProps, protoDescriptions)
     return finalEntries
 end
 
@@ -245,10 +259,21 @@ function genDocs:genFunctionEntry(info)
     local isDeprecated = info.isDeprecated
     local entry = {}
 
+    -- Lua-proto types can be complex (callbacks `fun(a: X): Y`, generics `table<a, b>`). The mdx
+    -- heading round-trip (parsed back by genEmmy) can't carry inner parens/commas/`<>`, so collapse
+    -- them to a simple token for proto entries only (C++ types already round-trip fine).
+    local function simplify(t)
+        if not (info.isLuaProto and t) then return t end
+        if t:find("%(") then return "fun" end            -- callback -> fun (bare fun becomes fun() in emmy)
+        local base = t:match("^([%w_]+)<")
+        if base then return base .. (t:match(">(%??)$") or "") end  -- table<a,b> -> table (keep trailing ?)
+        return t
+    end
+
     --returns
     if next(returns) then
         for index, v in ipairs(returns) do
-            local t = v.type
+            local t = simplify(v.type)
             local name = v.name
             table.insert(entry, t)
             if name then
@@ -270,7 +295,7 @@ function genDocs:genFunctionEntry(info)
     --parms
     if next(params) then
         for index, v in ipairs(params) do
-            local t = v.type
+            local t = simplify(v.type)
             local name = v.name
             table.insert(entry, t)
             table.insert(entry, " ")
@@ -295,7 +320,8 @@ function genDocs:genPropEntry(info)
     return name
 end
 
-function genDocs:getFinalEntries(currentEntries, newEntries, className, updatedMethods)
+function genDocs:getFinalEntries(currentEntries, newEntries, className, updatedMethods, protoDescriptions)
+    protoDescriptions = protoDescriptions or {}
     local currentEntiesKeys = {}
     local finalEntries = {}
 
@@ -341,7 +367,8 @@ function genDocs:getFinalEntries(currentEntries, newEntries, className, updatedM
         local header = newEntries[k]
         --local header = genDocs:generateHeading(v)
         if (updatedMethods[header]) then
-            local entry = { header, "" }
+            local desc = protoDescriptions[header]
+            local entry = desc and { header, desc, "" } or { header, "" }
             table.insert(finalEntries, { entry = entry })
         else
             local info = currentEntiesKeys[header]

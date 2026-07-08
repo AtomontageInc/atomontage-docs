@@ -1,0 +1,44 @@
+---
+title: InteractionFilter
+id: InteractionFilter
+---
+`Client`
+`Server`
+
+## Methods
+
+### self Ignore(Object|Object[]|nil ignore) {#self-Ignore-ObjectObjectnil-ignore}
+ignore objects(s)
+
+### InteractionFilter SetForce(Object|Object[] force) {#InteractionFilter-SetForce-ObjectObject-force}
+Replace the force list entirely with the given object(s). Unlike Force() which appends, this overwrites.
+Perf: on cached ops, changing force/ignore triggers an expensive C++ filter update on next Run().
+If the same list is passed again, the update is skipped. For best perf with cached ops, keep
+separate pre-cached ops per target (e.g. one for static, one per dynamic object) instead of
+calling SetForce with different objects each frame.
+
+### InteractionFilter SetIgnore(Object|Object[] ignore) {#InteractionFilter-SetIgnore-ObjectObject-ignore}
+Replace the ignore list entirely with the given object(s). Unlike Ignore() which appends, this overwrites.
+Perf: see SetForce comment above.
+
+### InteractionFilter Force(Object|Object[]|nil force) {#InteractionFilter-Force-ObjectObjectnil-force}
+
+### InteractionFilter ForceStatic() {#InteractionFilter-ForceStatic}
+
+### InteractionFilter IgnoreStatic() {#InteractionFilter-IgnoreStatic}
+
+### InteractionFilter IgnoreTag(string|string[]|nil ignore) {#InteractionFilter-IgnoreTag-stringstringnil-ignore}
+Perf: tags prevent filter caching and force containsStatic scan each Run()
+
+### InteractionFilter ForceTag(string|string[]|nil force) {#InteractionFilter-ForceTag-stringstringnil-force}
+Perf: tags prevent filter caching and force containsStatic scan each Run()
+
+### Filter prepareFilter(string? builtinIgnoreTag) {#Filter-prepareFilter-string-builtinIgnoreTag}
+Single Run-time entry point: build the Filter on first call, sync it on subsequent calls.
+Tag-resolved object membership is re-checked each call (via applyTagsToFilter's listsEqual gate),
+so the cached Filter stays correct even as scene tags change, without reassigning filter.forceList
+or filter.ignoreList when the resolved set hasn't actually changed.
+Pass a builtin ignore tag (e.g. "No Voxel Paint", "No Voxel Change") to merge it with user-set
+ignoreTags without mutating self.ignoreTags. The merged list is cached and only rebuilt when
+user ignoreTags change (via IgnoreTag()).
+

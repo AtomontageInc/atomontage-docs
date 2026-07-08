@@ -23,3 +23,10 @@ id: Random
 
 ### Vec3 InBox(Vec3|Box dimsOrBox) {#Vec3-InBox-Vec3Box-dimsOrBox}
 
+### table Shuffle(table tbl) {#table-Shuffle-table-tbl}
+Fisher-Yates shuffle. Stays in Lua: table swaps via sol2 are slower than native Lua bytecode.
+
+### number Number(number? min, number? max) {#number-Number-number-min-number-max}
+
+### number RangeWithDistribution(number? min, number? max, number? deviationChance) {#number-RangeWithDistribution-number-min-number-max-number-deviationChance}
+

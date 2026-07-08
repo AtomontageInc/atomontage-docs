@@ -1,0 +1,74 @@
+---
+title: Util
+id: Util
+---
+`Client`
+`Server`
+
+## Methods
+
+### nil schedule(number time, fun func, any ...) {#nil-schedule-number-time-fun-func-any}
+Call function once after time
+
+### nil scheduleUpdate(number time, fun func, any ...) {#nil-scheduleUpdate-number-time-fun-func-any}
+Call function every frame until time passed.
+Passes paramter t (0-1) for time passed to function, last call always finishes with 1 
+
+### table makeNetworkedTable(ScriptInstance script, table? tab, boolean? allowPrediction) {#table-makeNetworkedTable-ScriptInstance-script-table-tab-boolean-allowPrediction}
+Changes in this table are synced from server to clients.
+New clients connecting receive all current values in the networked table
+
+### Vec3|Vec4 hexToRgb(string hex) {#Vec3Vec4-hexToRgb-string-hex}
+returns Vec3 or Vec4 with alpha depending on length of hex value
+
+### Vec4 hexToRgba(string hex, number? alpha) {#Vec4-hexToRgba-string-hex-number-alpha}
+
+### Vec4 toRgba(Vec3 rgb, ?number a) {#Vec4-toRgba-Vec3-rgb-number-a}
+
+### Vec3 toRgb(Vec4 rgba) {#Vec3-toRgb-Vec4-rgba}
+
+### Vec3 hsvToRgb(number hue, number saturation, number value) {#Vec3-hsvToRgb-number-hue-number-saturation-number-value}
+
+### Vec4 hsvToRgba(number hue, number saturation, number value, number? alpha) {#Vec4-hsvToRgba-number-hue-number-saturation-number-value-number-alpha}
+
+### nil rgbToHsv(Vec3|Vec4 color) {#nil-rgbToHsv-Vec3Vec4-color}
+
+### number L, number a, number b rgbToLab(Vec3|Vec4 color) {#number-L-number-a-number-b-rgbToLab-Vec3Vec4-color}
+CIELAB color space (also known as L*a*b*) is a perceptually uniform color space
+designed to approximate human vision. It consists of three components:
+L* (lightness), a* (green-red), and b* (blue-yellow).
+This color space is useful for color comparisons and manipulations.
+good for smooth color transitions and fades
+
+### table readOnly(table t) {#table-readOnly-table-t}
+https://www.lua.org/pil/13.4.5.html
+
+### boolean shallowEquals(any t1, any t2) {#boolean-shallowEquals-any-t1-any-t2}
+compare tables and others shallow
+
+### nil assertType(any value, string|"Shape"|any ..., number? errorDepth) {#nil-assertType-any-value-stringShapeany-number-errorDepth}
+this can be called 1000s of times per frame, should be disabled in release somehow
+assert value type
+
+### nil trackChanges(any tbl) {#nil-trackChanges-any-tbl}
+debug func
+
+### nil prof(any name) {#nil-prof-any-name}
+One-shot / chained timer. Any call resets the clock; named calls print since the previous call.
+GC is paused for each segment and collected between segments — never accumulates indefinitely.
+After printing, tPart is re-snapped so print overhead is excluded from the next segment.
+Usage:
+  util:prof("start")  -- first call inits clock (tPart was nil), no output
+  util:prof("part1")  -- prints µs + KB since "start"
+  util:prof("part2")  -- prints µs + KB since "part1"
+  util:prof()         -- resets clock silently
+
+### nil profGr(any name) {#nil-profGr-any-name}
+profile and group measurements of each string passed together for this frame
+GC is paused on first call per frame and restarted in profFlush, so alloc deltas are exact.
+g = &#123;[1]=accumulated_time, [2]=call_count, [3]=accumulated_KB&#125; — integer keys use array part, faster than string fields
+
+### nil expensive(any us) {#nil-expensive-any-us}
+Spin for a given number of microseconds (busy-wait). Useful for testing the profiler.
+Usage: util:expensive(500) -- burn ~500µs
+
