@@ -738,10 +738,23 @@ function genEmmy:addEnum(file, name, intro, finalRows)
     file:write("}", "\n\n")
 end
 
+-- Base classes for @class inheritance annotations. The bindings dump carries no base-class info
+-- (LuaDocClass has none), so this map mirrors the C++ sol::bases<> registrations. Without ': Widget'
+-- the Lua language server treats e.g. Panel and Widget as unrelated and flags every AddPanel(panel)
+-- call with param-type-mismatch.
+local classBase = {
+    Button = 'Widget', ButtonPanel = 'Widget', Checkbox = 'Widget', Colorbox = 'Widget',
+    Graph = 'Widget', Header = 'Widget', Inputbox = 'Widget', Label = 'Widget', Panel = 'Widget',
+    Selectbox = 'Widget', Separator = 'Widget', Slider = 'Widget', Vectorbox = 'Widget',
+    Window = 'Widget',
+}
+
 --generate emmy annotation for one class
 function genEmmy:generateEmmyLua(file, name, intro, finalMethods, finalProperties, realName, extends)
     -- use the real binding name (preserves casing: `util` stays lowercase, `Object`/`Random` unchanged)
     local className = realName or util:firstToUpper(name)
+    -- inheritance: prefer a parent threaded in (Lua-proto @class Foo:Bar), else the hardcoded map
+    extends = extends or classBase[className]
     local docsPath = ""
     self:writeClassHeader(file, className, intro, docsPath)
     -- "Global" is the synthetic bucket for real global functions — emit them bare, not under a class

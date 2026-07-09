@@ -750,7 +750,7 @@ function Box(pos, rot, size) end
 
 [View Documentation](https://docs.atomontage.com/api/Button)
 ]]
---- @class Button
+--- @class Button : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -774,6 +774,8 @@ function Box(pos, rot, size) end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -855,7 +857,7 @@ function Button:WidgetByName(name) end
 
 [View Documentation](https://docs.atomontage.com/api/ButtonPanel)
 ]]
---- @class ButtonPanel
+--- @class ButtonPanel : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -879,6 +881,8 @@ function Button:WidgetByName(name) end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -1066,7 +1070,7 @@ function Cast:Ray(startPos, ray) end
 
 [View Documentation](https://docs.atomontage.com/api/Checkbox)
 ]]
---- @class Checkbox
+--- @class Checkbox : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -1090,6 +1094,8 @@ function Cast:Ray(startPos, ray) end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -1783,7 +1789,7 @@ function Color:Copy() end
 
 [View Documentation](https://docs.atomontage.com/api/Colorbox)
 ]]
---- @class Colorbox
+--- @class Colorbox : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -1807,6 +1813,8 @@ function Color:Copy() end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -2236,7 +2244,7 @@ function Text(text, posPerc, pivot, pixelOffset, color, size, colorOutline) end
 
 [View Documentation](https://docs.atomontage.com/api/Graph)
 ]]
---- @class Graph
+--- @class Graph : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -2260,6 +2268,8 @@ function Text(text, posPerc, pivot, pixelOffset, color, size, colorOutline) end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -2352,7 +2362,7 @@ function Graph:ClearThresholds() end
 
 [View Documentation](https://docs.atomontage.com/api/Header)
 ]]
---- @class Header
+--- @class Header : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -2376,6 +2386,8 @@ function Graph:ClearThresholds() end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -2716,7 +2728,7 @@ function Input:GetActiveGamepad() end
 
 [View Documentation](https://docs.atomontage.com/api/Inputbox)
 ]]
---- @class Inputbox
+--- @class Inputbox : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -2740,6 +2752,8 @@ function Input:GetActiveGamepad() end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -2902,7 +2916,7 @@ function InteractionFilter:prepareFilter(builtinIgnoreTag) end
 
 [View Documentation](https://docs.atomontage.com/api/Label)
 ]]
---- @class Label
+--- @class Label : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -2926,6 +2940,8 @@ function InteractionFilter:prepareFilter(builtinIgnoreTag) end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -4120,7 +4136,7 @@ Overlap = {}
 
 [View Documentation](https://docs.atomontage.com/api/Panel)
 ]]
---- @class Panel
+--- @class Panel : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -4144,6 +4160,8 @@ Overlap = {}
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -4585,23 +4603,23 @@ function Quat.LookAt(dir, up) end
 --- @class Random
 Random = {}
 
---- @param maxAngle number
+--- @param maxAngle number?
 --- @return Quat
 function Random:Quat(maxAngle) end
 
---- @param diameter number
+--- @param diameter number?
 --- @return Vec3
 function Random:OnSphere(diameter) end
 
---- @param diameter number
+--- @param diameter number?
 --- @return Vec3
 function Random:InSphere(diameter) end
 
---- @param diameter number
+--- @param diameter number?
 --- @return Vec3
 function Random:OnCircle(diameter) end
 
---- @param diameter number
+--- @param diameter number?
 --- @return Vec3
 function Random:InCircle(diameter) end
 
@@ -5463,7 +5481,7 @@ function ScriptInstance:RPC(funcName, ...) end
 
 [View Documentation](https://docs.atomontage.com/api/Selectbox)
 ]]
---- @class Selectbox
+--- @class Selectbox : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -5487,6 +5505,8 @@ function ScriptInstance:RPC(funcName, ...) end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -5563,7 +5583,7 @@ function Selectbox:WidgetByName(name) end
 
 [View Documentation](https://docs.atomontage.com/api/Separator)
 ]]
---- @class Separator
+--- @class Separator : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -5587,6 +5607,8 @@ function Selectbox:WidgetByName(name) end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -6004,7 +6026,7 @@ function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 
 [View Documentation](https://docs.atomontage.com/api/Slider)
 ]]
---- @class Slider
+--- @class Slider : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -6028,6 +6050,8 @@ function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -8023,7 +8047,7 @@ function Vec4i:Dot(other) end
 
 [View Documentation](https://docs.atomontage.com/api/Vectorbox)
 ]]
---- @class Vectorbox
+--- @class Vectorbox : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -8047,6 +8071,8 @@ function Vec4i:Dot(other) end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -8958,6 +8984,8 @@ function VoxelInspectData:GetColors() end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
@@ -9031,7 +9059,7 @@ function Widget:WidgetByName(name) end
 
 [View Documentation](https://docs.atomontage.com/api/Window)
 ]]
---- @class Window
+--- @class Window : Widget
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -9055,6 +9083,8 @@ function Widget:WidgetByName(name) end
 --- @field sizingY string
 --- @field pos Vec2
 --- @field posType string
+--- @field sizePx Vec2 (readonly)
+--- @field posPx Vec2 (readonly)
 --- @field overflow boolean
 --- @field endLine boolean
 --- @field siblingIndex integer
