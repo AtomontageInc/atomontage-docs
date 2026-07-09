@@ -31,7 +31,7 @@ id: UI
 
 ### Separator AddSeparator(Widget parent, string? name) {#Separator-AddSeparator-Widget-parent-string-name}
 
-### Widget AddWidget(string type, Widget parent) {#Widget-AddWidget-string-type-Widget-parent}
+### Widget AddWidget(string type, Widget parent, boolean? putInside, boolean? front, boolean? save) {#Widget-AddWidget-string-type-Widget-parent-boolean-putInside-boolean-front-boolean-save}
 
 ### Widget CloneWidget(Widget widget) {#Widget-CloneWidget-Widget-widget}
 
@@ -55,7 +55,7 @@ id: UI
 
 ### nil MoveWidgetBy(Widget widget, integer delta) {#nil-MoveWidgetBy-Widget-widget-integer-delta}
 
-### Window AddWindow(boolean? isSystemUI) {#Window-AddWindow-boolean-isSystemUI}
+### Window AddWindow(bool|Asset? saveOrLuaAsset) {#Window-AddWindow-boolAsset-saveOrLuaAsset}
 
 ### nil DeleteWindow(Window window) {#nil-DeleteWindow-Window-window}
 
@@ -68,6 +68,8 @@ id: UI
 ### nil OpenWindow(Window|string window, boolean? focus, boolean? animate) {#nil-OpenWindow-Windowstring-window-boolean-focus-boolean-animate}
 
 ### nil CloseWindow(Window window) {#nil-CloseWindow-Window-window}
+
+### nil ToggleWindow(Window window) {#nil-ToggleWindow-Window-window}
 
 ### nil CloseAllWindows(Window? except) {#nil-CloseAllWindows-Window-except}
 
@@ -83,9 +85,15 @@ id: UI
 
 ### table GetCfgAll() {#table-GetCfgAll}
 
-### nil SetUIScale(number scale) {#nil-SetUIScale-number-scale}
+### nil SetUserScale(number scale) {#nil-SetUserScale-number-scale}
+
+### number GetUserScale() {#number-GetUserScale}
 
 ### number GetUIScale() {#number-GetUIScale}
+
+### table GetUIStats() {#table-GetUIStats}
+
+### table GetUIGlyphs() {#table-GetUIGlyphs}
 
 ### nil SaveUI(string path) {#nil-SaveUI-string-path}
 
@@ -98,4 +106,72 @@ id: UI
 ### nil OpenWindowLuaFile(Window window) {#nil-OpenWindowLuaFile-Window-window}
 
 ### nil DebugWidgetInfo(Widget widget) {#nil-DebugWidgetInfo-Widget-widget}
+
+### table DebugFrameInfo() {#table-DebugFrameInfo}
+
+### boolean GetDebugFrame() {#boolean-GetDebugFrame}
+
+### nil SetDebugFrame(boolean enable) {#nil-SetDebugFrame-boolean-enable}
+
+### nil OpenLuaFileAtWidgetFunction(Widget widget, string func, string eventType) {#nil-OpenLuaFileAtWidgetFunction-Widget-widget-string-func-string-eventType}
+
+### nil AutoCreateLuaFileForWindow(Window window) {#nil-AutoCreateLuaFileForWindow-Window-window}
+
+### nil OnColorPick(Color color) {#nil-OnColorPick-Color-color}
+
+### bool|any IsNoValue(any value) {#boolany-IsNoValue-any-value}
+
+## Properties
+
+### table&lt;string,boolean&gt; Key {#tablestringboolean-Key}
+
+### table&lt;string,boolean&gt; KeyDown {#tablestringboolean-KeyDown}
+
+### table&lt;string,boolean&gt; KeyUp {#tablestringboolean-KeyUp}
+
+### boolean showUI {#boolean-showUI}
+
+### boolean alwaysRedraw {#boolean-alwaysRedraw}
+
+### boolean useFrameBuffers {#boolean-useFrameBuffers}
+
+### any NoValue {#any-NoValue}
+
+### table WidgetTypes {#table-WidgetTypes}
+
+### table PropertyNames {#table-PropertyNames}
+
+### table&lt;string,int&gt; PropertyMode {#tablestringint-PropertyMode}
+
+### table&lt;string,int&gt; WidgetEvent {#tablestringint-WidgetEvent}
+
+### table&lt;int,string&gt; WidgetEventName {#tableintstring-WidgetEventName}
+
+### table&lt;string,int&gt; PosType {#tablestringint-PosType}
+
+### table PosTypeList {#table-PosTypeList}
+
+### table&lt;string,int&gt; SizeType {#tablestringint-SizeType}
+
+### table&lt;string,int&gt; TextAlign {#tablestringint-TextAlign}
+
+### table&lt;string,int&gt; InputType {#tablestringint-InputType}
+
+### table InputTypeList {#table-InputTypeList}
+
+### table&lt;string,int&gt; ButtonType {#tablestringint-ButtonType}
+
+### table&lt;int,string&gt; ButtonTypeName {#tableintstring-ButtonTypeName}
+
+### table ButtonTypeList {#table-ButtonTypeList}
+
+### table&lt;string,int&gt; SliderType {#tablestringint-SliderType}
+
+### table SliderTypeList {#table-SliderTypeList}
+
+### table&lt;string,int&gt; LabelType {#tablestringint-LabelType}
+
+### table LabelTypeList {#table-LabelTypeList}
+
+### table TextureScaleModeList {#table-TextureScaleModeList}
 

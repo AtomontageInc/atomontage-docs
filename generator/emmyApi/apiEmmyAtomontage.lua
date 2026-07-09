@@ -776,7 +776,7 @@ function Box(pos, rot, size) end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -814,28 +814,28 @@ function Box(pos, rot, size) end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 --- @field text string
 --- @field multiLine boolean
---- @field buttonType UIButtonType
+--- @field buttonType string
 --- @field value boolean
 --- @field icon string
 --- @field icon2 string
@@ -844,7 +844,7 @@ function Box(pos, rot, size) end
 Button = {}
 
 --- @param properties table
---- @return Widget
+--- @return Button
 function Button:Set(properties) end
 
 --- @param name string
@@ -883,7 +883,7 @@ function Button:WidgetByName(name) end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -921,31 +921,31 @@ function Button:WidgetByName(name) end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
---- @field buttonType UIButtonType
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
+--- @field buttonType string
 --- @field value boolean
 ButtonPanel = {}
 
 --- @param properties table
---- @return Widget
+--- @return ButtonPanel
 function ButtonPanel:Set(properties) end
 
 --- @param name string
@@ -1096,7 +1096,7 @@ function Cast:Ray(startPos, ray) end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -1134,25 +1134,25 @@ function Cast:Ray(startPos, ray) end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 --- @field text string
 --- @field value boolean
 --- @field checkboxType string
@@ -1160,7 +1160,7 @@ function Cast:Ray(startPos, ray) end
 Checkbox = {}
 
 --- @param properties table
---- @return Widget
+--- @return Checkbox
 function Checkbox:Set(properties) end
 
 --- @param name string
@@ -1345,8 +1345,9 @@ function Client:GetVREnabled() end
 --- @return nil
 function Client:SetVREnabled(enable, vrDevice) end
 
+--- @param vrDevice string
 --- @return nil
-function Client:ToggleVREnabled() end
+function Client:ToggleVREnabled(vrDevice) end
 
 --- @param side integer
 --- @param space Space
@@ -1815,7 +1816,7 @@ function Color:Copy() end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -1853,30 +1854,30 @@ function Color:Copy() end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 --- @field value Color
 Colorbox = {}
 
 --- @param properties table
---- @return Widget
+--- @return Colorbox
 function Colorbox:Set(properties) end
 
 --- @param name string
@@ -2030,6 +2031,24 @@ function Config:Get(key, default) end
 --- @param value any
 --- @return nil
 function Config:Set(key, value) end
+
+--- @param key string
+--- @param default any?
+--- @return any
+function Config:TempGet(key, default) end
+
+--- @param key string
+--- @param value any
+--- @return nil
+function Config:TempSet(key, value) end
+
+--- @param key string
+--- @return nil
+function Config:TempDel(key) end
+
+--- @param key string
+--- @return boolean
+function Config:TempExists(key) end
 
 --- @param key string
 --- @return nil
@@ -2270,7 +2289,7 @@ function Text(text, posPerc, pivot, pixelOffset, color, size, colorOutline) end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -2308,32 +2327,32 @@ function Text(text, posPerc, pivot, pixelOffset, color, size, colorOutline) end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 --- @field maxValue number
 --- @field maxBars integer
 --- @field barFill number
 Graph = {}
 
 --- @param properties table
---- @return Widget
+--- @return Graph
 function Graph:Set(properties) end
 
 --- @param name string
@@ -2388,7 +2407,7 @@ function Graph:ClearThresholds() end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -2426,31 +2445,31 @@ function Graph:ClearThresholds() end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 --- @field text string
 --- @field collapsed boolean
 Header = {}
 
 --- @param properties table
---- @return Widget
+--- @return Header
 function Header:Set(properties) end
 
 --- @param name string
@@ -2754,7 +2773,7 @@ function Input:GetActiveGamepad() end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -2792,34 +2811,34 @@ function Input:GetActiveGamepad() end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
---- @field value string
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
+--- @field value string|int|float
 --- @field range Range
---- @field inputType UIInputType
+--- @field inputType string
 --- @field multiLine boolean
 --- @field decimals integer
 Inputbox = {}
 
 --- @param properties table
---- @return Widget
+--- @return Inputbox
 function Inputbox:Set(properties) end
 
 --- @param name string
@@ -2942,7 +2961,7 @@ function InteractionFilter:prepareFilter(builtinIgnoreTag) end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -2980,32 +2999,32 @@ function InteractionFilter:prepareFilter(builtinIgnoreTag) end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 --- @field text string
---- @field labelType UILabelType
+--- @field labelType string
 --- @field multiLine boolean
 Label = {}
 
 --- @param properties table
---- @return Widget
+--- @return Label
 function Label:Set(properties) end
 
 --- @param name string
@@ -4162,7 +4181,7 @@ Overlap = {}
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -4200,25 +4219,25 @@ Overlap = {}
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 --- @field scroll boolean
 --- @field scrollX boolean
 --- @field scrollY boolean
@@ -4233,7 +4252,7 @@ Overlap = {}
 Panel = {}
 
 --- @param properties table
---- @return Widget
+--- @return Panel
 function Panel:Set(properties) end
 
 --- @param name string
@@ -5507,7 +5526,7 @@ function ScriptInstance:RPC(funcName, ...) end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -5545,32 +5564,32 @@ function ScriptInstance:RPC(funcName, ...) end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 --- @field value integer
 --- @field valueStr string
 --- @field values table
 Selectbox = {}
 
 --- @param properties table
---- @return Widget
+--- @return Selectbox
 function Selectbox:Set(properties) end
 
 --- @param name string
@@ -5609,7 +5628,7 @@ function Selectbox:WidgetByName(name) end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -5647,29 +5666,29 @@ function Selectbox:WidgetByName(name) end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 Separator = {}
 
 --- @param properties table
---- @return Widget
+--- @return Separator
 function Separator:Set(properties) end
 
 --- @param name string
@@ -6052,7 +6071,7 @@ function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -6090,26 +6109,26 @@ function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
---- @field value number
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
+--- @field value float|int|Vec2
 --- @field scalars integer
 --- @field sliderType UISliderType
 --- @field range Vec2
@@ -6117,7 +6136,7 @@ function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 Slider = {}
 
 --- @param properties table
---- @return Widget
+--- @return Slider
 function Slider:Set(properties) end
 
 --- @param name string
@@ -6215,6 +6234,32 @@ Time = {}
 [View Documentation](https://docs.atomontage.com/api/UI)
 ]]
 --- @class UI
+--- @field Key table<string,boolean>
+--- @field KeyDown table<string,boolean>
+--- @field KeyUp table<string,boolean>
+--- @field showUI boolean
+--- @field alwaysRedraw boolean
+--- @field useFrameBuffers boolean
+--- @field NoValue any (readonly)
+--- @field WidgetTypes table (readonly)
+--- @field PropertyNames table (readonly)
+--- @field PropertyMode table<string,int> (readonly)
+--- @field WidgetEvent table<string,int> (readonly)
+--- @field WidgetEventName table<int,string> (readonly)
+--- @field PosType table<string,int> (readonly)
+--- @field PosTypeList table (readonly)
+--- @field SizeType table<string,int> (readonly)
+--- @field TextAlign table<string,int> (readonly)
+--- @field InputType table<string,int> (readonly)
+--- @field InputTypeList table (readonly)
+--- @field ButtonType table<string,int> (readonly)
+--- @field ButtonTypeName table<int,string> (readonly)
+--- @field ButtonTypeList table (readonly)
+--- @field SliderType table<string,int> (readonly)
+--- @field SliderTypeList table (readonly)
+--- @field LabelType table<string,int> (readonly)
+--- @field LabelTypeList table (readonly)
+--- @field TextureScaleModeList table (readonly)
 UI = {}
 
 --- @param parent Widget
@@ -6279,8 +6324,11 @@ function UI:AddSeparator(parent, name) end
 
 --- @param type string
 --- @param parent Widget
+--- @param putInside boolean?
+--- @param front boolean?
+--- @param save boolean?
 --- @return Widget
-function UI:AddWidget(type, parent) end
+function UI:AddWidget(type, parent, putInside, front, save) end
 
 --- @param widget Widget
 --- @return Widget
@@ -6327,9 +6375,9 @@ function UI:MoveWidgetInto(widget, target) end
 --- @return nil
 function UI:MoveWidgetBy(widget, delta) end
 
---- @param isSystemUI boolean?
+--- @param saveOrLuaAsset bool|Asset?
 --- @return Window
-function UI:AddWindow(isSystemUI) end
+function UI:AddWindow(saveOrLuaAsset) end
 
 --- @param window Window
 --- @return nil
@@ -6357,6 +6405,10 @@ function UI:OpenWindow(window, focus, animate) end
 --- @param window Window
 --- @return nil
 function UI:CloseWindow(window) end
+
+--- @param window Window
+--- @return nil
+function UI:ToggleWindow(window) end
 
 --- @param except Window?
 --- @return nil
@@ -6389,10 +6441,19 @@ function UI:GetCfgAll() end
 
 --- @param scale number
 --- @return nil
-function UI:SetUIScale(scale) end
+function UI:SetUserScale(scale) end
+
+--- @return number
+function UI:GetUserScale() end
 
 --- @return number
 function UI:GetUIScale() end
+
+--- @return table
+function UI:GetUIStats() end
+
+--- @return table
+function UI:GetUIGlyphs() end
 
 --- @param path string
 --- @return nil
@@ -6416,6 +6477,34 @@ function UI:OpenWindowLuaFile(window) end
 --- @param widget Widget
 --- @return nil
 function UI:DebugWidgetInfo(widget) end
+
+--- @return table
+function UI:DebugFrameInfo() end
+
+--- @return boolean
+function UI:GetDebugFrame() end
+
+--- @param enable boolean
+--- @return nil
+function UI:SetDebugFrame(enable) end
+
+--- @param widget Widget
+--- @param func string
+--- @param eventType string
+--- @return nil
+function UI:OpenLuaFileAtWidgetFunction(widget, func, eventType) end
+
+--- @param window Window
+--- @return nil
+function UI:AutoCreateLuaFileForWindow(window) end
+
+--- @param color Color
+--- @return nil
+function UI:OnColorPick(color) end
+
+--- @param value any
+--- @return bool|any
+function UI:IsNoValue(value) end
 
 --[[
 `Client`
@@ -8073,7 +8162,7 @@ function Vec4i:Dot(other) end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -8111,25 +8200,25 @@ function Vec4i:Dot(other) end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 --- @field scalars integer
 --- @field integer boolean
 --- @field value Vec2|Vec3|Vec4|Vec2i|Vec3i|Vec4i
@@ -8139,7 +8228,7 @@ function Vec4i:Dot(other) end
 Vectorbox = {}
 
 --- @param properties table
---- @return Widget
+--- @return Vectorbox
 function Vectorbox:Set(properties) end
 
 --- @param name string
@@ -8986,7 +9075,7 @@ function VoxelInspectData:GetColors() end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -9024,25 +9113,25 @@ function VoxelInspectData:GetColors() end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 Widget = {}
 
 --- @param properties table
@@ -9085,7 +9174,7 @@ function Widget:WidgetByName(name) end
 --- @field posType string
 --- @field sizePx Vec2 (readonly)
 --- @field posPx Vec2 (readonly)
---- @field overflow boolean
+--- @field overflow string
 --- @field endLine boolean
 --- @field siblingIndex integer
 --- @field padding Vec2
@@ -9123,25 +9212,25 @@ function Widget:WidgetByName(name) end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget, ...)
---- @field onDragOverEx fun(widget:Widget, ...)
---- @field onDragLeaveEx fun(widget:Widget, ...)
---- @field onDragEndEx fun(widget:Widget, ...)
---- @field onPress fun()
---- @field onPressStart fun()
---- @field onPressCancel fun()
---- @field onMouseMove fun()
---- @field onHover fun()
---- @field onHoverEnd fun()
---- @field onFocus fun()
---- @field onFocusEnd fun()
---- @field onKeyDown fun()
---- @field onKeyUp fun()
---- @field onValueChange fun()
---- @field onDragStart fun()
---- @field onDragOver fun()
---- @field onDragLeave fun()
---- @field onDragEnd fun()
+--- @field onDragStartEx fun(widget:Widget):any
+--- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragLeaveEx fun(widget:Widget)
+--- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onPress string
+--- @field onPressStart string
+--- @field onPressCancel string
+--- @field onMouseMove string
+--- @field onHover string
+--- @field onHoverEnd string
+--- @field onFocus string
+--- @field onFocusEnd string
+--- @field onKeyDown string
+--- @field onKeyUp string
+--- @field onValueChange string
+--- @field onDragStart string
+--- @field onDragOver string
+--- @field onDragLeave string
+--- @field onDragEnd string
 --- @field luaFile Asset
 --- @field header boolean
 --- @field text string
@@ -9156,11 +9245,11 @@ function Widget:WidgetByName(name) end
 --- @field noHide boolean
 --- @field borders string
 --- @field enableShadow boolean
---- @field obj table
+--- @field obj table (readonly)
 Window = {}
 
 --- @param properties table
---- @return Widget
+--- @return Window
 function Window:Set(properties) end
 
 --- @param name string
