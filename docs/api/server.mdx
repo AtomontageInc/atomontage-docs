@@ -70,6 +70,10 @@ Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaRe
 
 ### nil MakeUrlForFile(File fileLua, fun(progress:number) eventUpdate, fun(success:boolean, url:string) eventFinish) {#nil-MakeUrlForFile-File-fileLua-fun-progressnumber-eventUpdate-fun-successboolean-urlstring-eventFinish}
 
+### string CaptureObjectThumbnail(Object target, table? opts) {#string-CaptureObjectThumbnail-Object-target-table-opts}
+
+### string MakeThumbnailForAsset(Asset asset, table? opts) {#string-MakeThumbnailForAsset-Asset-asset-table-opts}
+
 ### table GetStreamingStats() {#table-GetStreamingStats}
 
 ### table GetVolumeDbInfo() {#table-GetVolumeDbInfo}
@@ -77,10 +81,6 @@ Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaRe
 ### table GetVolumeDbStats() {#table-GetVolumeDbStats}
 
 ### table GetMainDispatcherStats() {#table-GetMainDispatcherStats}
-
-### nil AnalyticsServer(string name, table props) {#nil-AnalyticsServer-string-name-table-props}
-
-### nil AnalyticsClient(integer clientID, string name, table props) {#nil-AnalyticsClient-integer-clientID-string-name-table-props}
 
 ### integer GetCollectionPreferredLoad(number collectionId) {#integer-GetCollectionPreferredLoad-number-collectionId}
 

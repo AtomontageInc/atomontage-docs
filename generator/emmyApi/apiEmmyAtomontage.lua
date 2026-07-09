@@ -290,9 +290,8 @@
 --- Polymorphic runtime alias. Resolves to whichever runtime is active in the current Lua state:
 --- - Server-side global script: `Server`
 --- - Client app: `Client`
---- - Server-side per-client script: `ClientContext`
 --- Calls to methods that exist on only one of those will fail at runtime when called from a different side.
---- @class RUI : Server, Client, ClientContext
+--- @class RUI : Server, Client
 RUI = nil
 
 --- Internal table populated by the engine's binding system. Maps class/enum names to metadata used by the EmmyLua doc generator.
@@ -455,6 +454,10 @@ function AE:GetBuiltinMaterial(name) end
 --- @param image Asset
 --- @return Asset
 function AE:GetTextureForImage(image) end
+
+--- @param asset Asset
+--- @return Asset
+function AE:GetThumbnailForAsset(asset) end
 
 --- @param typeName string
 --- @return integer
@@ -797,22 +800,22 @@ function Box(pos, rot, size) end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -829,7 +832,6 @@ function Box(pos, rot, size) end
 --- @field onDragLeave fun()
 --- @field onDragEnd fun()
 --- @field text string
---- @field textAlign Vec2
 --- @field multiLine boolean
 --- @field buttonType UIButtonType
 --- @field value boolean
@@ -903,22 +905,22 @@ function Button:WidgetByName(name) end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -1114,22 +1116,22 @@ function Cast:Ray(startPos, ray) end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -1316,6 +1318,11 @@ function Client:GetWindowSize() end
 
 --- @return Vec2
 function Client:GetViewportSize() end
+
+--- @param target Object
+--- @param opts table?
+--- @return string
+function Client:CaptureObjectThumbnail(target, opts) end
 
 --- @return Color
 function Client:GetBGColor() end
@@ -1826,22 +1833,22 @@ function Color:Copy() end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -2279,22 +2286,22 @@ function Text(text, posPerc, pivot, pixelOffset, color, size, colorOutline) end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -2313,7 +2320,6 @@ function Text(text, posPerc, pivot, pixelOffset, color, size, colorOutline) end
 --- @field maxValue number
 --- @field maxBars integer
 --- @field barFill number
---- @field bgColor Color
 Graph = {}
 
 --- @param properties table
@@ -2396,22 +2402,22 @@ function Graph:ClearThresholds() end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -2760,22 +2766,22 @@ function Input:GetActiveGamepad() end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -2795,7 +2801,6 @@ function Input:GetActiveGamepad() end
 --- @field range Range
 --- @field inputType UIInputType
 --- @field multiLine boolean
---- @field textAlign Vec2
 --- @field decimals integer
 Inputbox = {}
 
@@ -2947,22 +2952,22 @@ function InteractionFilter:prepareFilter(builtinIgnoreTag) end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -2981,7 +2986,6 @@ function InteractionFilter:prepareFilter(builtinIgnoreTag) end
 --- @field text string
 --- @field labelType UILabelType
 --- @field multiLine boolean
---- @field textAlign Vec2
 Label = {}
 
 --- @param properties table
@@ -4166,22 +4170,22 @@ Overlap = {}
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -4335,18 +4339,6 @@ function Polyhedron:SetSide(index, side) end
 --- @param nz number
 --- @return nil
 function Polyhedron:AddPlane(px, py, pz, nx, ny, nz) end
-
---- @param width number
---- @param height number
---- @param border number
---- @param bevel number
---- @param fromPos Vec3
---- @param toPos Vec3
---- @param fromUp Vec3
---- @param toUp Vec3
---- @param addDirBevels boolean
---- @return nil
-function Polyhedron:BuildWheelTrack(width, height, border, bevel, fromPos, toPos, fromUp, toUp, addDirBevels) end
 
 --- @return boolean valid, string error
 function Polyhedron:IsValid() end
@@ -5521,22 +5513,22 @@ function ScriptInstance:RPC(funcName, ...) end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -5621,22 +5613,22 @@ function Selectbox:WidgetByName(name) end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -5820,6 +5812,16 @@ function Server:MoveFileToMontageVoxelsFolder(fileLua, subPath) end
 --- @return nil
 function Server:MakeUrlForFile(fileLua, eventUpdate, eventFinish) end
 
+--- @param target Object
+--- @param opts table?
+--- @return string
+function Server:CaptureObjectThumbnail(target, opts) end
+
+--- @param asset Asset
+--- @param opts table?
+--- @return string
+function Server:MakeThumbnailForAsset(asset, opts) end
+
 --- @return table
 function Server:GetStreamingStats() end
 
@@ -5831,17 +5833,6 @@ function Server:GetVolumeDbStats() end
 
 --- @return table
 function Server:GetMainDispatcherStats() end
-
---- @param name string
---- @param props table
---- @return nil
-function Server:AnalyticsServer(name, props) end
-
---- @param clientID integer
---- @param name string
---- @param props table
---- @return nil
-function Server:AnalyticsClient(clientID, name, props) end
 
 --- @param collectionId number
 --- @return integer
@@ -6063,22 +6054,22 @@ function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -8082,22 +8073,22 @@ function Vec4i:Dot(other) end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -8993,22 +8984,22 @@ function VoxelInspectData:GetColors() end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()
@@ -9090,22 +9081,22 @@ function Widget:WidgetByName(name) end
 --- @field textAlign Vec2
 --- @field intVar integer
 --- @field showNoValue boolean
---- @field onHoverEx fun()
---- @field onHoverEndEx fun()
---- @field onFocusEx fun()
---- @field onFocusEndEx fun()
---- @field onPressStartEx fun()
---- @field onPressCancelEx fun()
---- @field onPressEx fun()
---- @field onRightPressEx fun()
---- @field onMouseMoveEx fun()
---- @field onKeyDownEx fun()
---- @field onKeyUpEx fun()
---- @field onValueChangeEx fun()
---- @field onDragStartEx fun()
---- @field onDragOverEx fun()
---- @field onDragLeaveEx fun()
---- @field onDragEndEx fun()
+--- @field onHoverEx fun(widget:Widget, ...)
+--- @field onHoverEndEx fun(widget:Widget, ...)
+--- @field onFocusEx fun(widget:Widget, ...)
+--- @field onFocusEndEx fun(widget:Widget, ...)
+--- @field onPressStartEx fun(widget:Widget, ...)
+--- @field onPressCancelEx fun(widget:Widget, ...)
+--- @field onPressEx fun(widget:Widget, ...)
+--- @field onRightPressEx fun(widget:Widget, ...)
+--- @field onMouseMoveEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, ...)
+--- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onDragStartEx fun(widget:Widget, ...)
+--- @field onDragOverEx fun(widget:Widget, ...)
+--- @field onDragLeaveEx fun(widget:Widget, ...)
+--- @field onDragEndEx fun(widget:Widget, ...)
 --- @field onPress fun()
 --- @field onPressStart fun()
 --- @field onPressCancel fun()

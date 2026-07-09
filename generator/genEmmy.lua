@@ -591,9 +591,8 @@ local emmyDefaultLines = [[
 --- Polymorphic runtime alias. Resolves to whichever runtime is active in the current Lua state:
 --- - Server-side global script: `Server`
 --- - Client app: `Client`
---- - Server-side per-client script: `ClientContext`
 --- Calls to methods that exist on only one of those will fail at runtime when called from a different side.
---- @class RUI : Server, Client, ClientContext
+--- @class RUI : Server, Client
 RUI = nil
 
 --- Internal table populated by the engine's binding system. Maps class/enum names to metadata used by the EmmyLua doc generator.
