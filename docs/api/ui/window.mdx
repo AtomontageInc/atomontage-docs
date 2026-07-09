@@ -1,15 +1,38 @@
 ---
-title: Separator
-id: Separator
+title: Window
+id: Window
+slug: /api/Window
 ---
 `Client`
 `Server`
 
 ## Methods
 
-### Separator Set(table properties) {#Separator-Set-table-properties}
+### Window Set(table properties) {#Window-Set-table-properties}
 
 ### Widget WidgetByName(string name) {#Widget-WidgetByName-string-name}
+
+### nil Close() {#nil-Close}
+
+### boolean IsPopup() {#boolean-IsPopup}
+
+### Asset GetAsset(string name) {#Asset-GetAsset-string-name}
+
+### Asset GetAssetByIndex(integer index) {#Asset-GetAssetByIndex-integer-index}
+
+### integer GetAssetCount() {#integer-GetAssetCount}
+
+### nil AddAsset(string name, Asset asset) {#nil-AddAsset-string-name-Asset-asset}
+
+### nil SetAssetByIndex(integer index, Asset asset) {#nil-SetAssetByIndex-integer-index-Asset-asset}
+
+### nil SetAssetNameByIndex(integer index, string name) {#nil-SetAssetNameByIndex-integer-index-string-name}
+
+### nil RemoveAssetByIndex(integer index) {#nil-RemoveAssetByIndex-integer-index}
+
+### nil MoveAsset(integer fromIndex, integer toIndex) {#nil-MoveAsset-integer-fromIndex-integer-toIndex}
+
+### table GetAssets() {#table-GetAssets}
 
 ## Properties
 
@@ -176,4 +199,34 @@ id: Separator
 ### string onDragLeave {#string-onDragLeave}
 
 ### string onDragEnd {#string-onDragEnd}
+
+### Asset luaFile {#Asset-luaFile}
+
+### boolean header {#boolean-header}
+
+### string text {#string-text}
+
+### string icon {#string-icon}
+
+### boolean scroll {#boolean-scroll}
+
+### boolean scrollX {#boolean-scrollX}
+
+### boolean scrollY {#boolean-scrollY}
+
+### boolean stayOnBottom {#boolean-stayOnBottom}
+
+### boolean stayOnTop {#boolean-stayOnTop}
+
+### boolean resizable {#boolean-resizable}
+
+### boolean noInput {#boolean-noInput}
+
+### boolean noHide {#boolean-noHide}
+
+### string borders {#string-borders}
+
+### boolean enableShadow {#boolean-enableShadow}
+
+### table obj {#table-obj}
 

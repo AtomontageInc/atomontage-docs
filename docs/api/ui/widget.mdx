@@ -1,13 +1,14 @@
 ---
-title: Vectorbox
-id: Vectorbox
+title: Widget
+id: Widget
+slug: /api/Widget
 ---
 `Client`
 `Server`
 
 ## Methods
 
-### Vectorbox Set(table properties) {#Vectorbox-Set-table-properties}
+### Widget Set(table properties) {#Widget-Set-table-properties}
 
 ### Widget WidgetByName(string name) {#Widget-WidgetByName-string-name}
 
@@ -86,12 +87,16 @@ id: Vectorbox
 ### string marginMode {#string-marginMode}
 
 ### Vec2 gap {#Vec2-gap}
+Spacing between sibling widgets (x) and between wrapped flow lines (y).
 
 ### string alignItems {#string-alignItems}
+Cross-axis alignment of child widgets: `start`/`center`/`end`/`stretch`.
 
 ### string alignSelf {#string-alignSelf}
+Overrides the parent's `alignItems` for this widget (`auto` inherits).
 
 ### string justifyContent {#string-justifyContent}
+Main-axis distribution of children: `start`/`center`/`end`/`space-between`/`space-around`.
 
 ### Vec2 mp {#Vec2-mp}
 
@@ -176,16 +181,4 @@ id: Vectorbox
 ### string onDragLeave {#string-onDragLeave}
 
 ### string onDragEnd {#string-onDragEnd}
-
-### integer scalars {#integer-scalars}
-
-### boolean integer {#boolean-integer}
-
-### Vec2|Vec3|Vec4|Vec2i|Vec3i|Vec4i value {#Vec2Vec3Vec4Vec2iVec3iVec4i-value}
-
-### Vec2 inputsPadding {#Vec2-inputsPadding}
-
-### UIPropertyMode inputsPaddingMode {#UIPropertyMode-inputsPaddingMode}
-
-### integer decimals {#integer-decimals}
 

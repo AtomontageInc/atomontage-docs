@@ -747,6 +747,7 @@ function Box(pos, rot, size) end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Button)
 ]]
@@ -854,6 +855,7 @@ function Button:WidgetByName(name) end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/ButtonPanel)
 ]]
@@ -1067,6 +1069,7 @@ function Cast:Ray(startPos, ray) end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Checkbox)
 ]]
@@ -1787,6 +1790,7 @@ function Color:Copy() end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Colorbox)
 ]]
@@ -2260,6 +2264,7 @@ function Text(text, posPerc, pivot, pixelOffset, color, size, colorOutline) end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Graph)
 ]]
@@ -2378,6 +2383,7 @@ function Graph:ClearThresholds() end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Header)
 ]]
@@ -2744,6 +2750,7 @@ function Input:GetActiveGamepad() end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Inputbox)
 ]]
@@ -2932,6 +2939,7 @@ function InteractionFilter:prepareFilter(builtinIgnoreTag) end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Label)
 ]]
@@ -4152,6 +4160,7 @@ Overlap = {}
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Panel)
 ]]
@@ -5497,6 +5506,7 @@ function ScriptInstance:RPC(funcName, ...) end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Selectbox)
 ]]
@@ -5599,6 +5609,7 @@ function Selectbox:WidgetByName(name) end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Separator)
 ]]
@@ -6042,6 +6053,7 @@ function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Slider)
 ]]
@@ -6230,6 +6242,7 @@ Time = {}
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/UI)
 ]]
@@ -8133,6 +8146,7 @@ function Vec4i:Dot(other) end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Vectorbox)
 ]]
@@ -9046,6 +9060,7 @@ function VoxelInspectData:GetColors() end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Widget)
 ]]
@@ -9145,6 +9160,7 @@ function Widget:WidgetByName(name) end
 --[[
 `Client`
 `Server`
+---
 
 [View Documentation](https://docs.atomontage.com/api/Window)
 ]]

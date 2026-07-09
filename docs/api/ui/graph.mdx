@@ -1,15 +1,24 @@
 ---
-title: Checkbox
-id: Checkbox
+title: Graph
+id: Graph
+slug: /api/Graph
 ---
 `Client`
 `Server`
 
 ## Methods
 
-### Checkbox Set(table properties) {#Checkbox-Set-table-properties}
+### Graph Set(table properties) {#Graph-Set-table-properties}
 
 ### Widget WidgetByName(string name) {#Widget-WidgetByName-string-name}
+
+### nil Push(number value, Color color) {#nil-Push-number-value-Color-color}
+
+### nil Clear() {#nil-Clear}
+
+### nil AddThreshold(number value, Color color) {#nil-AddThreshold-number-value-Color-color}
+
+### nil ClearThresholds() {#nil-ClearThresholds}
 
 ## Properties
 
@@ -177,11 +186,9 @@ id: Checkbox
 
 ### string onDragEnd {#string-onDragEnd}
 
-### string text {#string-text}
+### number maxValue {#number-maxValue}
 
-### boolean value {#boolean-value}
+### integer maxBars {#integer-maxBars}
 
-### string checkboxType {#string-checkboxType}
-
-### number switchHeight {#number-switchHeight}
+### number barFill {#number-barFill}
 
