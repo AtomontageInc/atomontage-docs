@@ -7,28 +7,33 @@ id: Audio
 ## Methods
 
 ### AudioSource PlaySound(string|Asset sound, Vec3? position, number? volume, boolean? loop) {#AudioSource-PlaySound-stringAsset-sound-Vec3-position-number-volume-boolean-loop}
+Play a sound at a position, with volume and loop. Only single channel audio.
+Returns [AudioSource](./audioSource.mdx)
 
 ### AudioSource PlaySoundRelative(string|Asset sound, Vec3? position, number? volume, boolean? loop) {#AudioSource-PlaySoundRelative-stringAsset-sound-Vec3-position-number-volume-boolean-loop}
 
-### AudioMusic PlayMusic(string musicFile, number? volume, boolean? loop) {#AudioMusic-PlayMusic-string-musicFile-number-volume-boolean-loop}
+### AudioMusic PlayMusic(Asset music, number? volume, boolean? loop) {#AudioMusic-PlayMusic-Asset-music-number-volume-boolean-loop}
+Play music with volume and loop. This plays stereo music without any position, just like a normal audio player.
+Returns [AudioMusic](./audioMusic.mdx)
 
-### AudioMusic PrepareMusic(string musicFile, number? volume, boolean? loop) {#AudioMusic-PrepareMusic-string-musicFile-number-volume-boolean-loop}
-
-### boolean HasMusic(string musicFile) {#boolean-HasMusic-string-musicFile}
-
-### nil GetMusicFromServer(string musicFile) {#nil-GetMusicFromServer-string-musicFile}
+### AudioMusic PrepareMusic(Asset music, number? volume, boolean? loop) {#AudioMusic-PrepareMusic-Asset-music-number-volume-boolean-loop}
 
 ### nil PauseAudio() {#nil-PauseAudio}
+Pause all playing sounds and music
 
 ### nil ResumeAudio() {#nil-ResumeAudio}
+Resume all paused sounds and music
 
 ### nil StopAudio() {#nil-StopAudio}
 
 ## Properties
 
 ### number masterVolume {#number-masterVolume}
+Audio volume in range 0 - 1.
 
 ### number soundVolume {#number-soundVolume}
+Audio volume in range 0 - 1.
 
 ### number musicVolume {#number-musicVolume}
+Audio volume in range 0 - 1.
 

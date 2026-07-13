@@ -651,6 +651,46 @@ local readonlyProps = {}
 local deprecatedProps = {}
 local deprecatedMethods = {}
 
+-- The bindings FLATTEN inheritance: every widget subclass re-lists all of Widget's members. We
+-- document those once on Widget, so re-emitting them per subclass yields bare, description-less
+-- duplicates. Instead detect the subclasses (a superset of Widget's props — verified: no type
+-- overrides), emit `@class X : Widget`, and skip the inherited members, so sumneko resolves them
+-- (and their descriptions) from Widget.
+local widgetBaseProps = {}
+local widgetBaseFuncs = {}
+local widgetSubclasses = {}
+
+local function indexWidgetInheritance(bindings)
+    local W = bindings and bindings.Classes and bindings.Classes.Widget
+    if not W then return end
+    local baseCount = 0
+    for _, p in ipairs(W.properties or {}) do widgetBaseProps[p.name] = true; baseCount = baseCount + 1 end
+    for _, fn in ipairs(W.functions or {}) do widgetBaseFuncs[fn.name] = true end
+    if baseCount == 0 then return end
+
+    for className, class in pairs(bindings.Classes) do
+        if className ~= "Widget" then
+            local names = {}
+            for _, p in ipairs(class.properties or {}) do names[p.name] = true end
+            local isSub = true
+            for wn in pairs(widgetBaseProps) do
+                if not names[wn] then isSub = false break end
+            end
+            if isSub then
+                widgetSubclasses[className] = true
+                class.extends = class.extends or "Widget"   -- makes generateEmmyLua emit `: Widget`
+            end
+        end
+    end
+end
+
+function genEmmy:isInheritedProp(className, name)
+    return widgetSubclasses[className] and widgetBaseProps[name] or false
+end
+function genEmmy:isInheritedMethod(className, name)
+    return widgetSubclasses[className] and widgetBaseFuncs[name] or false
+end
+
 local function indexReadonlyFromBindings(bindings)
     if not bindings or not bindings.Classes then return end
     for className, class in pairs(bindings.Classes) do
@@ -690,6 +730,8 @@ function genEmmy:createFile(bindings)
 
     -- index readonly + deprecated flags from the bindings
     indexReadonlyFromBindings(bindings)
+    -- detect widget subclasses so their inherited members are emitted via `: Widget`, not duplicated
+    indexWidgetInheritance(bindings)
 
     --default lines
     file:write(emmyDefaultLines, "\n")
@@ -901,6 +943,7 @@ function genEmmy:writeProps(file, className, finalProperties)
         assert(body, "could not parse property header: " .. header)
         local returnType, name = splitTypeAndName(body)
         assert(returnType, "could not split type/name from: " .. body)
+        if self:isInheritedProp(className, name) then goto continue end   -- inherited from Widget
         returnType = self:convertToEmmyLuaType(returnType)
 
         local description = util:hasDocumentation(prop.entry) and util:getDocumentation(prop.entry) or nil
@@ -921,6 +964,7 @@ function genEmmy:writeProps(file, className, finalProperties)
         else
             file:write("--- @field ", name, " ", returnType, "\n")
         end
+        ::continue::
     end
     file:write(className, " = {}", "\n\n")
 end
@@ -932,6 +976,8 @@ function genEmmy:writeMethods(file, className, finalMethods)
     for i, prop in ipairs(finalMethods) do
         local lines = prop.entry
         local header, returnType, name, params = genEmmy:dissectMethodEntry(lines)
+
+        if self:isInheritedMethod(className, name) then goto continue end   -- inherited from Widget
 
         if overrides and overrides[name] then
             -- emit the manual override once (in place of the auto-generated emission)

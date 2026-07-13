@@ -44,19 +44,23 @@ Lists all engine profiler timer **names** under a prefix — use it to discover 
 
 ### nil SetLogValue(string name, number value) {#nil-SetLogValue-string-name-number-value}
 
+### table GetLogValuesWithPrefix(string namePrefix) {#table-GetLogValuesWithPrefix-string-namePrefix}
+
 ### Asset[], string[] GetAssetsFiltered(string assetFolder, string subfolder, string assetType) {#Asset-string-GetAssetsFiltered-string-assetFolder-string-subfolder-string-assetType}
 
 ### Asset[] GetAssets() {#Asset-GetAssets}
 
 ### string[] GetAssetSources() {#string-GetAssetSources}
 
-### string AssetPathInMontage(Asset asset) {#string-AssetPathInMontage-Asset-asset}
+### string AssetPathInMontage(Asset|AssetLink asset) {#string-AssetPathInMontage-AssetAssetLink-asset}
 
 ### Asset GetBuiltinMaterial(string name) {#Asset-GetBuiltinMaterial-string-name}
 
-### Asset GetTextureForImage(Asset image) {#Asset-GetTextureForImage-Asset-image}
+### Asset GetTextureForImage(Asset|AssetLink image) {#Asset-GetTextureForImage-AssetAssetLink-image}
 
-### Asset GetThumbnailForAsset(Asset asset) {#Asset-GetThumbnailForAsset-Asset-asset}
+### Asset GetThumbnailForAsset(Asset|AssetLink asset) {#Asset-GetThumbnailForAsset-AssetAssetLink-asset}
+
+### integer GetAssetsChangeCounter() {#integer-GetAssetsChangeCounter}
 
 ### integer TypeInt(string typeName) {#integer-TypeInt-string-typeName}
 

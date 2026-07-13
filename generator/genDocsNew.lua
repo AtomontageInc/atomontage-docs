@@ -63,7 +63,7 @@ function genDocs:gen()
     os.execute( "mkdir "..uiLocation )
     local filename = uiLocation.."_category_.json"
     local file = io.open(filename, "w")
-    file:write('{ "label": "UI", "collapsed": true }')
+    file:write('{ "label": "UI", "position": 2, "collapsed": true }')
     file:close()
 
     --get all files

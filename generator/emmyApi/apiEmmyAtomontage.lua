@@ -342,7 +342,6 @@ Callbacks = {}
 ---| '"RigidBody"'
 ---| '"Script"'
 ---| '"Sky"'
----| '"StaticVoxelData"'
 ---| '"VoxelData"'
 
 --- @alias opTarget Shape|Object|Object[]
@@ -431,6 +430,10 @@ function AE:GetLogValue(name, defaultVal) end
 --- @return nil
 function AE:SetLogValue(name, value) end
 
+--- @param namePrefix string
+--- @return table
+function AE:GetLogValuesWithPrefix(namePrefix) end
+
 --- @param assetFolder string
 --- @param subfolder string
 --- @param assetType string
@@ -443,7 +446,7 @@ function AE:GetAssets() end
 --- @return string[]
 function AE:GetAssetSources() end
 
---- @param asset Asset
+--- @param asset Asset|AssetLink
 --- @return string
 function AE:AssetPathInMontage(asset) end
 
@@ -451,13 +454,16 @@ function AE:AssetPathInMontage(asset) end
 --- @return Asset
 function AE:GetBuiltinMaterial(name) end
 
---- @param image Asset
+--- @param image Asset|AssetLink
 --- @return Asset
 function AE:GetTextureForImage(image) end
 
---- @param asset Asset
+--- @param asset Asset|AssetLink
 --- @return Asset
 function AE:GetThumbnailForAsset(asset) end
+
+--- @return integer
+function AE:GetAssetsChangeCounter() end
 
 --- @param typeName string
 --- @return integer
@@ -573,11 +579,17 @@ function AssetLink(asset) end
 [View Documentation](https://docs.atomontage.com/api/Audio)
 ]]
 --- @class Audio
---- @field masterVolume number
---- @field soundVolume number
---- @field musicVolume number
+--- @field masterVolume number Audio volume in range 0 - 1.
+--- @field soundVolume number Audio volume in range 0 - 1.
+--- @field musicVolume number Audio volume in range 0 - 1.
 Audio = {}
 
+--[[
+Play a sound at a position, with volume and loop. Only single channel audio.
+Returns [AudioSource](./audioSource.mdx)
+
+[View Documentation](https://docs.atomontage.com/api/Audio#AudioSource-PlaySound-stringAsset-sound-Vec3-position-number-volume-boolean-loop)
+]]
 --- @param sound string|Asset
 --- @param position Vec3?
 --- @param volume number?
@@ -592,29 +604,37 @@ function Audio:PlaySound(sound, position, volume, loop) end
 --- @return AudioSource
 function Audio:PlaySoundRelative(sound, position, volume, loop) end
 
---- @param musicFile string
+--[[
+Play music with volume and loop. This plays stereo music without any position, just like a normal audio player.
+Returns [AudioMusic](./audioMusic.mdx)
+
+[View Documentation](https://docs.atomontage.com/api/Audio#AudioMusic-PlayMusic-Asset-music-number-volume-boolean-loop)
+]]
+--- @param music Asset
 --- @param volume number?
 --- @param loop boolean?
 --- @return AudioMusic
-function Audio:PlayMusic(musicFile, volume, loop) end
+function Audio:PlayMusic(music, volume, loop) end
 
---- @param musicFile string
+--- @param music Asset
 --- @param volume number?
 --- @param loop boolean?
 --- @return AudioMusic
-function Audio:PrepareMusic(musicFile, volume, loop) end
+function Audio:PrepareMusic(music, volume, loop) end
 
---- @param musicFile string
---- @return boolean
-function Audio:HasMusic(musicFile) end
+--[[
+Pause all playing sounds and music
 
---- @param musicFile string
---- @return nil
-function Audio:GetMusicFromServer(musicFile) end
-
+[View Documentation](https://docs.atomontage.com/api/Audio#nil-PauseAudio)
+]]
 --- @return nil
 function Audio:PauseAudio() end
 
+--[[
+Resume all paused sounds and music
+
+[View Documentation](https://docs.atomontage.com/api/Audio#nil-ResumeAudio)
+]]
 --- @return nil
 function Audio:ResumeAudio() end
 
@@ -624,7 +644,7 @@ function Audio:StopAudio() end
 --[[
 `Client`
 
-Returned by [`Client:PlayMusic()`](./client.mdx#AudioMusic-PlayMusic-string-musicFile-number-volume-booleanean-loop)
+Returned by [`Audio:PlayMusic()`](./audio.mdx#AudioMusic-PlayMusic-Asset-music-number-volume-booleanean-loop)
 
 [View Documentation](https://docs.atomontage.com/api/AudioMusic)
 ]]
@@ -666,7 +686,7 @@ function AudioMusic:Stop() end
 --[[
 `Client`
 
-Returned by [`Client:PlaySound()`](./client.mdx#AudioSource-PlaySound-string-soundPath-Vec3-position-number-volume-booleanean-loop)
+Returned by [`Audio:PlaySound()`](./audio.mdx#AudioSource-PlaySound-stringAsset-sound-Vec3-position-number-volume-booleanean-loop)
 
 [View Documentation](https://docs.atomontage.com/api/AudioSource)
 ]]
@@ -745,95 +765,13 @@ Centered box
 function Box(pos, rot, size) end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Button)
 ]]
 --- @class Button : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field text string
 --- @field multiLine boolean
 --- @field buttonType string
@@ -841,118 +779,21 @@ function Box(pos, rot, size) end
 --- @field icon string
 --- @field icon2 string
 --- @field iconMargin Vec2
+--- @field iconSize number
 --- @field closeWindow boolean
 Button = {}
 
---- @param properties table
---- @return Button
-function Button:Set(properties) end
-
---- @param name string
---- @return Widget
-function Button:WidgetByName(name) end
-
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/ButtonPanel)
 ]]
 --- @class ButtonPanel : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field buttonType string
 --- @field value boolean
 ButtonPanel = {}
-
---- @param properties table
---- @return ButtonPanel
-function ButtonPanel:Set(properties) end
-
---- @param name string
---- @return Widget
-function ButtonPanel:WidgetByName(name) end
 
 --[[
 `Client`
@@ -1067,108 +908,18 @@ For hot loops (100+ casts/frame), prefer native Collision:Raycast() directly (~2
 function Cast:Ray(startPos, ray) end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Checkbox)
 ]]
 --- @class Checkbox : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field text string
 --- @field value boolean
 --- @field checkboxType string
 --- @field switchHeight number
 Checkbox = {}
-
---- @param properties table
---- @return Checkbox
-function Checkbox:Set(properties) end
-
---- @param name string
---- @return Widget
-function Checkbox:WidgetByName(name) end
 
 --[[
 `Client`
@@ -1182,9 +933,6 @@ This class is only available on client
 --- @field permission ClientPermission
 --- @field platform string (readonly)
 --- @field sysInfo string (readonly)
---- @field masterVolume number (deprecated) Audio volume in range 0 - 1.
---- @field soundVolume number (deprecated) Audio volume in range 0 - 1.
---- @field musicVolume number (deprecated) Audio volume in range 0 - 1.
 Client = {}
 
 --[[
@@ -1268,6 +1016,9 @@ Time for a network message to travel from client to server and back
 --- @return integer
 function Client:GetPing() end
 
+--- @return integer
+function Client:GetSceneMsgsInQueue() end
+
 --- @return table
 function Client:GetMainDispatcherStats() end
 
@@ -1313,8 +1064,9 @@ function Client:SetIntersectionSphere(posWC, radius) end
 --- @param size integer?
 --- @param outlineColor Color?
 --- @param time number?
+--- @param outlineWidth number?
 --- @return nil
-function Client:WriteToScreen(text, pos, anchor, color, size, outlineColor, time) end
+function Client:WriteToScreen(text, pos, anchor, color, size, outlineColor, time, outlineWidth) end
 
 --- @return nil
 function Client:CloseApp() end
@@ -1395,14 +1147,6 @@ function Client:IsVRPassthroughEnabled() end
 
 --- @return boolean
 function Client:IsVRPassthroughSupported() end
-
---- @param file File
---- @return boolean
-function Client:SendFile(file) end
-
---- @param files File[]
---- @return nil
-function Client:SendFiles(files) end
 
 --- @return boolean
 function Client:IsUploadingFiles() end
@@ -1489,72 +1233,6 @@ Tint the view for this frame or permanently
 --- @param permanent boolean?
 --- @return nil
 function Client:SetScreenColor(color, permanent) end
-
---[[
-Play sound with asset name, at position, with volume and loop. Only single channel audio.
-Returns [AudioSource](./audioSource.mdx)
-
-[View Documentation](https://docs.atomontage.com/api/Client#AudioSource-PlaySound-string-soundPath-Vec3-position-number-volume-boolean-loop)
-]]
---- @deprecated
---- @param soundPath string
---- @param position Vec3?
---- @param volume number?
---- @param loop boolean?
---- @return AudioSource
-function Client:PlaySound(soundPath, position, volume, loop) end
-
---[[
-Play sound with asset name, with volume and loop. This play stereo music without any position just like normal audio player.
-Returns [AudioMusic](./audioMusic.mdx)
-
-[View Documentation](https://docs.atomontage.com/api/Client#AudioMusic-PlayMusic-string-musicFile-number-volume-boolean-loop)
-]]
---- @deprecated
---- @param musicFile string
---- @param volume number?
---- @param loop boolean?
---- @return AudioMusic
-function Client:PlayMusic(musicFile, volume, loop) end
-
---- @deprecated
---- @param musicFile string
---- @param volume number?
---- @param loop boolean?
---- @return AudioMusic
-function Client:PrepareMusic(musicFile, volume, loop) end
-
---- @deprecated
---- @param musicFile string
---- @return boolean
-function Client:HasMusic(musicFile) end
-
---- @deprecated
---- @param musicFile string
---- @return nil
-function Client:GetMusicFromServer(musicFile) end
-
---[[
-Pause all playing sounds and music
-
-[View Documentation](https://docs.atomontage.com/api/Client#nil-PauseAudio)
-]]
---- @deprecated
---- @return nil
-function Client:PauseAudio() end
-
---[[
-Resume all paused sounds and music
-
-[View Documentation](https://docs.atomontage.com/api/Client#nil-ResumeAudio)
-]]
---- @deprecated
---- @return nil
-function Client:ResumeAudio() end
-
---- @deprecated
---- @return nil
-function Client:StopAudio() end
 
 --- @param type integer
 --- @param duration number
@@ -1788,105 +1466,15 @@ function Color:ToHsv() end
 function Color:Copy() end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Colorbox)
 ]]
 --- @class Colorbox : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field value Color
 Colorbox = {}
-
---- @param properties table
---- @return Colorbox
-function Colorbox:Set(properties) end
-
---- @param name string
---- @return Widget
-function Colorbox:WidgetByName(name) end
 
 --[[
 `Client`
@@ -1942,7 +1530,6 @@ All components inherit from this class. It is not meant to be instantiated direc
 * [Script](Script)
 * [Camera](Camera)
 * [VoxelData](VoxelData)
-* [StaticVoxelData](StaticVoxelData)
 * [Mesh](Mesh)
 * [Sky](Sky)
 
@@ -2143,19 +1730,6 @@ function Cylinder(pos1, pos2, radius1, radius2) end
 `Client`
 `Server`
 
-[View Documentation](https://docs.atomontage.com/api/File)
-]]
---- @class File
---- @field filename string (readonly)
---- @field type string (readonly)
---- @field url string (readonly)
---- @field available boolean (readonly)
-File = {}
-
---[[
-`Client`
-`Server`
-
 [View Documentation](https://docs.atomontage.com/api/Filter)
 ]]
 --- @class Filter
@@ -2262,107 +1836,17 @@ draw text for one frame on client
 function Text(text, posPerc, pivot, pixelOffset, color, size, colorOutline) end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Graph)
 ]]
 --- @class Graph : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field maxValue number
 --- @field maxBars integer
 --- @field barFill number
 Graph = {}
-
---- @param properties table
---- @return Graph
-function Graph:Set(properties) end
-
---- @param name string
---- @return Widget
-function Graph:WidgetByName(name) end
 
 --- @param value number
 --- @param color Color
@@ -2381,106 +1865,16 @@ function Graph:AddThreshold(value, color) end
 function Graph:ClearThresholds() end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Header)
 ]]
 --- @class Header : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field text string
 --- @field collapsed boolean
 Header = {}
-
---- @param properties table
---- @return Header
-function Header:Set(properties) end
-
---- @param name string
---- @return Widget
-function Header:WidgetByName(name) end
 
 --[[
 `Client`
@@ -2748,109 +2142,20 @@ function Input:Gamepads() end
 function Input:GetActiveGamepad() end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Inputbox)
 ]]
 --- @class Inputbox : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field value string|int|float
 --- @field range Range
 --- @field inputType string
 --- @field multiLine boolean
 --- @field decimals integer
+--- @field prefixLabel string
 Inputbox = {}
-
---- @param properties table
---- @return Inputbox
-function Inputbox:Set(properties) end
-
---- @param name string
---- @return Widget
-function Inputbox:WidgetByName(name) end
 
 --[[
 `Client`
@@ -2937,107 +2242,18 @@ user ignoreTags change (via IgnoreTag()).
 function InteractionFilter:prepareFilter(builtinIgnoreTag) end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Label)
 ]]
 --- @class Label : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field text string
 --- @field labelType string
 --- @field multiLine boolean
+--- @field maxWidth number
 Label = {}
-
---- @param properties table
---- @return Label
-function Label:Set(properties) end
-
---- @param name string
---- @return Widget
-function Label:WidgetByName(name) end
 
 --[[
 `Client`
@@ -3672,13 +2888,6 @@ function Object:AddMesh() end
 --- @return VoxelData?
 function Object:AddVoxelData() end
 
---- @param fileName string
---- @return StaticVoxelData?
-function Object:AddStaticVoxelData(fileName) end
-
---- @return VoxelData
-function Object:AddVoxelRenderer() end
-
 --- @return Camera
 function Object:AddCamera() end
 
@@ -3855,9 +3064,9 @@ function OpBase:Target(target) end
 --[[
 Callback function. `OnFinished` is called after `OnProgress` if it was last part
 
-[View Documentation](https://docs.atomontage.com/api/OpBase#nil-OnFinished-function-onFinished)
+[View Documentation](https://docs.atomontage.com/api/OpBase#nil-OnFinished-fun-onFinished)
 ]]
---- @param onFinished function
+--- @param onFinished fun()
 --- @return nil
 function OpBase:OnFinished(onFinished) end
 
@@ -4158,95 +3367,13 @@ Returned by [`Overlap()` functions](Collision#Overlap-GetOverlap-Shape-shape).
 Overlap = {}
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Panel)
 ]]
 --- @class Panel : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field scroll boolean
 --- @field scrollX boolean
 --- @field scrollY boolean
@@ -4259,14 +3386,6 @@ Overlap = {}
 --- @field glyph string
 --- @field glyphScaleMode string
 Panel = {}
-
---- @param properties table
---- @return Panel
-function Panel:Set(properties) end
-
---- @param name string
---- @return Widget
-function Panel:WidgetByName(name) end
 
 --- @param widget Widget
 --- @return nil
@@ -5044,6 +4163,9 @@ function Scene:GetObjectById(id) end
 --- @return boolean
 function Scene:IsComponentOnePerObject(typeName) end
 
+--- @return VoxelData?
+function Scene:GetStaticVoxelData() end
+
 --- @return Object[]
 function Scene:GetRootObjects() end
 
@@ -5504,207 +4626,27 @@ function ScriptInstance:EditorOnDeactivate() end
 function ScriptInstance:RPC(funcName, ...) end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Selectbox)
 ]]
 --- @class Selectbox : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field value integer
 --- @field valueStr string
 --- @field values table
 Selectbox = {}
 
---- @param properties table
---- @return Selectbox
-function Selectbox:Set(properties) end
-
---- @param name string
---- @return Widget
-function Selectbox:WidgetByName(name) end
-
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Separator)
 ]]
 --- @class Separator : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 Separator = {}
-
---- @param properties table
---- @return Separator
-function Separator:Set(properties) end
-
---- @param name string
---- @return Widget
-function Separator:WidgetByName(name) end
 
 --[[
 `Server`
@@ -5747,10 +4689,6 @@ function Server:EnterLiveMode(reloadGeom) end
 
 --- @return integer[]
 function Server:GetClients() end
-
---- @param clientID integer
---- @return integer
-function Server:GetUserID(clientID) end
 
 --- @param clientID integer
 --- @return boolean
@@ -5845,24 +4783,23 @@ function Server:HttpGet(url, headers, onResponse) end
 
 --- @param url string
 --- @param headers table
---- @param onResponse fun(success:boolean, response:string, statusCode:integer, file:File?)
+--- @param destPathInMontage string
+--- @param onResponse fun(success:boolean, response:string, statusCode:integer, asset:Asset?)
 --- @return nil
-function Server:HttpDownload(url, headers, onResponse) end
+function Server:HttpDownload(url, headers, destPathInMontage, onResponse) end
 
 --- @param clientID integer
 --- @return integer
 function Server:GetPing(clientID) end
 
---- @param fileLua File
---- @param subPath string
---- @return Asset
-function Server:MoveFileToMontageVoxelsFolder(fileLua, subPath) end
+--- @return integer
+function Server:GetSceneSendQueueMax() end
 
---- @param fileLua File
+--- @param asset Asset
 --- @param eventUpdate fun(progress:number)
 --- @param eventFinish fun(success:boolean, url:string)
 --- @return nil
-function Server:MakeUrlForFile(fileLua, eventUpdate, eventFinish) end
+function Server:MakeUrlForAsset(asset, eventUpdate, eventFinish) end
 
 --- @param target Object
 --- @param opts table?
@@ -6051,109 +4988,19 @@ function Sky:__eq(a, b) end
 function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Slider)
 ]]
 --- @class Slider : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field value float|int|Vec2
 --- @field scalars integer
 --- @field sliderType UISliderType
 --- @field range Vec2
 --- @field integer boolean
 Slider = {}
-
---- @param properties table
---- @return Slider
-function Slider:Set(properties) end
-
---- @param name string
---- @return Widget
-function Slider:WidgetByName(name) end
 
 --[[
 `Client`
@@ -6178,31 +5025,6 @@ Centered sphere
 --- @param radius number?
 --- @return Sphere
 function Sphere(pos, radius) end
-
---[[
-`Client`
-`Server`
-
-Every scene has only **one** static voxel data and can have multiple dynamic voxel data. The static voxel data is used for the world and can not be moved.
-
-[View Documentation](https://docs.atomontage.com/api/StaticVoxelData)
-]]
---- @class StaticVoxelData
---- @field active boolean
---- @field activeInHierarchy boolean (readonly)
---- @field object Object (readonly)
---- @field obj Object (readonly)
---- @field isDestroyed boolean (readonly)
---- @field type string (readonly)
---- @field onePerObject boolean (readonly)
---- @field path string
---- @field isLoaded boolean (readonly)
-StaticVoxelData = {}
-
---- @param a StaticVoxelData
---- @param b StaticVoxelData
---- @return boolean
-function StaticVoxelData:__eq(a, b) end
 
 --[[
 `Client`
@@ -6240,9 +5062,9 @@ Texture = {}
 Time = {}
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/UI)
 ]]
@@ -8144,95 +6966,13 @@ function Vec4i:Clamp(minValue, maxValue) end
 function Vec4i:Dot(other) end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Vectorbox)
 ]]
 --- @class Vectorbox : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field scalars integer
 --- @field integer boolean
 --- @field value Vec2|Vec3|Vec4|Vec2i|Vec3i|Vec4i
@@ -8240,14 +6980,6 @@ function Vec4i:Dot(other) end
 --- @field inputsPaddingMode UIPropertyMode
 --- @field decimals integer
 Vectorbox = {}
-
---- @param properties table
---- @return Vectorbox
-function Vectorbox:Set(properties) end
-
---- @param name string
---- @return Widget
-function Vectorbox:WidgetByName(name) end
 
 --[[
 `Client`
@@ -8261,7 +6993,7 @@ Vox:Add(Sphere(pos, 2))   -- operation + shape (see Shape)
    :Run()                 -- schedules the edit; it commits a frame or more later
 ```
 
-`:Run()` is asynchronous — chain [`:OnFinished(fn)`](./opBase.mdx#nil-OnFinished-function-onFinished) to run code once the edit actually lands. Full walkthrough: [Voxel Edits](/manual/scripting/examples/Voxel-Edits).
+`:Run()` is asynchronous — chain [`:OnFinished(fn)`](./opBase.mdx#nil-OnFinished-fun-onFinished) to run code once the edit actually lands. Full walkthrough: [Voxel Edits](/manual/scripting/examples/Voxel-Edits).
 
 [View Documentation](https://docs.atomontage.com/api/Vox)
 ]]
@@ -8684,6 +7416,8 @@ The data will only render if the object also has a `VoxelRender` component.
 --- @field receiveTransform boolean Receive transform(pos, rot scale) to render with from server. By default this is true.If you set this to false, you will need to manually set the transform of the object on the client side.This is useful for making objects respond immediately if something happened on the client side i.e. input
 --- @field lodBias number
 --- @field asset Asset
+--- @field static boolean
+--- @field isLoaded boolean (readonly)
 VoxelData = {}
 
 --- @param a VoxelData
@@ -8917,7 +7651,7 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 --- @field imageProjectionFade boolean Planar projection only: fade the albedo on faces angled away from the projection axis (decal-style, lands only on the facing face). Ignored for triplanar, which covers every face.
 --- @field imageNormalBlendPower number
 --- @field onProgress fun(progress:number) callback function. progress from 0-1. May not be called every frame. Is called after script updates 
---- @field onFinished fun(info:RemoveCountInfo) callback function. onFinished is called after onProgress if it was last part
+--- @field onFinished fun(info:RemoveCountInfo, computeTimeMs:number) callback function. onFinished is called after onProgress if it was last part
 --- @field onError fun() callback function
 VoxelEdit = {}
 
@@ -9058,9 +7792,9 @@ function VoxelInspectData:GetPositions() end
 function VoxelInspectData:GetColors() end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Widget)
 ]]
@@ -9114,6 +7848,24 @@ function VoxelInspectData:GetColors() end
 --- @field fontBold boolean
 --- @field fontName string
 --- @field textAlign Vec2
+--- @field cornerRound number 0..1: rounds the glyph's sharp MSDF corners (1 = fully rounded, SDF-like).
+--- @field bevel number 0..1: faux-3D bevel / emboss shading along the glyph edge.
+--- @field bevelLight number 0..1: bevel light direction, mapped to a 0..2pi azimuth.
+--- @field melt number 0..1: animated noise domain-warp ('melting') of the glyph.
+--- @field glitch number 0..1: static horizontal scanline-displacement bands.
+--- @field bend number 0..1: horizontal shear / slant of the glyph.
+--- @field twist number 0..1: swirl warp, stronger toward the glyph edges.
+--- @field wave number 0..1: animated sine ripple along the glyph.
+--- @field revealAmount number 0..1: coverage-mask reveal amount (0 = solid, 1 = fully gone).
+--- @field revealMask integer Reveal mask kind: 0 off, 1 noise, 2 linear, 3 radial.
+--- @field revealParam number 0..1: reveal mask scale (noise) or angle (linear).
+--- @field revealEdge number 0..1: hue of the glowing reveal front edge; 0 = no edge.
+--- @field reveal number|table Write `{ amount=, mask='noise'|'linear'|'radial', param=, edge= }` or a bare amount (noise mask); reads back the amount.
+--- @field pattern int|table Procedural fill pattern. Write a kind (0 off, 1 halftone, 2 dither, 3 contour) or `{ kind=, scale=, angle= }`; reads back the kind.
+--- @field patternScale number 0..1: fill-pattern scale (dot/cell size, ring frequency, ...).
+--- @field patternAngle number 0..1: fill-pattern rotation, mapped to 0..2pi.
+--- @field fill table Write-only 2-color fill gradient: `{ top=Color, bottom=Color, along='y'|'x' }`.
+--- @field layers table Array of stacked text layers, each `{ d=dilate, soft=glow, off=Vec2 shadow offset, color=, colorBottom=, along='y'|'x' }`. When set, the layer stack REPLACES the base fill/outline/shadow.
 --- @field intVar integer
 --- @field showNoValue boolean
 --- @field onHoverEx fun(widget:Widget, ...)
@@ -9128,6 +7880,7 @@ function VoxelInspectData:GetColors() end
 --- @field onKeyDownEx fun(widget:Widget, ...)
 --- @field onKeyUpEx fun(widget:Widget, ...)
 --- @field onValueChangeEx fun(widget:Widget, ...)
+--- @field onValueCommitEx fun(widget:Widget, value:any, oldValue:any)
 --- @field onDragStartEx fun(widget:Widget):any
 --- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
 --- @field onDragLeaveEx fun(widget:Widget)
@@ -9143,6 +7896,7 @@ function VoxelInspectData:GetColors() end
 --- @field onKeyDown string
 --- @field onKeyUp string
 --- @field onValueChange string
+--- @field onValueCommit string
 --- @field onDragStart string
 --- @field onDragOver string
 --- @field onDragLeave string
@@ -9158,95 +7912,13 @@ function Widget:Set(properties) end
 function Widget:WidgetByName(name) end
 
 --[[
+---
 `Client`
 `Server`
----
 
 [View Documentation](https://docs.atomontage.com/api/Window)
 ]]
 --- @class Window : Widget
---- @field type string (readonly)
---- @field id integer (readonly)
---- @field destroyed boolean (readonly)
---- @field parent Widget (readonly)
---- @field window Window (readonly)
---- @field children table (readonly)
---- @field childCount integer (readonly)
---- @field hasChildren boolean (readonly)
---- @field next Widget (readonly)
---- @field prev Widget (readonly)
---- @field isWindow boolean (readonly)
---- @field isContainer boolean (readonly)
---- @field isSelected boolean (readonly)
---- @field name string
---- @field tooltip string
---- @field visible boolean
---- @field enabled boolean
---- @field size Vec2
---- @field sizing string
---- @field sizingX string
---- @field sizingY string
---- @field pos Vec2
---- @field posType string
---- @field sizePx Vec2 (readonly)
---- @field posPx Vec2 (readonly)
---- @field overflow string
---- @field endLine boolean
---- @field siblingIndex integer
---- @field padding Vec2
---- @field paddingMode string
---- @field rounding number
---- @field roundingMode string
---- @field roundCorners integer
---- @field glyphFade boolean
---- @field margin Vec2
---- @field marginMode string
---- @field gap Vec2
---- @field alignItems string
---- @field alignSelf string
---- @field justifyContent string
---- @field mp Vec2
---- @field bgFrame boolean
---- @field bgColor Color
---- @field borderColor Color
---- @field textColor Color
---- @field fontSize number
---- @field fontBold boolean
---- @field fontName string
---- @field textAlign Vec2
---- @field intVar integer
---- @field showNoValue boolean
---- @field onHoverEx fun(widget:Widget, ...)
---- @field onHoverEndEx fun(widget:Widget, ...)
---- @field onFocusEx fun(widget:Widget, ...)
---- @field onFocusEndEx fun(widget:Widget, ...)
---- @field onPressStartEx fun(widget:Widget, ...)
---- @field onPressCancelEx fun(widget:Widget, ...)
---- @field onPressEx fun(widget:Widget, ...)
---- @field onRightPressEx fun(widget:Widget, ...)
---- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
---- @field onValueChangeEx fun(widget:Widget, ...)
---- @field onDragStartEx fun(widget:Widget):any
---- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onDragLeaveEx fun(widget:Widget)
---- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
---- @field onPress string
---- @field onPressStart string
---- @field onPressCancel string
---- @field onMouseMove string
---- @field onHover string
---- @field onHoverEnd string
---- @field onFocus string
---- @field onFocusEnd string
---- @field onKeyDown string
---- @field onKeyUp string
---- @field onValueChange string
---- @field onDragStart string
---- @field onDragOver string
---- @field onDragLeave string
---- @field onDragEnd string
 --- @field luaFile Asset
 --- @field header boolean
 --- @field text string
@@ -9263,14 +7935,6 @@ function Widget:WidgetByName(name) end
 --- @field enableShadow boolean
 --- @field obj table (readonly)
 Window = {}
-
---- @param properties table
---- @return Window
-function Window:Set(properties) end
-
---- @param name string
---- @return Widget
-function Window:WidgetByName(name) end
 
 --- @return nil
 function Window:Close() end

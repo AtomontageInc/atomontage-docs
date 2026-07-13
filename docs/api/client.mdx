@@ -53,6 +53,8 @@ Disconnected
 Time for a network message to travel from client to server and back
 
 
+### integer GetSceneMsgsInQueue() {#integer-GetSceneMsgsInQueue}
+
 ### table GetMainDispatcherStats() {#table-GetMainDispatcherStats}
 
 ### table GetRenderStats() {#table-GetRenderStats}
@@ -73,7 +75,7 @@ Time for a network message to travel from client to server and back
 
 ### nil SetIntersectionSphere(Vec3 posWC, number radius) {#nil-SetIntersectionSphere-Vec3-posWC-number-radius}
 
-### nil WriteToScreen(string text, Vec2 pos, Vec2 anchor, Color color, integer? size, Color? outlineColor, number? time) {#nil-WriteToScreen-string-text-Vec2-pos-Vec2-anchor-Color-color-integer-size-Color-outlineColor-number-time}
+### nil WriteToScreen(string text, Vec2 pos, Vec2 anchor, Color color, integer? size, Color? outlineColor, number? time, number? outlineWidth) {#nil-WriteToScreen-string-text-Vec2-pos-Vec2-anchor-Color-color-integer-size-Color-outlineColor-number-time-number-outlineWidth}
 
 ### nil CloseApp() {#nil-CloseApp}
 
@@ -119,10 +121,6 @@ Time for a network message to travel from client to server and back
 
 ### boolean IsVRPassthroughSupported() {#boolean-IsVRPassthroughSupported}
 
-### boolean SendFile(File file) {#boolean-SendFile-File-file}
-
-### nil SendFiles(File[] files) {#nil-SendFiles-File-files}
-
 ### boolean IsUploadingFiles() {#boolean-IsUploadingFiles}
 
 ### boolean IsDownloadingFiles() {#boolean-IsDownloadingFiles}
@@ -165,28 +163,6 @@ params: capsuleStart, capsuleEnd, capsuleRadius, velocity, size
 ### nil SetScreenColor(Color color, boolean? permanent) {#nil-SetScreenColor-Color-color-boolean-permanent}
 Tint the view for this frame or permanently
 
-### AudioSource PlaySound(string soundPath, Vec3? position, number? volume, boolean? loop) {#AudioSource-PlaySound-string-soundPath-Vec3-position-number-volume-boolean-loop}
-Play sound with asset name, at position, with volume and loop. Only single channel audio.
-Returns [AudioSource](./audioSource.mdx)
-
-### AudioMusic PlayMusic(string musicFile, number? volume, boolean? loop) {#AudioMusic-PlayMusic-string-musicFile-number-volume-boolean-loop}
-Play sound with asset name, with volume and loop. This play stereo music without any position just like normal audio player.
-Returns [AudioMusic](./audioMusic.mdx)
-
-### AudioMusic PrepareMusic(string musicFile, number? volume, boolean? loop) {#AudioMusic-PrepareMusic-string-musicFile-number-volume-boolean-loop}
-
-### boolean HasMusic(string musicFile) {#boolean-HasMusic-string-musicFile}
-
-### nil GetMusicFromServer(string musicFile) {#nil-GetMusicFromServer-string-musicFile}
-
-### nil PauseAudio() {#nil-PauseAudio}
-Pause all playing sounds and music
-
-### nil ResumeAudio() {#nil-ResumeAudio}
-Resume all paused sounds and music
-
-### nil StopAudio() {#nil-StopAudio}
-
 ### nil EnableRenderingWithFadeEffect(integer type, number duration) {#nil-EnableRenderingWithFadeEffect-integer-type-number-duration}
 
 ### nil DisableRenderingWithFadeEffect(integer type, number duration) {#nil-DisableRenderingWithFadeEffect-integer-type-number-duration}
@@ -215,13 +191,4 @@ Batch-draw multiple billboards from a table of descriptors.
 ### string platform {#string-platform}
 
 ### string sysInfo {#string-sysInfo}
-
-### number masterVolume {#number-masterVolume}
-Audio volume in range 0 - 1.
-
-### number soundVolume {#number-soundVolume}
-Audio volume in range 0 - 1.
-
-### number musicVolume {#number-musicVolume}
-Audio volume in range 0 - 1.
 

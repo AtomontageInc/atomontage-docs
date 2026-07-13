@@ -20,8 +20,6 @@ Switch the server into Live mode (play). If `reloadGeom` is true, voxel geometry
 
 ### integer[] GetClients() {#integer-GetClients}
 
-### integer GetUserID(integer clientID) {#integer-GetUserID-integer-clientID}
-
 ### boolean IsVRClient(integer clientID) {#boolean-IsVRClient-integer-clientID}
 
 ### nil DisconnectClient(integer clientID) {#nil-DisconnectClient-integer-clientID}
@@ -62,13 +60,13 @@ Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaRe
 
 ### nil HttpGet(string url, table headers, fun(success:boolean, response:string, statusCode:integer) onResponse) {#nil-HttpGet-string-url-table-headers-fun-successboolean-responsestring-statusCodeinteger-onResponse}
 
-### nil HttpDownload(string url, table headers, fun(success:boolean, response:string, statusCode:integer, file:File?) onResponse) {#nil-HttpDownload-string-url-table-headers-fun-successboolean-responsestring-statusCodeinteger-fileFile-onResponse}
+### nil HttpDownload(string url, table headers, string destPathInMontage, fun(success:boolean, response:string, statusCode:integer, asset:Asset?) onResponse) {#nil-HttpDownload-string-url-table-headers-string-destPathInMontage-fun-successboolean-responsestring-statusCodeinteger-assetAsset-onResponse}
 
 ### integer GetPing(integer clientID) {#integer-GetPing-integer-clientID}
 
-### Asset MoveFileToMontageVoxelsFolder(File fileLua, string subPath) {#Asset-MoveFileToMontageVoxelsFolder-File-fileLua-string-subPath}
+### integer GetSceneSendQueueMax() {#integer-GetSceneSendQueueMax}
 
-### nil MakeUrlForFile(File fileLua, fun(progress:number) eventUpdate, fun(success:boolean, url:string) eventFinish) {#nil-MakeUrlForFile-File-fileLua-fun-progressnumber-eventUpdate-fun-successboolean-urlstring-eventFinish}
+### nil MakeUrlForAsset(Asset asset, fun(progress:number) eventUpdate, fun(success:boolean, url:string) eventFinish) {#nil-MakeUrlForAsset-Asset-asset-fun-progressnumber-eventUpdate-fun-successboolean-urlstring-eventFinish}
 
 ### string CaptureObjectThumbnail(Object target, table? opts) {#string-CaptureObjectThumbnail-Object-target-table-opts}
 

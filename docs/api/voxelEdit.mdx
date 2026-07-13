@@ -250,7 +250,7 @@ Planar projection only: fade the albedo on faces angled away from the projection
 ### fun(progress:number) onProgress {#fun-progressnumber-onProgress}
 callback function. progress from 0-1. May not be called every frame. Is called after script updates 
 
-### fun(info:RemoveCountInfo) onFinished {#fun-infoRemoveCountInfo-onFinished}
+### fun(info:RemoveCountInfo, computeTimeMs:number) onFinished {#fun-infoRemoveCountInfo-computeTimeMsnumber-onFinished}
 callback function. onFinished is called after onProgress if it was last part
 
 ### fun() onError {#fun-onError}
