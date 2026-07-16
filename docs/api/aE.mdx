@@ -34,6 +34,8 @@ Returns the [`CommandLine`](./commandLine.mdx) (engine command-line arguments).
 
 ### Device GetDevice() {#Device-GetDevice}
 
+### boolean IsDebuggerPresent() {#boolean-IsDebuggerPresent}
+
 ### number GetLogTime(string name) {#number-GetLogTime-string-name}
 Reads an engine profiler timer's last-frame value in **seconds** (multiply by `1e6` for µs to match the "Profiling On Server" window's Duration column). Pass a timer name discovered via [`GetLogTimers`](#table-GetLogTimers-string-namePrefix), e.g. `AE:GetLogTime("SUF/Server - Update")`. Single reads fluctuate frame-to-frame — sample over several frames and average/take percentiles.
 

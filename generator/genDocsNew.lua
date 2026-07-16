@@ -268,6 +268,18 @@ function genDocs:getFinalPropEntries(currentEntriesInfo, newEntriesInfo, classNa
     return finalEntries
 end
 
+-- The bindings hand back raw C++ names inside union/generic types (`int|table`, `table<string,int>`,
+-- `string|int|float`) — standalone types are already Lua-ified on the C++ side, but composites leak.
+-- Map them to real Lua/EmmyLua types. Word-boundary matched, so `integer`/`uint`/`Vec3` are untouched.
+local cppToLuaType = {
+    int = "integer", float = "number", double = "number",
+    bool = "boolean", char = "string", void = "nil",
+}
+function genDocs:normalizeLuaType(t)
+    if not t then return t end
+    return (t:gsub("%f[%w]%a+%f[%W]", function(word) return cppToLuaType[word] end))
+end
+
 function genDocs:genFunctionEntry(info)
     local name = info.name
     local returns = info.returns
@@ -279,6 +291,7 @@ function genDocs:genFunctionEntry(info)
     -- heading round-trip (parsed back by genEmmy) can't carry inner parens/commas/`<>`, so collapse
     -- them to a simple token for proto entries only (C++ types already round-trip fine).
     local function simplify(t)
+        t = genDocs:normalizeLuaType(t)
         if not (info.isLuaProto and t) then return t end
         if t:find("%(") then return "fun" end            -- callback -> fun (bare fun becomes fun() in emmy)
         local base = t:match("^([%w_]+)<")
@@ -329,9 +342,9 @@ end
 
 function genDocs:genPropEntry(info)
     local name = info.name
-    local type = info.type
+    local type = genDocs:normalizeLuaType(info.type)
     local readOnly = info.readonly
-    local entry = type.." "..name 
+    local entry = type.." "..name
     local name = genDocs:generateHeading(entry)
     return name
 end

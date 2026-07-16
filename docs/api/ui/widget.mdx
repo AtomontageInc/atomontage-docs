@@ -14,6 +14,54 @@ slug: /api/Widget
 
 ## Properties
 
+### number cornerRound {#number-cornerRound}
+0..1: rounds the glyph's sharp MSDF corners (1 = fully rounded, SDF-like).
+
+### number bevel {#number-bevel}
+0..1: faux-3D bevel / emboss shading along the glyph edge.
+
+### number bevelLight {#number-bevelLight}
+0..1: bevel light direction, mapped to a 0..2pi azimuth.
+
+### number melt {#number-melt}
+0..1: animated noise domain-warp ('melting') of the glyph.
+
+### number glitch {#number-glitch}
+0..1: static horizontal scanline-displacement bands.
+
+### number bend {#number-bend}
+0..1: horizontal shear / slant of the glyph.
+
+### number twist {#number-twist}
+0..1: swirl warp, stronger toward the glyph edges.
+
+### number wave {#number-wave}
+0..1: animated sine ripple along the glyph.
+
+### number revealAmount {#number-revealAmount}
+0..1: coverage-mask reveal amount (0 = solid, 1 = fully gone).
+
+### integer revealMask {#integer-revealMask}
+Reveal mask kind: 0 off, 1 noise, 2 linear, 3 radial.
+
+### number revealParam {#number-revealParam}
+0..1: reveal mask scale (noise) or angle (linear).
+
+### number revealEdge {#number-revealEdge}
+0..1: hue of the glowing reveal front edge; 0 = no edge.
+
+### number|table reveal {#numbertable-reveal}
+Write `{ amount=, mask='noise'|'linear'|'radial', param=, edge= }` or a bare amount (noise mask); reads back the amount.
+
+### integer|table pattern {#integertable-pattern}
+Procedural fill pattern. Write a kind (0 off, 1 halftone, 2 dither, 3 contour) or `{ kind=, scale=, angle= }`; reads back the kind.
+
+### number patternScale {#number-patternScale}
+0..1: fill-pattern scale (dot/cell size, ring frequency, ...).
+
+### number patternAngle {#number-patternAngle}
+0..1: fill-pattern rotation, mapped to 0..2pi.
+
 ### string type {#string-type}
 
 ### integer id {#integer-id}
@@ -116,53 +164,7 @@ Main-axis distribution of children: `start`/`center`/`end`/`space-between`/`spac
 
 ### Vec2 textAlign {#Vec2-textAlign}
 
-### number cornerRound {#number-cornerRound}
-0..1: rounds the glyph's sharp MSDF corners (1 = fully rounded, SDF-like).
-
-### number bevel {#number-bevel}
-0..1: faux-3D bevel / emboss shading along the glyph edge.
-
-### number bevelLight {#number-bevelLight}
-0..1: bevel light direction, mapped to a 0..2pi azimuth.
-
-### number melt {#number-melt}
-0..1: animated noise domain-warp ('melting') of the glyph.
-
-### number glitch {#number-glitch}
-0..1: static horizontal scanline-displacement bands.
-
-### number bend {#number-bend}
-0..1: horizontal shear / slant of the glyph.
-
-### number twist {#number-twist}
-0..1: swirl warp, stronger toward the glyph edges.
-
-### number wave {#number-wave}
-0..1: animated sine ripple along the glyph.
-
-### number revealAmount {#number-revealAmount}
-0..1: coverage-mask reveal amount (0 = solid, 1 = fully gone).
-
-### integer revealMask {#integer-revealMask}
-Reveal mask kind: 0 off, 1 noise, 2 linear, 3 radial.
-
-### number revealParam {#number-revealParam}
-0..1: reveal mask scale (noise) or angle (linear).
-
-### number revealEdge {#number-revealEdge}
-0..1: hue of the glowing reveal front edge; 0 = no edge.
-
-### number|table reveal {#numbertable-reveal}
-Write `{ amount=, mask='noise'|'linear'|'radial', param=, edge= }` or a bare amount (noise mask); reads back the amount.
-
-### int|table pattern {#inttable-pattern}
-Procedural fill pattern. Write a kind (0 off, 1 halftone, 2 dither, 3 contour) or `{ kind=, scale=, angle= }`; reads back the kind.
-
-### number patternScale {#number-patternScale}
-0..1: fill-pattern scale (dot/cell size, ring frequency, ...).
-
-### number patternAngle {#number-patternAngle}
-0..1: fill-pattern rotation, mapped to 0..2pi.
+### table fx {#table-fx}
 
 ### table fill {#table-fill}
 Write-only 2-color fill gradient: `{ top=Color, bottom=Color, along='y'|'x' }`.

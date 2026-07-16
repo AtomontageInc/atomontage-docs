@@ -402,6 +402,9 @@ function AE:GetSystem() end
 --- @return Device
 function AE:GetDevice() end
 
+--- @return boolean
+function AE:IsDebuggerPresent() end
+
 --[[
 Reads an engine profiler timer's last-frame value in **seconds** (multiply by `1e6` for µs to match the "Profiling On Server" window's Duration column). Pass a timer name discovered via [`GetLogTimers`](#table-GetLogTimers-string-namePrefix), e.g. `AE:GetLogTime("SUF/Server - Update")`. Single reads fluctuate frame-to-frame — sample over several frames and average/take percentiles.
 
@@ -2149,7 +2152,7 @@ function Input:GetActiveGamepad() end
 [View Documentation](https://docs.atomontage.com/api/Inputbox)
 ]]
 --- @class Inputbox : Widget
---- @field value string|int|float
+--- @field value string|integer|number
 --- @field range Range
 --- @field inputType string
 --- @field multiLine boolean
@@ -2747,6 +2750,7 @@ function Material:SetProperty(name, vec) end
 --- @field vertexCount integer
 --- @field indexCount integer
 --- @field material Material
+--- @field assetMissing boolean (readonly)
 Mesh = {}
 
 --- @param a Mesh
@@ -4172,6 +4176,9 @@ function Scene:GetRootObjects() end
 --- @return Object[]
 function Scene:GetAllObjects() end
 
+--- @return table[]
+function Scene:GetMissingAssetRefs() end
+
 --- @param obj Object
 --- @return Object
 function Scene:CloneObject(obj) end
@@ -4328,6 +4335,7 @@ Script component. Not to be confused with the actual [lua table instance](Script
 --- @field name string
 --- @field luaFile Asset
 --- @field luaFilePath string
+--- @field assetMissing boolean (readonly)
 --- @field file string (deprecated)
 --- @field syncToClients boolean
 --- @field priority integer
@@ -4995,7 +5003,7 @@ function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 [View Documentation](https://docs.atomontage.com/api/Slider)
 ]]
 --- @class Slider : Widget
---- @field value float|int|Vec2
+--- @field value number|integer|Vec2
 --- @field scalars integer
 --- @field sliderType UISliderType
 --- @field range Vec2
@@ -5078,21 +5086,21 @@ Time = {}
 --- @field NoValue any (readonly)
 --- @field WidgetTypes table (readonly)
 --- @field PropertyNames table (readonly)
---- @field PropertyMode table<string,int> (readonly)
---- @field WidgetEvent table<string,int> (readonly)
---- @field WidgetEventName table<int,string> (readonly)
---- @field PosType table<string,int> (readonly)
+--- @field PropertyMode table<string,integer> (readonly)
+--- @field WidgetEvent table<string,integer> (readonly)
+--- @field WidgetEventName table<integer,string> (readonly)
+--- @field PosType table<string,integer> (readonly)
 --- @field PosTypeList table (readonly)
---- @field SizeType table<string,int> (readonly)
---- @field TextAlign table<string,int> (readonly)
---- @field InputType table<string,int> (readonly)
+--- @field SizeType table<string,integer> (readonly)
+--- @field TextAlign table<string,integer> (readonly)
+--- @field InputType table<string,integer> (readonly)
 --- @field InputTypeList table (readonly)
---- @field ButtonType table<string,int> (readonly)
---- @field ButtonTypeName table<int,string> (readonly)
+--- @field ButtonType table<string,integer> (readonly)
+--- @field ButtonTypeName table<integer,string> (readonly)
 --- @field ButtonTypeList table (readonly)
---- @field SliderType table<string,int> (readonly)
+--- @field SliderType table<string,integer> (readonly)
 --- @field SliderTypeList table (readonly)
---- @field LabelType table<string,int> (readonly)
+--- @field LabelType table<string,integer> (readonly)
 --- @field LabelTypeList table (readonly)
 --- @field TextureScaleModeList table (readonly)
 UI = {}
@@ -5210,7 +5218,7 @@ function UI:MoveWidgetInto(widget, target) end
 --- @return nil
 function UI:MoveWidgetBy(widget, delta) end
 
---- @param saveOrLuaAsset bool|Asset?
+--- @param saveOrLuaAsset boolean|Asset?
 --- @return Window
 function UI:AddWindow(saveOrLuaAsset) end
 
@@ -5273,6 +5281,14 @@ function UI:GetCfg(name) end
 
 --- @return table
 function UI:GetCfgAll() end
+
+--- @param name string
+--- @param value number|Vec2|Color
+--- @return nil
+function UI:SetCfg(name, value) end
+
+--- @return nil
+function UI:ResetCfg() end
 
 --- @param scale number
 --- @return nil
@@ -5338,7 +5354,7 @@ function UI:AutoCreateLuaFileForWindow(window) end
 function UI:OnColorPick(color) end
 
 --- @param value any
---- @return bool|any
+--- @return boolean|any
 function UI:IsNoValue(value) end
 
 --[[
@@ -7416,6 +7432,7 @@ The data will only render if the object also has a `VoxelRender` component.
 --- @field receiveTransform boolean Receive transform(pos, rot scale) to render with from server. By default this is true.If you set this to false, you will need to manually set the transform of the object on the client side.This is useful for making objects respond immediately if something happened on the client side i.e. input
 --- @field lodBias number
 --- @field asset Asset
+--- @field assetMissing boolean (readonly)
 --- @field static boolean
 --- @field isLoaded boolean (readonly)
 VoxelData = {}
@@ -7799,6 +7816,22 @@ function VoxelInspectData:GetColors() end
 [View Documentation](https://docs.atomontage.com/api/Widget)
 ]]
 --- @class Widget
+--- @field cornerRound number 0..1: rounds the glyph's sharp MSDF corners (1 = fully rounded, SDF-like).
+--- @field bevel number 0..1: faux-3D bevel / emboss shading along the glyph edge.
+--- @field bevelLight number 0..1: bevel light direction, mapped to a 0..2pi azimuth.
+--- @field melt number 0..1: animated noise domain-warp ('melting') of the glyph.
+--- @field glitch number 0..1: static horizontal scanline-displacement bands.
+--- @field bend number 0..1: horizontal shear / slant of the glyph.
+--- @field twist number 0..1: swirl warp, stronger toward the glyph edges.
+--- @field wave number 0..1: animated sine ripple along the glyph.
+--- @field revealAmount number 0..1: coverage-mask reveal amount (0 = solid, 1 = fully gone).
+--- @field revealMask integer Reveal mask kind: 0 off, 1 noise, 2 linear, 3 radial.
+--- @field revealParam number 0..1: reveal mask scale (noise) or angle (linear).
+--- @field revealEdge number 0..1: hue of the glowing reveal front edge; 0 = no edge.
+--- @field reveal number|table Write `{ amount=, mask='noise'|'linear'|'radial', param=, edge= }` or a bare amount (noise mask); reads back the amount.
+--- @field pattern integer|table Procedural fill pattern. Write a kind (0 off, 1 halftone, 2 dither, 3 contour) or `{ kind=, scale=, angle= }`; reads back the kind.
+--- @field patternScale number 0..1: fill-pattern scale (dot/cell size, ring frequency, ...).
+--- @field patternAngle number 0..1: fill-pattern rotation, mapped to 0..2pi.
 --- @field type string (readonly)
 --- @field id integer (readonly)
 --- @field destroyed boolean (readonly)
@@ -7848,22 +7881,7 @@ function VoxelInspectData:GetColors() end
 --- @field fontBold boolean
 --- @field fontName string
 --- @field textAlign Vec2
---- @field cornerRound number 0..1: rounds the glyph's sharp MSDF corners (1 = fully rounded, SDF-like).
---- @field bevel number 0..1: faux-3D bevel / emboss shading along the glyph edge.
---- @field bevelLight number 0..1: bevel light direction, mapped to a 0..2pi azimuth.
---- @field melt number 0..1: animated noise domain-warp ('melting') of the glyph.
---- @field glitch number 0..1: static horizontal scanline-displacement bands.
---- @field bend number 0..1: horizontal shear / slant of the glyph.
---- @field twist number 0..1: swirl warp, stronger toward the glyph edges.
---- @field wave number 0..1: animated sine ripple along the glyph.
---- @field revealAmount number 0..1: coverage-mask reveal amount (0 = solid, 1 = fully gone).
---- @field revealMask integer Reveal mask kind: 0 off, 1 noise, 2 linear, 3 radial.
---- @field revealParam number 0..1: reveal mask scale (noise) or angle (linear).
---- @field revealEdge number 0..1: hue of the glowing reveal front edge; 0 = no edge.
---- @field reveal number|table Write `{ amount=, mask='noise'|'linear'|'radial', param=, edge= }` or a bare amount (noise mask); reads back the amount.
---- @field pattern int|table Procedural fill pattern. Write a kind (0 off, 1 halftone, 2 dither, 3 contour) or `{ kind=, scale=, angle= }`; reads back the kind.
---- @field patternScale number 0..1: fill-pattern scale (dot/cell size, ring frequency, ...).
---- @field patternAngle number 0..1: fill-pattern rotation, mapped to 0..2pi.
+--- @field fx table
 --- @field fill table Write-only 2-color fill gradient: `{ top=Color, bottom=Color, along='y'|'x' }`.
 --- @field layers table Array of stacked text layers, each `{ d=dilate, soft=glow, off=Vec2 shadow offset, color=, colorBottom=, along='y'|'x' }`. When set, the layer stack REPLACES the base fill/outline/shadow.
 --- @field intVar integer

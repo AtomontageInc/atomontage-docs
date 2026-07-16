@@ -56,7 +56,7 @@ slug: /api/UI
 
 ### nil MoveWidgetBy(Widget widget, integer delta) {#nil-MoveWidgetBy-Widget-widget-integer-delta}
 
-### Window AddWindow(bool|Asset? saveOrLuaAsset) {#Window-AddWindow-boolAsset-saveOrLuaAsset}
+### Window AddWindow(boolean|Asset? saveOrLuaAsset) {#Window-AddWindow-booleanAsset-saveOrLuaAsset}
 
 ### nil DeleteWindow(Window window) {#nil-DeleteWindow-Window-window}
 
@@ -85,6 +85,10 @@ slug: /api/UI
 ### any GetCfg(string name) {#any-GetCfg-string-name}
 
 ### table GetCfgAll() {#table-GetCfgAll}
+
+### nil SetCfg(string name, number|Vec2|Color value) {#nil-SetCfg-string-name-numberVec2Color-value}
+
+### nil ResetCfg() {#nil-ResetCfg}
 
 ### nil SetUserScale(number scale) {#nil-SetUserScale-number-scale}
 
@@ -120,7 +124,7 @@ slug: /api/UI
 
 ### nil OnColorPick(Color color) {#nil-OnColorPick-Color-color}
 
-### bool|any IsNoValue(any value) {#boolany-IsNoValue-any-value}
+### boolean|any IsNoValue(any value) {#booleanany-IsNoValue-any-value}
 
 ## Properties
 
@@ -142,35 +146,35 @@ slug: /api/UI
 
 ### table PropertyNames {#table-PropertyNames}
 
-### table&lt;string,int&gt; PropertyMode {#tablestringint-PropertyMode}
+### table&lt;string,integer&gt; PropertyMode {#tablestringinteger-PropertyMode}
 
-### table&lt;string,int&gt; WidgetEvent {#tablestringint-WidgetEvent}
+### table&lt;string,integer&gt; WidgetEvent {#tablestringinteger-WidgetEvent}
 
-### table&lt;int,string&gt; WidgetEventName {#tableintstring-WidgetEventName}
+### table&lt;integer,string&gt; WidgetEventName {#tableintegerstring-WidgetEventName}
 
-### table&lt;string,int&gt; PosType {#tablestringint-PosType}
+### table&lt;string,integer&gt; PosType {#tablestringinteger-PosType}
 
 ### table PosTypeList {#table-PosTypeList}
 
-### table&lt;string,int&gt; SizeType {#tablestringint-SizeType}
+### table&lt;string,integer&gt; SizeType {#tablestringinteger-SizeType}
 
-### table&lt;string,int&gt; TextAlign {#tablestringint-TextAlign}
+### table&lt;string,integer&gt; TextAlign {#tablestringinteger-TextAlign}
 
-### table&lt;string,int&gt; InputType {#tablestringint-InputType}
+### table&lt;string,integer&gt; InputType {#tablestringinteger-InputType}
 
 ### table InputTypeList {#table-InputTypeList}
 
-### table&lt;string,int&gt; ButtonType {#tablestringint-ButtonType}
+### table&lt;string,integer&gt; ButtonType {#tablestringinteger-ButtonType}
 
-### table&lt;int,string&gt; ButtonTypeName {#tableintstring-ButtonTypeName}
+### table&lt;integer,string&gt; ButtonTypeName {#tableintegerstring-ButtonTypeName}
 
 ### table ButtonTypeList {#table-ButtonTypeList}
 
-### table&lt;string,int&gt; SliderType {#tablestringint-SliderType}
+### table&lt;string,integer&gt; SliderType {#tablestringinteger-SliderType}
 
 ### table SliderTypeList {#table-SliderTypeList}
 
-### table&lt;string,int&gt; LabelType {#tablestringint-LabelType}
+### table&lt;string,integer&gt; LabelType {#tablestringinteger-LabelType}
 
 ### table LabelTypeList {#table-LabelTypeList}
 
