@@ -23,6 +23,12 @@ id: AE
 
 ### number GetDebugTime() {#number-GetDebugTime}
 
+### number GetDisplayScale() {#number-GetDisplayScale}
+
+### table GetSafeArea() {#table-GetSafeArea}
+
+### table GetDisplayUsableArea() {#table-GetDisplayUsableArea}
+
 ### CommandLine GetCommandLine() {#CommandLine-GetCommandLine}
 Returns the [`CommandLine`](./commandLine.mdx) (engine command-line arguments).
 
@@ -30,7 +36,11 @@ Returns the [`CommandLine`](./commandLine.mdx) (engine command-line arguments).
 
 ### table GetVersion() {#table-GetVersion}
 
+### table GetFolders() {#table-GetFolders}
+
 ### System GetSystem() {#System-GetSystem}
+
+### System GetHostSystem() {#System-GetHostSystem}
 
 ### Device GetDevice() {#Device-GetDevice}
 
@@ -48,11 +58,17 @@ Lists all engine profiler timer **names** under a prefix — use it to discover 
 
 ### table GetLogValuesWithPrefix(string namePrefix) {#table-GetLogValuesWithPrefix-string-namePrefix}
 
-### Asset[], string[] GetAssetsFiltered(string assetFolder, string subfolder, string assetType) {#Asset-string-GetAssetsFiltered-string-assetFolder-string-subfolder-string-assetType}
+### Asset[] assets, string[] folders GetAssetsFiltered(string assetFolder, string subfolder, string assetType) {#Asset-assets-string-folders-GetAssetsFiltered-string-assetFolder-string-subfolder-string-assetType}
 
 ### Asset[] GetAssets() {#Asset-GetAssets}
 
+### Asset[] GetDefaultBrushImages() {#Asset-GetDefaultBrushImages}
+
 ### string[] GetAssetSources() {#string-GetAssetSources}
+
+### VarTable, integer version, boolean editable, string error GetScriptMetadata(Asset|AssetLink asset) {#VarTable-integer-version-boolean-editable-string-error-GetScriptMetadata-AssetAssetLink-asset}
+
+### string error SaveScriptMetadata(Asset|AssetLink asset, VarTable table, integer version) {#string-error-SaveScriptMetadata-AssetAssetLink-asset-VarTable-table-integer-version}
 
 ### string AssetPathInMontage(Asset|AssetLink asset) {#string-AssetPathInMontage-AssetAssetLink-asset}
 
@@ -60,7 +76,13 @@ Lists all engine profiler timer **names** under a prefix — use it to discover 
 
 ### Asset GetTextureForImage(Asset|AssetLink image) {#Asset-GetTextureForImage-AssetAssetLink-image}
 
-### Asset GetThumbnailForAsset(Asset|AssetLink asset) {#Asset-GetThumbnailForAsset-AssetAssetLink-asset}
+### Asset MakeTextureForImage(Asset|AssetLink image) {#Asset-MakeTextureForImage-AssetAssetLink-image}
+
+### table GetImageSupport(Asset|AssetLink image) {#table-GetImageSupport-AssetAssetLink-image}
+
+### Asset CopyAssetToMontage(Asset|AssetLink asset) {#Asset-CopyAssetToMontage-AssetAssetLink-asset}
+
+### Asset GetThumbnailForAsset(Asset|AssetLink|string asset) {#Asset-GetThumbnailForAsset-AssetAssetLinkstring-asset}
 
 ### integer GetAssetsChangeCounter() {#integer-GetAssetsChangeCounter}
 
@@ -70,13 +92,27 @@ Lists all engine profiler timer **names** under a prefix — use it to discover 
 
 ### table GetAELuaBindings() {#table-GetAELuaBindings}
 
-### table, table GetMemoryUsage() {#table-table-GetMemoryUsage}
+### table mem, table cnt, table type GetMemoryUsage() {#table-mem-table-cnt-table-type-GetMemoryUsage}
+
+### table GetAssetsMemUsage(string type) {#table-GetAssetsMemUsage-string-type}
+
+### table GetGpuTextures() {#table-GetGpuTextures}
 
 ### nil ReloadGeometry() {#nil-ReloadGeometry}
 
 ### nil AEVV_InvalidateData() {#nil-AEVVInvalidateData}
 
 ### boolean ToggleFullScreen() {#boolean-ToggleFullScreen}
+
+### table GetVideoModes() {#table-GetVideoModes}
+
+### number GetVSyncMode() {#number-GetVSyncMode}
+
+### boolean SetVSyncMode(VSyncMode mode) {#boolean-SetVSyncMode-VSyncMode-mode}
+
+### table GetVideoMode() {#table-GetVideoMode}
+
+### boolean SetVideoMode(table opts) {#boolean-SetVideoMode-table-opts}
 
 ## Properties
 

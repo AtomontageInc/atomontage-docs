@@ -16,23 +16,7 @@ slug: /api/Window
 
 ### boolean IsPopup() {#boolean-IsPopup}
 
-### Asset GetAsset(string name) {#Asset-GetAsset-string-name}
-
-### Asset GetAssetByIndex(integer index) {#Asset-GetAssetByIndex-integer-index}
-
-### integer GetAssetCount() {#integer-GetAssetCount}
-
-### nil AddAsset(string name, Asset asset) {#nil-AddAsset-string-name-Asset-asset}
-
-### nil SetAssetByIndex(integer index, Asset asset) {#nil-SetAssetByIndex-integer-index-Asset-asset}
-
-### nil SetAssetNameByIndex(integer index, string name) {#nil-SetAssetNameByIndex-integer-index-string-name}
-
-### nil RemoveAssetByIndex(integer index) {#nil-RemoveAssetByIndex-integer-index}
-
-### nil MoveAsset(integer fromIndex, integer toIndex) {#nil-MoveAsset-integer-fromIndex-integer-toIndex}
-
-### table GetAssets() {#table-GetAssets}
+### nil PlaceAtPercent(Vec2? percent) {#nil-PlaceAtPercent-Vec2-percent}
 
 ## Properties
 
@@ -40,7 +24,7 @@ slug: /api/Window
 
 ### integer id {#integer-id}
 
-### boolean destroyed {#boolean-destroyed}
+### boolean isDestroyed {#boolean-isDestroyed}
 
 ### Widget parent {#Widget-parent}
 
@@ -65,6 +49,8 @@ slug: /api/Window
 ### string name {#string-name}
 
 ### string tooltip {#string-tooltip}
+
+### string tooltipTitle {#string-tooltipTitle}
 
 ### boolean visible {#boolean-visible}
 
@@ -100,6 +86,8 @@ slug: /api/Window
 
 ### string roundingMode {#string-roundingMode}
 
+### string cornerShape {#string-cornerShape}
+
 ### integer roundCorners {#integer-roundCorners}
 
 ### boolean glyphFade {#boolean-glyphFade}
@@ -109,6 +97,14 @@ slug: /api/Window
 ### string marginMode {#string-marginMode}
 
 ### Vec2 gap {#Vec2-gap}
+
+### Vec2 translate {#Vec2-translate}
+
+### Vec2 scale {#Vec2-scale}
+
+### Vec2 scaleOrigin {#Vec2-scaleOrigin}
+
+### number opacity {#number-opacity}
 
 ### string alignItems {#string-alignItems}
 
@@ -120,9 +116,15 @@ slug: /api/Window
 
 ### boolean bgFrame {#boolean-bgFrame}
 
+### string cursor {#string-cursor}
+
+### boolean dragHighlight {#boolean-dragHighlight}
+
 ### Color bgColor {#Color-bgColor}
 
 ### Color borderColor {#Color-borderColor}
+
+### number borderWidth {#number-borderWidth}
 
 ### Color textColor {#Color-textColor}
 
@@ -134,11 +136,37 @@ slug: /api/Window
 
 ### Vec2 textAlign {#Vec2-textAlign}
 
+### boolean outline {#boolean-outline}
+
+### Color outlineColor {#Color-outlineColor}
+
+### number outlineWidth {#number-outlineWidth}
+
+### Color outline2Color {#Color-outline2Color}
+
+### number outline2Width {#number-outline2Width}
+
+### boolean effectOutline {#boolean-effectOutline}
+
+### boolean shadow {#boolean-shadow}
+
+### Color shadowColor {#Color-shadowColor}
+
+### Vec2 shadowOffset {#Vec2-shadowOffset}
+
+### number shadowSoftness {#number-shadowSoftness}
+
+### number weight {#number-weight}
+
 ### table fx {#table-fx}
 
 ### table fill {#table-fill}
 
 ### table layers {#table-layers}
+
+### boolean pixelSnap {#boolean-pixelSnap}
+
+### boolean ellipsis {#boolean-ellipsis}
 
 ### integer intVar {#integer-intVar}
 
@@ -162,9 +190,9 @@ slug: /api/Window
 
 ### fun(widget:Widget, ...) onMouseMoveEx {#fun-widgetWidget-onMouseMoveEx}
 
-### fun(widget:Widget, ...) onKeyDownEx {#fun-widgetWidget-onKeyDownEx}
+### fun(widget:Widget, key:string) onKeyDownEx {#fun-widgetWidget-keystring-onKeyDownEx}
 
-### fun(widget:Widget, ...) onKeyUpEx {#fun-widgetWidget-onKeyUpEx}
+### fun(widget:Widget, key:string) onKeyUpEx {#fun-widgetWidget-keystring-onKeyUpEx}
 
 ### fun(widget:Widget, ...) onValueChangeEx {#fun-widgetWidget-onValueChangeEx}
 
@@ -177,6 +205,8 @@ slug: /api/Window
 ### fun(widget:Widget) onDragLeaveEx {#fun-widgetWidget-onDragLeaveEx}
 
 ### fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean? onDragEndEx {#fun-widgetWidget-varany-varListtable-posVec2boolean-onDragEndEx}
+
+### fun(widget:Widget, active:boolean, var:any, varList:table) onDragSessionEx {#fun-widgetWidget-activeboolean-varany-varListtable-onDragSessionEx}
 
 ### string onPress {#string-onPress}
 
@@ -228,15 +258,17 @@ slug: /api/Window
 
 ### boolean stayOnTop {#boolean-stayOnTop}
 
+### string relativeTo {#string-relativeTo}
+
 ### boolean resizable {#boolean-resizable}
 
 ### boolean noInput {#boolean-noInput}
 
-### boolean noHide {#boolean-noHide}
-
 ### string borders {#string-borders}
 
 ### boolean enableShadow {#boolean-enableShadow}
+
+### boolean allowOffscreen {#boolean-allowOffscreen}
 
 ### table obj {#table-obj}
 

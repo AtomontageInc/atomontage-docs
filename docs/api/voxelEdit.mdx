@@ -119,8 +119,6 @@ Smoothing/Inflate/Deflate
 
 ### Image CaptureImage(Mat4 textureUvTmWorld, number relBorderSize) {#Image-CaptureImage-Mat4-textureUvTmWorld-number-relBorderSize}
 
-### Image GetImageResource(string name) {#Image-GetImageResource-string-name}
-
 ### nil FreeTmpLayers(integer clientId) {#nil-FreeTmpLayers-integer-clientId}
 It projects cone on voxel geometry and everything inside will be copies to tmp
 all raycasts will collide with this tmp layer instead until FreeTmpLayers
@@ -228,9 +226,9 @@ if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least
 5 = Normals smooth
 6 = Normals sharp
 
-### Image imageColor {#Image-imageColor}
+### Asset|AssetLink|Image imageColor {#AssetAssetLinkImage-imageColor}
 
-### Image imageNormal {#Image-imageNormal}
+### Asset|AssetLink|Image imageNormal {#AssetAssetLinkImage-imageNormal}
 
 ### Mat4 imageUVTm {#Mat4-imageUVTm}
 
@@ -253,6 +251,6 @@ callback function. progress from 0-1. May not be called every frame. Is called a
 ### fun(info:RemoveCountInfo, computeTimeMs:number) onFinished {#fun-infoRemoveCountInfo-computeTimeMsnumber-onFinished}
 callback function. onFinished is called after onProgress if it was last part
 
-### fun() onError {#fun-onError}
-callback function
+### fun(reason:string, opCount:integer) onError {#fun-reasonstring-opCountinteger-onError}
+callback function. Called when the op group is dropped: reason says why, opCount is how many ops that group covered
 

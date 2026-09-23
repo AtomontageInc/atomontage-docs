@@ -9,15 +9,6 @@ This class is only available on server
 
 ## Methods
 
-### boolean IsInitMode() {#boolean-IsInitMode}
-True while the server is in Init mode (editing); false in Live mode (play).
-
-### nil EnterInitMode(boolean? reloadGeom) {#nil-EnterInitMode-boolean-reloadGeom}
-Switch the server into Init mode (editing). If `reloadGeom` is true, voxel geometry is reloaded on the mode change.
-
-### nil EnterLiveMode(boolean? reloadGeom) {#nil-EnterLiveMode-boolean-reloadGeom}
-Switch the server into Live mode (play). If `reloadGeom` is true, voxel geometry is reloaded on the mode change.
-
 ### integer[] GetClients() {#integer-GetClients}
 
 ### boolean IsVRClient(integer clientID) {#boolean-IsVRClient-integer-clientID}
@@ -35,7 +26,7 @@ Re-runs all server Lua scripts from scratch. The entire Lua state is wiped — n
 
 ### table GetInsertPrefabStats() {#table-GetInsertPrefabStats}
 
-### nil PreloadVDRsForPrefab(string name, integer count) {#nil-PreloadVDRsForPrefab-string-name-integer-count}
+### nil PreloadVDRsForPrefab(Asset prefab, integer count) {#nil-PreloadVDRsForPrefab-Asset-prefab-integer-count}
 
 ### nil SaveScene() {#nil-SaveScene}
 Saves the whole scene to disk, including voxel geometry.
@@ -43,14 +34,38 @@ Saves the whole scene to disk, including voxel geometry.
 ### nil SaveSceneHierarchy() {#nil-SaveSceneHierarchy}
 Saves the object hierarchy and scripts only, without voxel geometry (much faster than `SaveScene`).
 
+### nil AutoSaveScene() {#nil-AutoSaveScene}
+
+### boolean IsHierarchyDirty() {#boolean-IsHierarchyDirty}
+
+### string ReportHierarchyDirty() {#string-ReportHierarchyDirty}
+
+### boolean SaveSceneAs(string name) {#boolean-SaveSceneAs-string-name}
+
+### boolean SaveSceneAsFileExists(string name) {#boolean-SaveSceneAsFileExists-string-name}
+
+### boolean SaveToPlayScene(boolean enterSession) {#boolean-SaveToPlayScene-boolean-enterSession}
+
+### boolean NewScene(string name, Asset? terrain) {#boolean-NewScene-string-name-Asset-terrain}
+
+### boolean OpenScene(Asset sceneAsset) {#boolean-OpenScene-Asset-sceneAsset}
+
+### boolean DeleteMontageAsset(Asset asset) {#boolean-DeleteMontageAsset-Asset-asset}
+
+### Asset GetCurrentScene() {#Asset-GetCurrentScene}
+
 ### nil ReloadScene() {#nil-ReloadScene}
 Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaReset`](#nil-LuaReset).
+
+### nil ResizeTerrain(integer potDelta) {#nil-ResizeTerrain-integer-potDelta}
 
 ### nil ResetSceneToInitState(boolean? reloadTerrain) {#nil-ResetSceneToInitState-boolean-reloadTerrain}
 
 ### nil BackupMontage() {#nil-BackupMontage}
 
 ### integer GetMemoryUsage() {#integer-GetMemoryUsage}
+
+### integer? GetMemoryLimit() {#integer-GetMemoryLimit}
 
 ### table GetErrors() {#table-GetErrors}
 
@@ -61,6 +76,8 @@ Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaRe
 ### nil HttpGet(string url, table headers, fun(success:boolean, response:string, statusCode:integer) onResponse) {#nil-HttpGet-string-url-table-headers-fun-successboolean-responsestring-statusCodeinteger-onResponse}
 
 ### nil HttpDownload(string url, table headers, string destPathInMontage, fun(success:boolean, response:string, statusCode:integer, asset:Asset?) onResponse) {#nil-HttpDownload-string-url-table-headers-string-destPathInMontage-fun-successboolean-responsestring-statusCodeinteger-assetAsset-onResponse}
+
+### nil TrackAnalytics(string name, table properties, integer? clientID) {#nil-TrackAnalytics-string-name-table-properties-integer-clientID}
 
 ### integer GetPing(integer clientID) {#integer-GetPing-integer-clientID}
 

@@ -83,49 +83,6 @@ end
 
 ## Methods
 
-### nil LateUpdate() {#nil-LateUpdate}
-Called after Update(), before rendering
-
-### nil RPC(string, ...) {#nil-RPC-string}
-Call a lua function by name from server to all clients or from one client to server. You may pass parameters. 
-You may send tables and basic math types such as `Vec3` or `Quat` but other classes may not be supported.
-
-```lua
-function self:Start()
-    --remember to sync the script component to clients otherwise there is no one to receive the RPCs
-    self.component.syncToClients = true
-    self.cam = Scene:GetActiveCamera()
-
-    events.mouseButtonDown.addListener(self, function (button, from)
-        if self.onServer then return end
-        --if left mouse button pressed create a ray from mouse position and direction
-        if button == 1 then
-            local mpos = Input:MousePosPerc()
-            local tf = self.cam.object
-            local pos = tf.pos + tf.forward * 1.5
-
-            --call this function on all clients with these two parameters
-            self:RPC("serverRaycast", pos, tf.forward*1000)
-        end
-    end)
-
-end
-
-function self:serverRaycast(origin, ray)
-    assert(self.onServer)
-    local hit = Collision():Raycast(origin, ray)[1]
-    if hit then
-        --make a cross at hit
-        deb:cross(hit.pos)
-        print("hit")
-    end
-end
-```
-
-
-### nil RPC(integer, string, ...) {#nil-RPC-integer-string}
-From server call a lua function by name on one specific client
-
 ### nil Attach() {#nil-Attach}
 Called once on object creation before Start() even if the script is not active
 
@@ -141,6 +98,7 @@ Called once on object creation after Attach() once the script becomes active
 Called once a frame after Start() if the object is active 
 
 ### nil LateUpdate(number deltaTime) {#nil-LateUpdate-number-deltaTime}
+Called after Update(), before rendering
 
 ### nil OnActivate() {#nil-OnActivate}
 Script active state changed through object or component. Never called before Start() 
@@ -165,6 +123,38 @@ Script active state changed through object or component. Never called before Sta
 ### nil EditorOnDeactivate() {#nil-EditorOnDeactivate}
 
 ### nil RPC(string funcName, ... args) {#nil-RPC-string-funcName-args}
+Call a lua function by name from server to all clients or from one client to server. You may pass parameters.
+You may send tables and basic math types such as `Vec3` or `Quat` but other classes may not be supported.
+Pass a client id as the first argument to call the function on one specific client from the server.
+
+```lua
+function self:Start()
+    --remember to sync the script component to clients otherwise there is no one to receive the RPCs
+    self.component.syncToClients = true
+    self.cam = Scene:GetActiveCamera()
+    events.mouseButtonDown.addListener(self, function (button, from)
+        if self.onServer then return end
+        --if left mouse button pressed create a ray from mouse position and direction
+        if button == 1 then
+            local mpos = Input:MousePosPerc()
+            local tf = self.cam.object
+            local pos = tf.pos + tf.forward * 1.5
+            --call this function on all clients with these two parameters
+            self:RPC("serverRaycast", pos, tf.forward*1000)
+        end
+    end)
+end
+
+function self:serverRaycast(origin, ray)
+    assert(self.onServer)
+    local hit = Collision():Raycast(origin, ray)[1]
+    if hit then
+        --make a cross at hit
+        deb:cross(hit.pos)
+        print("hit")
+    end
+end
+```
 
 ## Properties
 

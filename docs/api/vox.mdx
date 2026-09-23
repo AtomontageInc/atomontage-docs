@@ -17,6 +17,13 @@ Vox:Add(Sphere(pos, 2))   -- operation + shape (see Shape)
 
 ## Methods
 
+### number flushEdits() {#number-flushEdits}
+Run everything the queue is holding, in insertion order - an Add followed by a Remove on the same
+spot has to stay ordered. Called for you every `flushFrames` frames; call it by hand only when
+something needs the pending edits applied right now (a save, a scene teardown, a readback).
+
+### number pendingEdits() {#number-pendingEdits}
+
 ### OpRemove Remove(opTarget target) {#OpRemove-Remove-opTarget-target}
 Remove a shape from something
 

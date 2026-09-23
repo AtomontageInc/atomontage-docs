@@ -32,9 +32,11 @@ slug: /api/UI
 
 ### Separator AddSeparator(Widget parent, string? name) {#Separator-AddSeparator-Widget-parent-string-name}
 
-### Widget AddWidget(string type, Widget parent, boolean? putInside, boolean? front, boolean? save) {#Widget-AddWidget-string-type-Widget-parent-boolean-putInside-boolean-front-boolean-save}
+### Graph AddGraph(Widget parent, string? name) {#Graph-AddGraph-Widget-parent-string-name}
 
-### Widget CloneWidget(Widget widget) {#Widget-CloneWidget-Widget-widget}
+### Widget AddWidget(string type, Widget parent, boolean? putInside, boolean? front) {#Widget-AddWidget-string-type-Widget-parent-boolean-putInside-boolean-front}
+
+### Widget? CloneWidget(Widget widget) {#Widget-CloneWidget-Widget-widget}
 
 ### nil DeleteWidget(Widget widget) {#nil-DeleteWidget-Widget-widget}
 
@@ -46,9 +48,9 @@ slug: /api/UI
 
 ### nil SelectWidget(Widget widget) {#nil-SelectWidget-Widget-widget}
 
-### nil FocusWidget(Widget widget) {#nil-FocusWidget-Widget-widget}
+### nil FocusWidget(Widget? widget) {#nil-FocusWidget-Widget-widget}
 
-### nil SetKeyboardFocus(Widget? widget) {#nil-SetKeyboardFocus-Widget-widget}
+### boolean ClickWidget(Widget widget) {#boolean-ClickWidget-Widget-widget}
 
 ### boolean CanMoveWidgetInto(Widget widget, Widget target) {#boolean-CanMoveWidgetInto-Widget-widget-Widget-target}
 
@@ -56,11 +58,19 @@ slug: /api/UI
 
 ### nil MoveWidgetBy(Widget widget, integer delta) {#nil-MoveWidgetBy-Widget-widget-integer-delta}
 
-### Window AddWindow(boolean|Asset? saveOrLuaAsset) {#Window-AddWindow-booleanAsset-saveOrLuaAsset}
+### Window AddWindow(string|Asset? nameOrLuaAsset) {#Window-AddWindow-stringAsset-nameOrLuaAsset}
 
 ### nil DeleteWindow(Window window) {#nil-DeleteWindow-Window-window}
 
 ### table GetWindows() {#table-GetWindows}
+
+### nil ExternalDragBegin(table mimes) {#nil-ExternalDragBegin-table-mimes}
+
+### nil ExternalDragMove(number x, number y) {#nil-ExternalDragMove-number-x-number-y}
+
+### nil ExternalDragEnd() {#nil-ExternalDragEnd}
+
+### nil SetDragLabel(string name, string? type) {#nil-SetDragLabel-string-name-string-type}
 
 ### Window WindowByName(string name) {#Window-WindowByName-string-name}
 
@@ -96,13 +106,17 @@ slug: /api/UI
 
 ### number GetUIScale() {#number-GetUIScale}
 
+### nil SetUseDisplayScale(boolean enable) {#nil-SetUseDisplayScale-boolean-enable}
+
+### boolean GetUseDisplayScale() {#boolean-GetUseDisplayScale}
+
+### number left, number top, number right, number bottom GetSafeAreaInsets() {#number-left-number-top-number-right-number-bottom-GetSafeAreaInsets}
+
 ### table GetUIStats() {#table-GetUIStats}
 
 ### table GetUIGlyphs() {#table-GetUIGlyphs}
 
-### nil SaveUI(string path) {#nil-SaveUI-string-path}
-
-### nil LoadUI(string path) {#nil-LoadUI-string-path}
+### nil LoadUI() {#nil-LoadUI}
 
 ### nil ResetLua() {#nil-ResetLua}
 
@@ -133,8 +147,6 @@ slug: /api/UI
 ### table&lt;string,boolean&gt; KeyDown {#tablestringboolean-KeyDown}
 
 ### table&lt;string,boolean&gt; KeyUp {#tablestringboolean-KeyUp}
-
-### boolean showUI {#boolean-showUI}
 
 ### boolean alwaysRedraw {#boolean-alwaysRedraw}
 

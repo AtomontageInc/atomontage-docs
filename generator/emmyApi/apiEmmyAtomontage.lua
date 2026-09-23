@@ -341,7 +341,6 @@ Callbacks = {}
 ---| '"Mesh"'
 ---| '"RigidBody"'
 ---| '"Script"'
----| '"Sky"'
 ---| '"VoxelData"'
 
 --- @alias opTarget Shape|Object|Object[]
@@ -381,6 +380,15 @@ function AE:OnClient() end
 --- @return number
 function AE:GetDebugTime() end
 
+--- @return number
+function AE:GetDisplayScale() end
+
+--- @return table
+function AE:GetSafeArea() end
+
+--- @return table
+function AE:GetDisplayUsableArea() end
+
 --[[
 Returns the [`CommandLine`](./commandLine.mdx) (engine command-line arguments).
 
@@ -396,8 +404,14 @@ function AE:GetScript(fileName) end
 --- @return table
 function AE:GetVersion() end
 
+--- @return table
+function AE:GetFolders() end
+
 --- @return System
 function AE:GetSystem() end
+
+--- @return System
+function AE:GetHostSystem() end
 
 --- @return Device
 function AE:GetDevice() end
@@ -440,14 +454,27 @@ function AE:GetLogValuesWithPrefix(namePrefix) end
 --- @param assetFolder string
 --- @param subfolder string
 --- @param assetType string
---- @return Asset[], string[]
+--- @return Asset[] assets, string[] folders
 function AE:GetAssetsFiltered(assetFolder, subfolder, assetType) end
 
 --- @return Asset[]
 function AE:GetAssets() end
 
+--- @return Asset[]
+function AE:GetDefaultBrushImages() end
+
 --- @return string[]
 function AE:GetAssetSources() end
+
+--- @param asset Asset|AssetLink
+--- @return VarTable, integer version, boolean editable, string error
+function AE:GetScriptMetadata(asset) end
+
+--- @param asset Asset|AssetLink
+--- @param table VarTable
+--- @param version integer
+--- @return string error
+function AE:SaveScriptMetadata(asset, table, version) end
 
 --- @param asset Asset|AssetLink
 --- @return string
@@ -461,7 +488,19 @@ function AE:GetBuiltinMaterial(name) end
 --- @return Asset
 function AE:GetTextureForImage(image) end
 
+--- @param image Asset|AssetLink
+--- @return Asset
+function AE:MakeTextureForImage(image) end
+
+--- @param image Asset|AssetLink
+--- @return table
+function AE:GetImageSupport(image) end
+
 --- @param asset Asset|AssetLink
+--- @return Asset
+function AE:CopyAssetToMontage(asset) end
+
+--- @param asset Asset|AssetLink|string
 --- @return Asset
 function AE:GetThumbnailForAsset(asset) end
 
@@ -479,8 +518,15 @@ function AE:GetEnumValues(enumName) end
 --- @return table
 function AE:GetAELuaBindings() end
 
---- @return table, table
+--- @return table mem, table cnt, table type
 function AE:GetMemoryUsage() end
+
+--- @param type string
+--- @return table
+function AE:GetAssetsMemUsage(type) end
+
+--- @return table
+function AE:GetGpuTextures() end
 
 --- @return nil
 function AE:ReloadGeometry() end
@@ -490,6 +536,23 @@ function AE:AEVV_InvalidateData() end
 
 --- @return boolean
 function AE:ToggleFullScreen() end
+
+--- @return table
+function AE:GetVideoModes() end
+
+--- @return number
+function AE:GetVSyncMode() end
+
+--- @param mode VSyncMode
+--- @return boolean
+function AE:SetVSyncMode(mode) end
+
+--- @return table
+function AE:GetVideoMode() end
+
+--- @param opts table
+--- @return boolean
+function AE:SetVideoMode(opts) end
 
 --[[
 `Client`
@@ -514,6 +577,16 @@ function AnyVar:IsAsset(type) end
 --- @return boolean
 function AnyVar:IsAssetLink(type) end
 
+--- @param mimePrefix string?
+--- @return boolean
+function AnyVar:IsExternalFile(mimePrefix) end
+
+--- @return string?
+function AnyVar:ExternalFileMime() end
+
+--- @return boolean
+function AnyVar:ExternalKindKnown() end
+
 --- @return boolean
 function AnyVar:IsServerObject() end
 
@@ -534,12 +607,16 @@ function AnyVar:IsComponent() end
 ]]
 --- @class Asset
 --- @field name string
+--- @field id string
 --- @field type integer
 --- @field typeStr string
 --- @field deleted boolean
 --- @field filepath string
 --- @field relpath string
 --- @field canReferenceAssets boolean
+--- @field cloud boolean
+--- @field fileSize integer
+--- @field lastModified integer
 Asset = {}
 
 --- @return Asset[]
@@ -551,6 +628,21 @@ function Asset:GetReferencedAssetsAndTypes() end
 --- @param asset Asset
 --- @return Asset[]
 function Asset:GetAssetsReferencingAsset(asset) end
+
+--- @return boolean
+function Asset:IsDownloaded() end
+
+--- @return nil
+function Asset:Download() end
+
+--- @return boolean
+function Asset:IsDownloading() end
+
+--- @return boolean
+function Asset:DownloadFailed() end
+
+--- @return number
+function Asset:DownloadProgress() end
 
 --[[
 `Client`
@@ -591,16 +683,16 @@ Audio = {}
 Play a sound at a position, with volume and loop. Only single channel audio.
 Returns [AudioSource](./audioSource.mdx)
 
-[View Documentation](https://docs.atomontage.com/api/Audio#AudioSource-PlaySound-stringAsset-sound-Vec3-position-number-volume-boolean-loop)
+[View Documentation](https://docs.atomontage.com/api/Audio#AudioSource-PlaySound-Asset-sound-Vec3-position-number-volume-boolean-loop)
 ]]
---- @param sound string|Asset
+--- @param sound Asset
 --- @param position Vec3?
 --- @param volume number?
 --- @param loop boolean?
 --- @return AudioSource
 function Audio:PlaySound(sound, position, volume, loop) end
 
---- @param sound string|Asset
+--- @param sound Asset
 --- @param position Vec3?
 --- @param volume number?
 --- @param loop boolean?
@@ -689,7 +781,7 @@ function AudioMusic:Stop() end
 --[[
 `Client`
 
-Returned by [`Audio:PlaySound()`](./audio.mdx#AudioSource-PlaySound-stringAsset-sound-Vec3-position-number-volume-booleanean-loop)
+Returned by [`Audio:PlaySound()`](./audio.mdx#AudioSource-PlaySound-Asset-sound-Vec3-position-number-volume-booleanean-loop)
 
 [View Documentation](https://docs.atomontage.com/api/AudioSource)
 ]]
@@ -781,7 +873,7 @@ function Box(pos, rot, size) end
 --- @field value boolean
 --- @field icon string
 --- @field icon2 string
---- @field iconMargin Vec2
+--- @field iconMargin number
 --- @field iconSize number
 --- @field closeWindow boolean
 Button = {}
@@ -813,6 +905,9 @@ ButtonPanel = {}
 --- @field type string (readonly) Specifies the object's type as a string, useful for type identification.
 --- @field onePerObject boolean (readonly)
 --- @field fovY number Defines the vertical field of view in degrees
+--- @field zNear number
+--- @field zFar number
+--- @field aspectRatio number
 Camera = {}
 
 --- @param a Camera
@@ -934,17 +1029,7 @@ This class is only available on client
 ]]
 --- @class Client
 --- @field permission ClientPermission
---- @field platform string (readonly)
---- @field sysInfo string (readonly)
 Client = {}
-
---[[
-True while the client is in Init mode (the editor's edit mode), as opposed to live/play.
-
-[View Documentation](https://docs.atomontage.com/api/Client#boolean-IsInitMode)
-]]
---- @return boolean
-function Client:IsInitMode() end
 
 --- @return integer
 function Client:GetID() end
@@ -961,6 +1046,10 @@ function Client:OpenMontageScriptFile(fileName, lineNumber) end
 
 --- @return string
 function Client:GetMontageURL() end
+
+--- @param url string
+--- @return boolean
+function Client:NeedsRestartToOpen(url) end
 
 --- @param url string
 --- @return nil
@@ -1006,6 +1095,9 @@ function Client:GetConnectionStatus() end
 --- @return string
 function Client:GetConnectionStatusDetailed() end
 
+--- @return string
+function Client:GetEngineMismatchUrl() end
+
 --- @param reason string?
 --- @return nil
 function Client:Disconnect(reason) end
@@ -1022,11 +1114,17 @@ function Client:GetPing() end
 --- @return integer
 function Client:GetSceneMsgsInQueue() end
 
+--- @return boolean
+function Client:IsInitialAssetSyncDone() end
+
 --- @return table
 function Client:GetMainDispatcherStats() end
 
 --- @return table
 function Client:GetRenderStats() end
+
+--- @return table
+function Client:GetRenderStatsWrites() end
 
 --- @return boolean
 function Client:GetRenderStatsEnabled() end
@@ -1036,11 +1134,43 @@ function Client:GetRenderStatsEnabled() end
 function Client:SetRenderStatsEnabled(enable) end
 
 --- @return nil
-function Client:ConnectToServer() end
+function Client:SignIn() end
+
+--- @return nil
+function Client:SignOut() end
+
+--- @return string
+function Client:GetAuthStatus() end
+
+--- @return string
+function Client:GetAuthPrompt() end
+
+--- @return string
+function Client:GetAuthError() end
+
+--- @return string
+function Client:StartAISession() end
 
 --- @param path string
 --- @return boolean opened
 function Client:OpenFolder(path) end
+
+--- @param sky Asset|AssetLink
+--- @return nil
+function Client:SetSky(sky) end
+
+--- @return nil
+function Client:ClearSky() end
+
+--- @param enabled boolean
+--- @return nil
+function Client:SetSkyEnabled(enabled) end
+
+--- @return boolean
+function Client:GetSkyEnabled() end
+
+--- @return table
+function Client:GetSkyInfo() end
 
 --- @return boolean
 function Client:GetNetworkThrottlingNow() end
@@ -1082,6 +1212,15 @@ function Client:GetWindowSize() end
 
 --- @return Vec2
 function Client:GetViewportSize() end
+
+--- @return Vec2
+function Client:GetRenderSize() end
+
+--- @return Vec2
+function Client:GetViewportPos() end
+
+--- @return boolean
+function Client:IsAppVisible() end
 
 --- @param target Object
 --- @param opts table?
@@ -1157,11 +1296,11 @@ function Client:IsUploadingFiles() end
 --- @return boolean
 function Client:IsDownloadingFiles() end
 
+--- @return string
+function Client:GetDragDropBlockedReason() end
+
 --- @return nil
 function Client:Restart() end
-
---- @return string
-function Client:ReloadShaders() end
 
 --- @return nil
 function Client:ToggleChannelRendering() end
@@ -1184,11 +1323,24 @@ function Client:IsMobile() end
 --- @return integer
 function Client:GetMemoryUsage() end
 
+--- @return integer?
+function Client:GetMemoryLimit() end
+
 --- @return string
 function Client:GetCredits() end
 
 --- @return table
 function Client:GetErrors() end
+
+--- @return table
+function Client:GetShaderErrors() end
+
+--- @param defines string
+--- @return nil
+function Client:SetVPuzzleShaderDefines(defines) end
+
+--- @return nil
+function Client:RequestReloadShaders() end
 
 --- @param text string
 --- @return nil
@@ -1205,6 +1357,26 @@ function Client:GetClipboardText() end
 --- @param url string
 --- @return nil
 function Client:OpenBrowserWithURL(url) end
+
+--- @param url string
+--- @param onResponse fun(success:boolean, response:string, statusCode:integer)
+--- @return nil
+function Client:HttpGet(url, onResponse) end
+
+--- @param url string
+--- @param fileName string
+--- @param onResponse fun(success:boolean, response:string, statusCode:integer, asset:Asset?)
+--- @return nil
+function Client:HttpDownload(url, fileName, onResponse) end
+
+--- @param url string
+--- @param fileName string
+--- @param onResponse fun(success:boolean, response:string, statusCode:integer, asset:Asset?)
+--- @return nil
+function Client:HttpDownloadToClientCache(url, fileName, onResponse) end
+
+--- @return nil
+function Client:ReleaseClientCacheResources() end
 
 --- @param fromCache boolean
 --- @return nil
@@ -1300,6 +1472,14 @@ Batch-draw multiple billboards from a table of descriptors.
 --- @param billboards table
 --- @return nil
 function Client:DrawBillboards(billboards) end
+
+--- @param texture Asset|AssetLink
+--- @param pos Vec3
+--- @param size number
+--- @param color Vec4
+--- @param angleDeg number
+--- @return nil
+function Client:DrawBillboardTexture(texture, pos, size, color, angleDeg) end
 
 --[[
 `Client`
@@ -1534,7 +1714,6 @@ All components inherit from this class. It is not meant to be instantiated direc
 * [Camera](Camera)
 * [VoxelData](VoxelData)
 * [Mesh](Mesh)
-* [Sky](Sky)
 
 [View Documentation](https://docs.atomontage.com/api/Component)
 ]]
@@ -1814,6 +1993,21 @@ function FindObjectsWithTag(tag) end
 function Collide(shape) end
 
 --[[
+Em size Text()/WriteToScreen actually renders at, in the same pixel units their `pixelOffset`
+takes - so a width measured with TextWidth can be fed straight back in as an offset.
+Mirrors Client::UpdateScreenLabels: muiSize = 1 + 0.3*size, the em size is 20x that, and the
+whole thing scales with the SHORT side of the viewport against a 2160px reference. Text
+therefore GROWS WITH RESOLUTION while a raw pixelOffset does not - which is exactly why offsets
+hand-tuned at one window size drift at another. The MUI/user scale deliberately does not appear:
+the engine divides it out and the layout multiplies it back, so it cancels exactly.
+
+[View Documentation](https://docs.atomontage.com/api/Global#number-emPx-TextFontSizePx-number-size)
+]]
+--- @param size number?
+--- @return number emPx
+function TextFontSizePx(size) end
+
+--[[
 doesnt really work idk why, need this in engine
 
 [View Documentation](https://docs.atomontage.com/api/Global#number-widthPx-TextWidth-string-text-number-size)
@@ -2032,6 +2226,13 @@ Releases all keys and buttons previously set via the `Inject*` functions.
 --- @return nil
 function Input:ClearInjected() end
 
+--- @param allow boolean
+--- @return nil
+function Input:SetAllowGameInput(allow) end
+
+--- @return boolean
+function Input:GetAllowGameInput() end
+
 --- @return boolean
 function Input:GetRelativeMouseMode() end
 
@@ -2158,6 +2359,7 @@ function Input:GetActiveGamepad() end
 --- @field multiLine boolean
 --- @field decimals integer
 --- @field prefixLabel string
+--- @field wrap number
 Inputbox = {}
 
 --[[
@@ -2818,6 +3020,8 @@ The object visible in the hierarchy. Every object has a transform and can have a
 --- @field active boolean Set the object to be active or inactive. Inactive objects are not updated or rendered. All its children also become inactive.
 --- @field activeInHierarchy boolean (readonly) Readonly. Check if the object is active in the scene. It may be inactive because a parent is inactive.
 --- @field save boolean Save this object in the hierarchy. If not saved it will be deleted after lua reset or server restart
+--- @field owner integer
+--- @field receiveTransform boolean Receive transform(pos, rot scale) to render with from server. By default this is true.If you set this to false, you will need to manually set the transform of the object on the client side.This is useful for making objects respond immediately if something happened on the client side i.e. inputDisable RigidBody simulation before setting this to false.
 --- @field isDestroyed boolean (readonly) True if the object was destroyed. Note that references to this object will still be valid 
 --- @field id string (readonly) This is id is unique across clients and server
 --- @field parent Object?
@@ -2827,7 +3031,6 @@ The object visible in the hierarchy. Every object has a transform and can have a
 --- @field isPrefabObject boolean (readonly)
 --- @field components Component[] (readonly)
 --- @field voxelData VoxelData? (readonly)
---- @field voxelRenderer VoxelData? (readonly)
 --- @field rigidBody RigidBody? (readonly)
 Object = {}
 
@@ -2881,10 +3084,10 @@ Get child object by name
 --- @return Object?
 function Object:GetChild(name) end
 
---- @param fileName string
+--- @param luaFile Asset
 --- @param sync boolean?
 --- @return Script
-function Object:AddScript(fileName, sync) end
+function Object:AddScript(luaFile, sync) end
 
 --- @return Mesh
 function Object:AddMesh() end
@@ -2894,9 +3097,6 @@ function Object:AddVoxelData() end
 
 --- @return Camera
 function Object:AddCamera() end
-
---- @return Sky
-function Object:AddSkybox() end
 
 --- @return boolean
 function Object:RemoveParent() end
@@ -2927,6 +3127,11 @@ function Object:GetComponents(typeName) end
 --- @param type `T`|componentType
 --- @return T
 function Object:AddComponent(type) end
+
+--- @param component Component
+--- @param before Component
+--- @return boolean
+function Object:MoveComponentBefore(component, before) end
 
 --[[
 get the object and all its children, descendants, does not returns destroyed objects
@@ -3066,6 +3271,56 @@ Set the target shape/object(s) for this operation. Updates the cached VoxelEdit 
 function OpBase:Target(target) end
 
 --[[
+Batch this edit instead of applying it the moment you call `Run()`. It joins a shared queue and
+lands within `Vox.editQueue.flushFrames` frames (default 8), in the order it was issued.
+**Why it is worth it.** A voxel edit costs far more for the FRAME it lands on than for itself:
+applying it invalidates blocks, which makes the renderer reload them and the server re-stream
+them to every client. Pay that once for 40 edits instead of once each and most of it disappears.
+Measured in a Cortex Command firefight (2 troops, ~200 edits/s, wall clock, 6 interleaved pairs):
+   | server frame | immediate | batched (every 8) |
+   | median       | 123ms     | 65ms              |
+   | average      | 127ms     | 85ms              |
+   | fps          | 7.9       | 12.1              |
+Cutting the effects instead is far weaker: dropping blood entirely won ~20%, spark scorch ~17%,
+bullet craters ~4% - because whatever you leave in still edits every frame and still pays the
+per-frame toll. Batching everything got 89% of the win available from deleting every edit.
+**Use it for cosmetic scarring** - blood splatter, scorch marks, bullet craters, rubble, shell
+casings. Anything the player only looks at.
+**Do NOT use it for anything read back synchronously** - digging progress, `volume`/`volumePerc`
+health checks, build placement validation, or an edit another edit depends on this frame. A
+queued edit is invisible to those reads until it flushes and the failure mode is a silent
+desync, not an error. Leave those alone; un-batched is the default.
+**What it costs.** Up to `flushFrames` frames of latency before the mark appears (~0.5s at 15fps).
+The flush frame itself is heavier, so batching trades tail for median: measured p95 183 -&gt; 199ms
+and max 215 -&gt; 270ms while the median halved. Lower `flushFrames` to flatten that, raise it to
+push the median lower.
+**When it silently declines** (the edit just runs immediately, which is always correct):
+* the edit is forced onto a dynamic object - it would land where the object *was*, and troop
+  damage has to register on the frame the bullet lands. One splatter op alternating between
+  terrain and body hits is decided per `Run()`, so this is normal, not a mistake.
+* the shape is a `Polyhedron` or `Polygon` (no cheap way to snapshot it).
+* `Vox.editQueue.enabled` is false - the global off switch, for A/B profiling.
+```lua
+Vox:Paint(Sphere(hit.pos, 0.04)):Color(0, 0, 0, 0.5):Batch():Run()  -- scorch mark
+```
+
+[View Documentation](https://docs.atomontage.com/api/OpBase#self-Batch-boolean-on)
+]]
+--- @param on boolean?
+--- @return self
+function OpBase:Batch(on) end
+
+--[[
+Opt-in for ONE oversized edit (soft limit only — the hard limit stays refused).
+Confirm with the user first: the edit executes as a single multi-second frame
+stall for every connected client.
+
+[View Documentation](https://docs.atomontage.com/api/OpBase#nil-AcceptStall)
+]]
+--- @return nil
+function OpBase:AcceptStall() end
+
+--[[
 Callback function. `OnFinished` is called after `OnProgress` if it was last part
 
 [View Documentation](https://docs.atomontage.com/api/OpBase#nil-OnFinished-fun-onFinished)
@@ -3164,12 +3419,12 @@ Project an image onto the voxels (works on Add/Paint/Remove). The image replaces
 Color to tint it. Projected along `dir` (planar): lands only on the face toward `dir`, fading out on
 angled faces (decal-style). Use TriplanarTexture to cover every face without fading instead.
 
-[View Documentation](https://docs.atomontage.com/api/OpBaseTextured#OpBaseTextured-Texture-string-tex-Vec3-dir-number-scale-stringbooleannil-normal)
+[View Documentation](https://docs.atomontage.com/api/OpBaseTextured#OpBaseTextured-Texture-stringAssetAssetLinknil-tex-Vec3-dir-number-scale-stringAssetAssetLinkbooleannil-normal)
 ]]
---- @param tex string?
+--- @param tex string|Asset|AssetLink|nil
 --- @param dir Vec3
 --- @param scale number?
---- @param normal string|boolean|nil
+--- @param normal string|Asset|AssetLink|boolean|nil
 --- @return OpBaseTextured
 function OpBaseTextured:Texture(tex, dir, scale, normal) end
 
@@ -3177,12 +3432,12 @@ function OpBaseTextured:Texture(tex, dir, scale, normal) end
 Texture voxels from all three world axes, blended by surface normal (works on Add/Paint/Remove).
 The image replaces color; set a Color to tint it.
 
-[View Documentation](https://docs.atomontage.com/api/OpBaseTextured#OpBaseTextured-TriplanarTexture-string-tex-Vec3-anchor-number-scale-stringbooleannil-normal)
+[View Documentation](https://docs.atomontage.com/api/OpBaseTextured#OpBaseTextured-TriplanarTexture-stringAssetAssetLinknil-tex-Vec3-anchor-number-scale-stringAssetAssetLinkbooleannil-normal)
 ]]
---- @param tex string?
+--- @param tex string|Asset|AssetLink|nil
 --- @param anchor Vec3?
 --- @param scale number?
---- @param normal string|boolean|nil
+--- @param normal string|Asset|AssetLink|boolean|nil
 --- @return OpBaseTextured
 function OpBaseTextured:TriplanarTexture(tex, anchor, scale, normal) end
 
@@ -4054,20 +4309,10 @@ function RigidBody:GetCollisions(eventType) end
 [View Documentation](https://docs.atomontage.com/api/Scene)
 ]]
 --- @class Scene
---- @field voxelDataResourceTemplateSizeThreshold integer
 --- @field simulationPaused boolean
 --- @field simulationSpeed number
 --- @field gravity number
 Scene = {}
-
---[[
-Gets the shared [`Material`](./material.mdx) the renderer actually draws with (the cached instance, not a copy) — use it to drive live shader uniforms via [`Material:SetProperty`](./material.mdx#nil-SetProperty-string-name-Vec3Vec4-vec).
-
-[View Documentation](https://docs.atomontage.com/api/Scene#Material-CreateMaterial-string-path)
-]]
---- @param path string
---- @return Material?
-function Scene:CreateMaterial(path) end
 
 --[[
 Simulation time in seconds; use this instead of the sandboxed `os.time`.
@@ -4126,21 +4371,25 @@ local ob = Scene:CreateObject("Player Controller 1")
 
 Also see [`Scene:MakeNameValid`](#string-MakeNameValid-string-name)
 
-
-[View Documentation](https://docs.atomontage.com/api/Scene#Object-CreateObject-string-name-Object-parentObj-boolean-save-boolean-selectInEditor)
+[View Documentation](https://docs.atomontage.com/api/Scene#Object-CreateObject-string-name-Object-parentObj)
 ]]
 --- @param name string?
 --- @param parentObj Object?
---- @param save boolean?
---- @param selectInEditor boolean?
 --- @return Object
-function Scene:CreateObject(name, parentObj, save, selectInEditor) end
+function Scene:CreateObject(name, parentObj) end
 
 --- @param name string
+--- @param parentObj Object?
+--- @param active boolean
 --- @param save boolean
---- @param selectInEditor boolean
 --- @return Object
-function Scene:CreateObject(name, save, selectInEditor) end
+function Scene:CreateObject(name, parentObj, active, save) end
+
+--- @param name string
+--- @param active boolean
+--- @param save boolean
+--- @return Object
+function Scene:CreateObject(name, active, save) end
 
 --[[
 Flags the object for deletion. The object will not actually be destroyed until the next frame.
@@ -4156,12 +4405,16 @@ function Scene:DestroyObject(obj) end
 function Scene:GetObjectsByName(name) end
 
 --- @param name string
---- @return Object
+--- @return Object?
 function Scene:GetObjectByName(name) end
 
 --- @param id string
---- @return Object
+--- @return Object?
 function Scene:GetObjectById(id) end
+
+--- @param id string
+--- @return Component?
+function Scene:GetComponentById(id) end
 
 --- @param typeName string
 --- @return boolean
@@ -4194,33 +4447,33 @@ function Scene:CloneObject(obj, intoObj) end
 function Scene:CloneObject(obj, name) end
 
 --- @param obj Object
---- @param keepPrefabLink boolean
+--- @param setSaveToFalse boolean
 --- @return Object
-function Scene:CloneObject(obj, keepPrefabLink) end
+function Scene:CloneObject(obj, setSaveToFalse) end
 
 --- @param obj Object
 --- @param name string
---- @param keepPrefabLink boolean
+--- @param setSaveToFalse boolean
 --- @return Object
-function Scene:CloneObject(obj, name, keepPrefabLink) end
+function Scene:CloneObject(obj, name, setSaveToFalse) end
 
 --- @param obj Object
 --- @param newParentObj Object
---- @return nil
+--- @return boolean
 function Scene:MoveObject(obj, newParentObj) end
 
 --- @param obj Object
 --- @param siblingObj Object
---- @return nil
+--- @return boolean
 function Scene:MoveObjectAfter(obj, siblingObj) end
 
 --- @param obj Object
 --- @param siblingObj Object
---- @return nil
+--- @return boolean
 function Scene:MoveObjectBefore(obj, siblingObj) end
 
 --- @param obj Object
---- @return nil
+--- @return boolean
 function Scene:MoveObjectToRoot(obj) end
 
 --- @param obj Object
@@ -4229,11 +4482,11 @@ function Scene:MoveObjectToRoot(obj) end
 function Scene:CanMoveObject(obj, newParentObj) end
 
 --[[
-Returns the currently active (rendering) camera.
+Returns the currently active (rendering) camera, falling back to the first active camera found in the hierarchy. Nil when the scene has none.
 
 [View Documentation](https://docs.atomontage.com/api/Scene#Camera-GetActiveCamera)
 ]]
---- @return Camera
+--- @return Camera?
 function Scene:GetActiveCamera() end
 
 --[[
@@ -4245,9 +4498,13 @@ Makes the given camera the active view.
 --- @return nil
 function Scene:SetActiveCamera(cam) end
 
---- @param db string
+--- @param name string
 --- @return VoxelDB?
-function Scene:GetVoxelDB(db) end
+function Scene:GetVoxelDB(name) end
+
+--- @param vd VoxelData
+--- @return nil
+function Scene:ClearNormals(vd) end
 
 --- @param name string
 --- @return boolean
@@ -4336,7 +4593,6 @@ Script component. Not to be confused with the actual [lua table instance](Script
 --- @field luaFile Asset
 --- @field luaFilePath string
 --- @field assetMissing boolean (readonly)
---- @field file string (deprecated)
 --- @field syncToClients boolean
 --- @field priority integer
 --- @field varsTable VarTable (readonly)
@@ -4484,69 +4740,6 @@ end
 ScriptInstance = {}
 
 --[[
-Called after Update(), before rendering
-
-[View Documentation](https://docs.atomontage.com/api/ScriptInstance#nil-LateUpdate)
-]]
---- @return nil
-function ScriptInstance:LateUpdate() end
-
---[[
-Call a lua function by name from server to all clients or from one client to server. You may pass parameters. 
-You may send tables and basic math types such as `Vec3` or `Quat` but other classes may not be supported.
-
-```lua
-function self:Start()
-    --remember to sync the script component to clients otherwise there is no one to receive the RPCs
-    self.component.syncToClients = true
-    self.cam = Scene:GetActiveCamera()
-
-    events.mouseButtonDown.addListener(self, function (button, from)
-        if self.onServer then return end
-        --if left mouse button pressed create a ray from mouse position and direction
-        if button == 1 then
-            local mpos = Input:MousePosPerc()
-            local tf = self.cam.object
-            local pos = tf.pos + tf.forward * 1.5
-
-            --call this function on all clients with these two parameters
-            self:RPC("serverRaycast", pos, tf.forward*1000)
-        end
-    end)
-
-end
-
-function self:serverRaycast(origin, ray)
-    assert(self.onServer)
-    local hit = Collision():Raycast(origin, ray)[1]
-    if hit then
-        --make a cross at hit
-        deb:cross(hit.pos)
-        print("hit")
-    end
-end
-```
-
-
-[View Documentation](https://docs.atomontage.com/api/ScriptInstance#nil-RPC-string)
-]]
---- @param p1 string
---- @vararg any
---- @return nil
-function ScriptInstance:RPC(p1, ...) end
-
---[[
-From server call a lua function by name on one specific client
-
-[View Documentation](https://docs.atomontage.com/api/ScriptInstance#nil-RPC-integer-string)
-]]
---- @param p1 integer
---- @param p2 string
---- @vararg any
---- @return nil
-function ScriptInstance:RPC(p1, p2, ...) end
-
---[[
 Called once on object creation before Start() even if the script is not active
 
 [View Documentation](https://docs.atomontage.com/api/ScriptInstance#nil-Attach)
@@ -4582,6 +4775,11 @@ Called once a frame after Start() if the object is active
 --- @return nil
 function ScriptInstance:Update(deltaTime) end
 
+--[[
+Called after Update(), before rendering
+
+[View Documentation](https://docs.atomontage.com/api/ScriptInstance#nil-LateUpdate-number-deltaTime)
+]]
 --- @param deltaTime number
 --- @return nil
 function ScriptInstance:LateUpdate(deltaTime) end
@@ -4628,6 +4826,42 @@ function ScriptInstance:EditorOnActivate() end
 --- @return nil
 function ScriptInstance:EditorOnDeactivate() end
 
+--[[
+Call a lua function by name from server to all clients or from one client to server. You may pass parameters.
+You may send tables and basic math types such as `Vec3` or `Quat` but other classes may not be supported.
+Pass a client id as the first argument to call the function on one specific client from the server.
+
+```lua
+function self:Start()
+    --remember to sync the script component to clients otherwise there is no one to receive the RPCs
+    self.component.syncToClients = true
+    self.cam = Scene:GetActiveCamera()
+    events.mouseButtonDown.addListener(self, function (button, from)
+        if self.onServer then return end
+        --if left mouse button pressed create a ray from mouse position and direction
+        if button == 1 then
+            local mpos = Input:MousePosPerc()
+            local tf = self.cam.object
+            local pos = tf.pos + tf.forward * 1.5
+            --call this function on all clients with these two parameters
+            self:RPC("serverRaycast", pos, tf.forward*1000)
+        end
+    end)
+end
+
+function self:serverRaycast(origin, ray)
+    assert(self.onServer)
+    local hit = Collision():Raycast(origin, ray)[1]
+    if hit then
+        --make a cross at hit
+        deb:cross(hit.pos)
+        print("hit")
+    end
+end
+```
+
+[View Documentation](https://docs.atomontage.com/api/ScriptInstance#nil-RPC-string-funcName-args)
+]]
 --- @param funcName string
 --- @vararg any
 --- @return nil
@@ -4669,32 +4903,6 @@ This class is only available on server
 --- @field settings ServerSceneSettings (readonly)
 Server = {}
 
---[[
-True while the server is in Init mode (editing); false in Live mode (play).
-
-[View Documentation](https://docs.atomontage.com/api/Server#boolean-IsInitMode)
-]]
---- @return boolean
-function Server:IsInitMode() end
-
---[[
-Switch the server into Init mode (editing). If `reloadGeom` is true, voxel geometry is reloaded on the mode change.
-
-[View Documentation](https://docs.atomontage.com/api/Server#nil-EnterInitMode-boolean-reloadGeom)
-]]
---- @param reloadGeom boolean?
---- @return nil
-function Server:EnterInitMode(reloadGeom) end
-
---[[
-Switch the server into Live mode (play). If `reloadGeom` is true, voxel geometry is reloaded on the mode change.
-
-[View Documentation](https://docs.atomontage.com/api/Server#nil-EnterLiveMode-boolean-reloadGeom)
-]]
---- @param reloadGeom boolean?
---- @return nil
-function Server:EnterLiveMode(reloadGeom) end
-
 --- @return integer[]
 function Server:GetClients() end
 
@@ -4731,10 +4939,10 @@ function Server:UpdatePrefab(obj) end
 --- @return table
 function Server:GetInsertPrefabStats() end
 
---- @param name string
+--- @param prefab Asset
 --- @param count integer
 --- @return nil
-function Server:PreloadVDRsForPrefab(name, count) end
+function Server:PreloadVDRsForPrefab(prefab, count) end
 
 --[[
 Saves the whole scene to disk, including voxel geometry.
@@ -4752,6 +4960,43 @@ Saves the object hierarchy and scripts only, without voxel geometry (much faster
 --- @return nil
 function Server:SaveSceneHierarchy() end
 
+--- @return nil
+function Server:AutoSaveScene() end
+
+--- @return boolean
+function Server:IsHierarchyDirty() end
+
+--- @return string
+function Server:ReportHierarchyDirty() end
+
+--- @param name string
+--- @return boolean
+function Server:SaveSceneAs(name) end
+
+--- @param name string
+--- @return boolean
+function Server:SaveSceneAsFileExists(name) end
+
+--- @param enterSession boolean
+--- @return boolean
+function Server:SaveToPlayScene(enterSession) end
+
+--- @param name string
+--- @param terrain Asset?
+--- @return boolean
+function Server:NewScene(name, terrain) end
+
+--- @param sceneAsset Asset
+--- @return boolean
+function Server:OpenScene(sceneAsset) end
+
+--- @param asset Asset
+--- @return boolean
+function Server:DeleteMontageAsset(asset) end
+
+--- @return Asset
+function Server:GetCurrentScene() end
+
 --[[
 Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaReset`](#nil-LuaReset).
 
@@ -4759,6 +5004,10 @@ Full scene reload — reloads geometry and re-runs scripts. Heavier than [`LuaRe
 ]]
 --- @return nil
 function Server:ReloadScene() end
+
+--- @param potDelta integer
+--- @return nil
+function Server:ResizeTerrain(potDelta) end
 
 --- @param reloadTerrain boolean?
 --- @return nil
@@ -4769,6 +5018,9 @@ function Server:BackupMontage() end
 
 --- @return integer
 function Server:GetMemoryUsage() end
+
+--- @return integer?
+function Server:GetMemoryLimit() end
 
 --- @return table
 function Server:GetErrors() end
@@ -4795,6 +5047,12 @@ function Server:HttpGet(url, headers, onResponse) end
 --- @param onResponse fun(success:boolean, response:string, statusCode:integer, asset:Asset?)
 --- @return nil
 function Server:HttpDownload(url, headers, destPathInMontage, onResponse) end
+
+--- @param name string
+--- @param properties table
+--- @param clientID integer?
+--- @return nil
+function Server:TrackAnalytics(name, properties, clientID) end
 
 --- @param clientID integer
 --- @return integer
@@ -4959,43 +5217,6 @@ All shapes inherit from this class. It is not meant to be instantiated directly.
 Shape = {}
 
 --[[
-`Client`
-`Server`
-
-[View Documentation](https://docs.atomontage.com/api/Sky)
-]]
---- @class Sky
---- @field active boolean
---- @field activeInHierarchy boolean (readonly)
---- @field object Object (readonly)
---- @field obj Object (readonly)
---- @field isDestroyed boolean (readonly)
---- @field type string (readonly)
---- @field onePerObject boolean (readonly)
---- @field cloudScale number
---- @field cloudOffset number
---- @field cloudSlope number
---- @field sunAzimuth number
---- @field sunAltitude number
---- @field rayleighCoeff Vec3
---- @field mieCoeff number
---- @field yRotationAngle number
---- @field render boolean
-Sky = {}
-
---- @param a Sky
---- @param b Sky
---- @return boolean
-function Sky:__eq(a, b) end
-
---- @param texturePath string
---- @param textureType SkyTextureType
---- @param color Color
---- @param strength number
---- @return nil
-function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
-
---[[
 ---
 `Client`
 `Server`
@@ -5008,6 +5229,16 @@ function Sky:LoadSkyTexture(texturePath, textureType, color, strength) end
 --- @field sliderType UISliderType
 --- @field range Vec2
 --- @field integer boolean
+--- @field trackColor Color
+--- @field trackHeight number
+--- @field trackRounding number
+--- @field fillColor Color
+--- @field thumbColor Color
+--- @field thumbBorderColor Color
+--- @field thumbBorderWidth number
+--- @field thumbSize number
+--- @field hoverColor Color
+--- @field showValue boolean
 Slider = {}
 
 --[[
@@ -5080,7 +5311,6 @@ Time = {}
 --- @field Key table<string,boolean>
 --- @field KeyDown table<string,boolean>
 --- @field KeyUp table<string,boolean>
---- @field showUI boolean
 --- @field alwaysRedraw boolean
 --- @field useFrameBuffers boolean
 --- @field NoValue any (readonly)
@@ -5165,16 +5395,20 @@ function UI:AddColorbox(parent, name) end
 --- @return Separator
 function UI:AddSeparator(parent, name) end
 
+--- @param parent Widget
+--- @param name string?
+--- @return Graph
+function UI:AddGraph(parent, name) end
+
 --- @param type string
 --- @param parent Widget
 --- @param putInside boolean?
 --- @param front boolean?
---- @param save boolean?
 --- @return Widget
-function UI:AddWidget(type, parent, putInside, front, save) end
+function UI:AddWidget(type, parent, putInside, front) end
 
 --- @param widget Widget
---- @return Widget
+--- @return Widget?
 function UI:CloneWidget(widget) end
 
 --- @param widget Widget
@@ -5195,13 +5429,13 @@ function UI:HoveredWidget() end
 --- @return nil
 function UI:SelectWidget(widget) end
 
---- @param widget Widget
+--- @param widget Widget?
 --- @return nil
 function UI:FocusWidget(widget) end
 
---- @param widget Widget?
---- @return nil
-function UI:SetKeyboardFocus(widget) end
+--- @param widget Widget
+--- @return boolean
+function UI:ClickWidget(widget) end
 
 --- @param widget Widget
 --- @param target Widget
@@ -5218,9 +5452,9 @@ function UI:MoveWidgetInto(widget, target) end
 --- @return nil
 function UI:MoveWidgetBy(widget, delta) end
 
---- @param saveOrLuaAsset boolean|Asset?
+--- @param nameOrLuaAsset string|Asset?
 --- @return Window
-function UI:AddWindow(saveOrLuaAsset) end
+function UI:AddWindow(nameOrLuaAsset) end
 
 --- @param window Window
 --- @return nil
@@ -5228,6 +5462,23 @@ function UI:DeleteWindow(window) end
 
 --- @return table
 function UI:GetWindows() end
+
+--- @param mimes table
+--- @return nil
+function UI:ExternalDragBegin(mimes) end
+
+--- @param x number
+--- @param y number
+--- @return nil
+function UI:ExternalDragMove(x, y) end
+
+--- @return nil
+function UI:ExternalDragEnd() end
+
+--- @param name string
+--- @param type string?
+--- @return nil
+function UI:SetDragLabel(name, type) end
 
 --- @param name string
 --- @return Window
@@ -5300,19 +5551,24 @@ function UI:GetUserScale() end
 --- @return number
 function UI:GetUIScale() end
 
+--- @param enable boolean
+--- @return nil
+function UI:SetUseDisplayScale(enable) end
+
+--- @return boolean
+function UI:GetUseDisplayScale() end
+
+--- @return number left, number top, number right, number bottom
+function UI:GetSafeAreaInsets() end
+
 --- @return table
 function UI:GetUIStats() end
 
 --- @return table
 function UI:GetUIGlyphs() end
 
---- @param path string
 --- @return nil
-function UI:SaveUI(path) end
-
---- @param path string
---- @return nil
-function UI:LoadUI(path) end
+function UI:LoadUI() end
 
 --- @return nil
 function UI:ResetLua() end
@@ -5413,12 +5669,16 @@ VarEnum = {}
 ]]
 --- @class VarList
 --- @field byVar AnyVar (readonly)
+--- @field byVarTooltips table (readonly)
 --- @field values AnyVar[] (readonly)
 VarList = {}
 
 --- @param value any
 --- @return nil
 function VarList:Add(value) end
+
+--- @return nil
+function VarList:AddDefault() end
 
 --- @param index number
 --- @return nil
@@ -5435,6 +5695,20 @@ function VarList:Remove(index) end
 --- @field editOrder string[] (readonly)
 --- @field tooltips table (readonly)
 VarTable = {}
+
+--- @param key string
+--- @param value any
+--- @return boolean
+function VarTable:Set(key, value) end
+
+--- @param key string
+--- @return nil
+function VarTable:Remove(key) end
+
+--- @param key string
+--- @param newKey string
+--- @return boolean
+function VarTable:Rename(key, newKey) end
 
 --[[
 `Client`
@@ -6995,6 +7269,8 @@ function Vec4i:Dot(other) end
 --- @field inputsPadding Vec2
 --- @field inputsPaddingMode UIPropertyMode
 --- @field decimals integer
+--- @field range Range
+--- @field wrap number
 Vectorbox = {}
 
 --[[
@@ -7015,6 +7291,19 @@ Vox:Add(Sphere(pos, 2))   -- operation + shape (see Shape)
 ]]
 --- @class Vox
 Vox = {}
+
+--[[
+Run everything the queue is holding, in insertion order - an Add followed by a Remove on the same
+spot has to stay ordered. Called for you every `flushFrames` frames; call it by hand only when
+something needs the pending edits applied right now (a save, a scene teardown, a readback).
+
+[View Documentation](https://docs.atomontage.com/api/Vox#number-flushEdits)
+]]
+--- @return number
+function Vox:flushEdits() end
+
+--- @return number
+function Vox:pendingEdits() end
 
 --[[
 Remove a shape from something
@@ -7129,6 +7418,10 @@ function VoxelDB:SetMask(vpos, value) end
 --- @return boolean
 function VoxelDB:GetMask(vpos) end
 
+--- @param worldPos Vec3
+--- @return boolean
+function VoxelDB:GetMask(worldPos) end
+
 --- @param x number
 --- @param y number
 --- @param z number
@@ -7191,6 +7484,18 @@ function VoxelDB:SetColor(x, y, z, color) end
 --- @param vpos Vec3i
 --- @return Color
 function VoxelDB:GetColor(vpos) end
+
+--- @param worldPos Vec3
+--- @return Color
+function VoxelDB:GetColor(worldPos) end
+
+--- @param vpos Vec3i
+--- @return string
+function VoxelDB:GetMaterial(vpos) end
+
+--- @param worldPos Vec3
+--- @return string
+function VoxelDB:GetMaterial(worldPos) end
 
 --- @deprecated
 --- @param vpos Vec3i
@@ -7362,12 +7667,6 @@ function VoxelDB:GetInfo() end
 --- @return nil
 function VoxelDB:CopyTo(destVoxelDB) end
 
---- @param filePath string
---- @param compression string
---- @param quality number
---- @return nil
-function VoxelDB:Save(filePath, compression, quality) end
-
 --- @param pos Vec3
 --- @param radiusVoxels integer
 --- @param lod integer
@@ -7421,6 +7720,7 @@ The data will only render if the object also has a `VoxelRender` component.
 --- @field onePerObject boolean (readonly)
 --- @field size Vec3 (readonly)
 --- @field contentVersion integer (readonly) Monotonic counter incremented every time the underlying voxel content is invalidated (any edit that changes voxel presence). Cheap O(1) read for caching downstream computations like total volume.
+--- @field isSaved boolean (readonly)
 --- @field data VoxelDataResource The voxel data resource that this voxel data is using
 --- @field save boolean Marks the voxel data to be persisted on save; it does not write any voxels by itself.
 --- @field editable boolean
@@ -7429,7 +7729,6 @@ The data will only render if the object also has a `VoxelRender` component.
 --- @field prioritizeLod boolean Try to load higher LODs faster than those of other objects
 --- @field outline boolean Draw an outline around this object
 --- @field tintColor Color Render with a tint color
---- @field receiveTransform boolean Receive transform(pos, rot scale) to render with from server. By default this is true.If you set this to false, you will need to manually set the transform of the object on the client side.This is useful for making objects respond immediately if something happened on the client side i.e. input
 --- @field lodBias number
 --- @field asset Asset
 --- @field assetMissing boolean (readonly)
@@ -7447,8 +7746,20 @@ function VoxelData:__eq(a, b) end
 --- @return nil
 function VoxelData:Mirror(worldPos, worldNormal) end
 
+--- @return Asset
+function VoxelData:Save() end
+
+--- @param path string
+--- @param overwrite boolean
+--- @return Asset
+function VoxelData:SaveAs(path, overwrite) end
+
+--- @param path string
+--- @return boolean
+function VoxelData:SaveAsFileExists(path) end
+
 --[[
-Returns the world-space axis-aligned bounds (center, size). Affected by the object's rotation, and reports size `(0,0,0)` when `receiveTransform=false`.
+Returns the world-space axis-aligned bounds (center, size). Affected by the object's rotation, and reports size `(0,0,0)` when `Object.receiveTransform=false`.
 
 [View Documentation](https://docs.atomontage.com/api/VoxelData#Vec3-center-Vec3-size-GetAABounds)
 ]]
@@ -7493,23 +7804,12 @@ VoxelDataParams = {}
 --- @field voxelSize integer (readonly)
 VoxelDataResource = {}
 
---- @param path string
+--- @param voxelFile Asset
 --- @return VoxelDataResource
-function VoxelDataResource(path) end
+function VoxelDataResource(voxelFile) end
 
 --- @return VoxelDataResource
 function VoxelDataResource() end
-
---[[
-save voxel data in AM file
-second parameter controls if file will be overwritten
-
-[View Documentation](https://docs.atomontage.com/api/VoxelDataResource#Asset-Save-string-path-boolean-overwrite)
-]]
---- @param path string
---- @param overwrite boolean
---- @return Asset
-function VoxelDataResource:Save(path, overwrite) end
 
 --[[
 get center (in local space) and approximate dimensions of the voxel data
@@ -7659,8 +7959,8 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 --- @field copyOperation CopyOperation
 --- @field insertOperation InsertOperation
 --- @field kernelType integer 0 = Smooth 7x5x71 = Smooth 3x3x32 = Smooth 5x5x53 = Inflate4 = Deflate5 = Normals smooth6 = Normals sharp
---- @field imageColor Image
---- @field imageNormal Image
+--- @field imageColor Asset|AssetLink|Image
+--- @field imageNormal Asset|AssetLink|Image
 --- @field imageUVTm Mat4
 --- @field imageUVClamp boolean
 --- @field imageTriplanar boolean Triplanar projection — samples the image along world X/Y/Z so it covers every face, with the tiling grid anchored in world space. When false, the image is planar-projected along a single direction.
@@ -7669,7 +7969,7 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 --- @field imageNormalBlendPower number
 --- @field onProgress fun(progress:number) callback function. progress from 0-1. May not be called every frame. Is called after script updates 
 --- @field onFinished fun(info:RemoveCountInfo, computeTimeMs:number) callback function. onFinished is called after onProgress if it was last part
---- @field onError fun() callback function
+--- @field onError fun(reason:string, opCount:integer) callback function. Called when the op group is dropped: reason says why, opCount is how many ops that group covered
 VoxelEdit = {}
 
 --- @return VoxelEdit
@@ -7737,10 +8037,6 @@ function VoxelEdit:Kernel() end
 --- @param relBorderSize number
 --- @return Image
 function VoxelEdit:CaptureImage(textureUvTmWorld, relBorderSize) end
-
---- @param name string
---- @return Image
-function VoxelEdit:GetImageResource(name) end
 
 --- @param clientId integer
 --- @return nil
@@ -7816,25 +8112,9 @@ function VoxelInspectData:GetColors() end
 [View Documentation](https://docs.atomontage.com/api/Widget)
 ]]
 --- @class Widget
---- @field cornerRound number 0..1: rounds the glyph's sharp MSDF corners (1 = fully rounded, SDF-like).
---- @field bevel number 0..1: faux-3D bevel / emboss shading along the glyph edge.
---- @field bevelLight number 0..1: bevel light direction, mapped to a 0..2pi azimuth.
---- @field melt number 0..1: animated noise domain-warp ('melting') of the glyph.
---- @field glitch number 0..1: static horizontal scanline-displacement bands.
---- @field bend number 0..1: horizontal shear / slant of the glyph.
---- @field twist number 0..1: swirl warp, stronger toward the glyph edges.
---- @field wave number 0..1: animated sine ripple along the glyph.
---- @field revealAmount number 0..1: coverage-mask reveal amount (0 = solid, 1 = fully gone).
---- @field revealMask integer Reveal mask kind: 0 off, 1 noise, 2 linear, 3 radial.
---- @field revealParam number 0..1: reveal mask scale (noise) or angle (linear).
---- @field revealEdge number 0..1: hue of the glowing reveal front edge; 0 = no edge.
---- @field reveal number|table Write `{ amount=, mask='noise'|'linear'|'radial', param=, edge= }` or a bare amount (noise mask); reads back the amount.
---- @field pattern integer|table Procedural fill pattern. Write a kind (0 off, 1 halftone, 2 dither, 3 contour) or `{ kind=, scale=, angle= }`; reads back the kind.
---- @field patternScale number 0..1: fill-pattern scale (dot/cell size, ring frequency, ...).
---- @field patternAngle number 0..1: fill-pattern rotation, mapped to 0..2pi.
 --- @field type string (readonly)
 --- @field id integer (readonly)
---- @field destroyed boolean (readonly)
+--- @field isDestroyed boolean (readonly)
 --- @field parent Widget (readonly)
 --- @field window Window (readonly)
 --- @field children table (readonly)
@@ -7847,6 +8127,7 @@ function VoxelInspectData:GetColors() end
 --- @field isSelected boolean (readonly)
 --- @field name string
 --- @field tooltip string
+--- @field tooltipTitle string
 --- @field visible boolean
 --- @field enabled boolean
 --- @field size Vec2
@@ -7864,26 +8145,47 @@ function VoxelInspectData:GetColors() end
 --- @field paddingMode string
 --- @field rounding number
 --- @field roundingMode string
+--- @field cornerShape string
 --- @field roundCorners integer
 --- @field glyphFade boolean
 --- @field margin Vec2
 --- @field marginMode string
 --- @field gap Vec2 Spacing between sibling widgets (x) and between wrapped flow lines (y).
+--- @field translate Vec2
+--- @field scale Vec2
+--- @field scaleOrigin Vec2
+--- @field opacity number
 --- @field alignItems string Cross-axis alignment of child widgets: `start`/`center`/`end`/`stretch`.
 --- @field alignSelf string Overrides the parent's `alignItems` for this widget (`auto` inherits).
 --- @field justifyContent string Main-axis distribution of children: `start`/`center`/`end`/`space-between`/`space-around`.
 --- @field mp Vec2
 --- @field bgFrame boolean
+--- @field cursor string
+--- @field dragHighlight boolean
 --- @field bgColor Color
 --- @field borderColor Color
+--- @field borderWidth number
 --- @field textColor Color
 --- @field fontSize number
 --- @field fontBold boolean
 --- @field fontName string
 --- @field textAlign Vec2
---- @field fx table
+--- @field outline boolean
+--- @field outlineColor Color
+--- @field outlineWidth number
+--- @field outline2Color Color
+--- @field outline2Width number
+--- @field effectOutline boolean If true, the `fx` domain-warp and reveal effects are applied to the shadow and outline passes as well, so the whole glyph warps together instead of the fill sliding off a static outline. Shape/shading (cornerRound, bevel) and pattern stay fill-only. Default false.
+--- @field shadow boolean
+--- @field shadowColor Color
+--- @field shadowOffset Vec2
+--- @field shadowSoftness number
+--- @field weight number
+--- @field fx table Grouped MTSDF text effects. Write-only: unlisted keys reset to default, so `fx = {...}` sets the complete warp state and `nil` clears all. Values are 0..1 unless noted. `cornerRound` rounds the glyph's sharp MSDF corners (1 = fully rounded, SDF-like). `bevel` is faux-3D bevel / emboss shading along the glyph edge, lit from `bevelLight` (direction, mapped to a 0..2pi azimuth). `melt` is an animated noise domain-warp ('melting') of the glyph; `glitch` static horizontal scanline-displacement bands; `bend` horizontal shear / slant; `twist` a swirl warp, stronger toward the glyph edges; `wave` an animated sine ripple along the glyph; `hollow` knocks out the fill. `reveal = { amount, mask='noise'|'linear'|'radial', param, edge }` is the coverage-mask reveal: `amount` 0 = solid, 1 = fully gone; `param` is the mask scale (noise) or angle (linear); `edge` is the hue of the glowing reveal front edge, 0 = no edge. `pattern = { kind='halftone'|'dither'|'contour', scale, angle }` is the procedural fill pattern: `scale` sets dot/cell size or ring frequency, `angle` its rotation mapped to 0..2pi. See the FX Playground editor tool.
 --- @field fill table Write-only 2-color fill gradient: `{ top=Color, bottom=Color, along='y'|'x' }`.
 --- @field layers table Array of stacked text layers, each `{ d=dilate, soft=glow, off=Vec2 shadow offset, color=, colorBottom=, along='y'|'x' }`. When set, the layer stack REPLACES the base fill/outline/shadow.
+--- @field pixelSnap boolean
+--- @field ellipsis boolean
 --- @field intVar integer
 --- @field showNoValue boolean
 --- @field onHoverEx fun(widget:Widget, ...)
@@ -7895,14 +8197,15 @@ function VoxelInspectData:GetColors() end
 --- @field onPressEx fun(widget:Widget, ...)
 --- @field onRightPressEx fun(widget:Widget, ...)
 --- @field onMouseMoveEx fun(widget:Widget, ...)
---- @field onKeyDownEx fun(widget:Widget, ...)
---- @field onKeyUpEx fun(widget:Widget, ...)
+--- @field onKeyDownEx fun(widget:Widget, key:string)
+--- @field onKeyUpEx fun(widget:Widget, key:string)
 --- @field onValueChangeEx fun(widget:Widget, ...)
 --- @field onValueCommitEx fun(widget:Widget, value:any, oldValue:any)
 --- @field onDragStartEx fun(widget:Widget):any
 --- @field onDragOverEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
 --- @field onDragLeaveEx fun(widget:Widget)
 --- @field onDragEndEx fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean?
+--- @field onDragSessionEx fun(widget:Widget, active:boolean, var:any, varList:table)
 --- @field onPress string
 --- @field onPressStart string
 --- @field onPressCancel string
@@ -7946,11 +8249,12 @@ function Widget:WidgetByName(name) end
 --- @field scrollY boolean
 --- @field stayOnBottom boolean
 --- @field stayOnTop boolean
+--- @field relativeTo string
 --- @field resizable boolean
 --- @field noInput boolean
---- @field noHide boolean
 --- @field borders string
 --- @field enableShadow boolean
+--- @field allowOffscreen boolean
 --- @field obj table (readonly)
 Window = {}
 
@@ -7960,43 +8264,9 @@ function Window:Close() end
 --- @return boolean
 function Window:IsPopup() end
 
---- @param name string
---- @return Asset
-function Window:GetAsset(name) end
-
---- @param index integer
---- @return Asset
-function Window:GetAssetByIndex(index) end
-
---- @return integer
-function Window:GetAssetCount() end
-
---- @param name string
---- @param asset Asset
+--- @param percent Vec2?
 --- @return nil
-function Window:AddAsset(name, asset) end
-
---- @param index integer
---- @param asset Asset
---- @return nil
-function Window:SetAssetByIndex(index, asset) end
-
---- @param index integer
---- @param name string
---- @return nil
-function Window:SetAssetNameByIndex(index, name) end
-
---- @param index integer
---- @return nil
-function Window:RemoveAssetByIndex(index) end
-
---- @param fromIndex integer
---- @param toIndex integer
---- @return nil
-function Window:MoveAsset(fromIndex, toIndex) end
-
---- @return table
-function Window:GetAssets() end
+function Window:PlaceAtPercent(percent) end
 
 --[[
 `Client`
@@ -8017,6 +8287,21 @@ Call function once after time
 --- @param ... any
 --- @return nil
 function util:schedule(time, func, ...) end
+
+--[[
+Call function once after time, on the unscaled wall clock (Time.appTime): immune to
+Time.timeScale, a paused sim, and a scene reset (Time.time freezes at timeScale 0 and resets
+to 0 on scene reset, so a sim-clock deadline can simply never arrive). Use for real-world
+deadlines - autosave, idle timeouts, reconnect grace - never for gameplay.
+Still plain Lua state: a LuaReset drops anything pending.
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-scheduleUnscaled-number-time-fun-func-any)
+]]
+--- @param time number
+--- @param func fun()
+--- @param ... any
+--- @return nil
+function util:scheduleUnscaled(time, func, ...) end
 
 --[[
 Call function every frame until time passed.
@@ -8041,6 +8326,73 @@ New clients connecting receive all current values in the networked table
 --- @param allowPrediction boolean?
 --- @return table
 function util:makeNetworkedTable(script, tab, allowPrediction) end
+
+--[[
+Resolve a brush image ASSET by its name ("color_9", "normal_9", "graybox_dark"). Assets and
+AssetLinks pass straight through, so a call site can take either form without branching - which is
+how the Vox API's :Texture and the editor tools accept both. Returns nil when the name is not in
+the set; callers decide whether that is fatal (a color texture) or fine (a normal map).
+A NAME, never a path: file paths do not appear in scripts, so "Textures/texpaint/color_9" is not
+a thing you can pass - it simply is not a name in the set and resolves to nil.
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-findImage-any-tex)
+]]
+--- @param tex any
+--- @return nil
+function util:findImage(tex) end
+
+--[[
+The normal map that pairs with a color image, or nil when it has none (graybox, flesh, decals).
+Takes the asset (or an AssetLink); a raw Image has no identity in the set, so it pairs with nothing.
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-normalImageFor-any-colorImage)
+]]
+--- @param colorImage any
+--- @return nil
+function util:normalImageFor(colorImage) end
+
+--[[
+Hand over assets once they actually exist, for callers that were given AssetLinks.
+A file dropped from the OS reaches a receiver as a LINK before its bytes finish syncing across, so
+link.asset reads nil for a moment and a handler that uses it right away gets nothing (the link
+keeps the id, so the same link resolves later). Without this every receiver - viewport, image
+picker, material slot - would hand-roll the same wait and get it subtly wrong in its own way.
+Already-resolved Assets pass straight through, so a caller never branches on where its input came
+from; when nothing has to be waited for, func runs immediately rather than a frame later.
+Polls the UNSCALED clock: the editor can sit with a paused sim, which freezes Time.time, and a
+wait keyed to that would simply never come back.
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-whenAssetsReady-table-links-fun-func-number-timeout-fun-onTimeout)
+]]
+--- @param links table
+--- @param func fun()
+--- @param timeout number?
+--- @param onTimeout fun()
+--- @return nil
+function util:whenAssetsReady(links, func, timeout, onTimeout) end
+
+--[[
+Park a PICK whose assets have not reached this side yet, and commit it when they do. The receiving
+side of a drop holds an id it cannot resolve for as long as the bytes are in flight, and every tool
+that lets you pick a dropped asset needs the same three things around that: report itself pending,
+refuse to act meanwhile, and un-pend when the file lands. This is that pattern, once.
+`owner` is any table to hang the generation counter on - a per-client context, or the script itself.
+The counter is what makes a fast re-pick safe: pick A, pick B before A arrives, and A's late callback
+must not clear B's pending flag. Bumped on EVERY call, so a pick that resolves immediately also
+supersedes an earlier one still waiting.
+`setPending(boolean)` is called with the answer right away and again when the wait ends - the caller owns
+what pending MEANS (its own flag, and telling its client about it).
+`what` names the thing for the timeout error ('Brush image', 'Shape texture').
+Returns true when it had to park, false when everything already resolved.
+
+[View Documentation](https://docs.atomontage.com/api/util#nil-whenAssetsSynced-table-owner-table-links-fun-setPending-string-what)
+]]
+--- @param owner table
+--- @param links table
+--- @param setPending fun()
+--- @param what string
+--- @return nil
+function util:whenAssetsSynced(owner, links, setPending, what) end
 
 --[[
 returns Vec3 or Vec4 with alpha depending on length of hex value
@@ -8173,6 +8525,19 @@ Usage: util:expensive(500) -- burn ~500µs
 function util:expensive(us) end
 
 --[[
+One-call orientation snapshot for AI agents. Server: client ids, per-client
+camera pos + view target (from the Editor's server-side camera sync), loaded scene name + mode,
+terrain name + unsaved state + bounds + static voxels-per-meter, object tree to depth 2 (Editor Tools omitted,
+deeper descendants collapsed to "(+N)"), and the Montage .lua layout (Examples/
+listed in full, other folders with script counts). Client: camera pos + view target.
+See baseStateView for the view/below10m semantics.
+
+[View Documentation](https://docs.atomontage.com/api/util#string-baseState)
+]]
+--- @return string
+function util:baseState() end
+
+--[[
 
 Used by [VoxelEdit](../VoxelEdit#BlendMode-blendMode)
 See a list of explanations [here](https://photoshoptrainingchannel.com/blending-modes-explained/#normal-blending-modes).
@@ -8239,6 +8604,13 @@ Device = {
 	Generic = 0,
 	Quest = 1,
 	MagicLeap2 = 2,
+}
+
+--- @enum DisplayMode
+DisplayMode = {
+	Fullscreen = 0,
+	Windowed = 1,
+	Borderless = 2,
 }
 
 --- @enum HitType
@@ -8418,6 +8790,7 @@ System = {
 	MacOS = 4,
 	iOS = 5,
 	Android = 6,
+	ChromeOS = 7,
 }
 
 --- @enum TmpLayerFlags
@@ -8464,6 +8837,12 @@ UIPropertyMode = {
 	Inherit = 2,
 }
 
+--- @enum UIRelativeTo
+UIRelativeTo = {
+	Viewport = 0,
+	Window = 1,
+}
+
 --- @enum UISizeType
 UISizeType = {
 	ByContent = 0,
@@ -8495,6 +8874,14 @@ VRControllerButton = {
 	Trigger = 4,
 	Grip = 5,
 	Shoulder = 6,
+}
+
+--- @enum VSyncMode
+VSyncMode = {
+	Enabled = 0,
+	Default = 1,
+	Adaptive = 2,
+	Disabled = 3,
 }
 
 --- @enum WidgetEvent

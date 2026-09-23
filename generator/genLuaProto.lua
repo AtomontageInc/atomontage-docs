@@ -14,7 +14,7 @@ Internal helpers (no doc block, or @protected, or local/self) are skipped.
 local genLuaProto = {}
 
 -- Engine system-script dir (same hardcoded atomontage base as main.lua — adjust per machine).
-local SCRIPT_DIR = "C:/Users/maxkr/Documents/Code/Atomontage/atomontage/Resources/Studio/Script/ae/"
+local SCRIPT_DIR = "C:/Users/maxkr/Documents/Code/Atomontage/atomontage/Resources/ScriptSys/"
 
 -- Files to harvest. Only well-annotated public-API scripts; zero-annotation files (json, fzy,
 -- bootstrap, ui_func, profile, perlin, …) yield nothing and are omitted. voxelApiCATS.lua is
@@ -173,7 +173,7 @@ end
 
 function genLuaProto:parseFile(path)
     local fh = io.open(path, "r")
-    if not fh then print("genLuaProto: could not open " .. path); return end
+    assert(fh, "genLuaProto: could not open " .. path)
 
     local inBlock = false   -- inside a --[[ ]] comment
     local doc = nil         -- accumulating doc block, or nil

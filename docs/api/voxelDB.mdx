@@ -26,6 +26,8 @@ If we had flush after each op, it would eliminate all multithreaded processing.
 
 ### boolean GetMask(Vec3i vpos) {#boolean-GetMask-Vec3i-vpos}
 
+### boolean GetMask(Vec3 worldPos) {#boolean-GetMask-Vec3-worldPos}
+
 ### boolean GetMask(number x, number y, number z) {#boolean-GetMask-number-x-number-y-number-z}
 
 ### integer GetMaskNeighbours(Vec3i vpos, integer radius) {#integer-GetMaskNeighbours-Vec3i-vpos-integer-radius}
@@ -48,6 +50,12 @@ it should be in range 1-8
 ### nil SetColor(number x, number y, number z, Color color) {#nil-SetColor-number-x-number-y-number-z-Color-color}
 
 ### Color GetColor(Vec3i vpos) {#Color-GetColor-Vec3i-vpos}
+
+### Color GetColor(Vec3 worldPos) {#Color-GetColor-Vec3-worldPos}
+
+### string GetMaterial(Vec3i vpos) {#string-GetMaterial-Vec3i-vpos}
+
+### string GetMaterial(Vec3 worldPos) {#string-GetMaterial-Vec3-worldPos}
 
 ### nil PaintSphereBlendV(Vec3i vpos, integer radius, Color color) {#nil-PaintSphereBlendV-Vec3i-vpos-integer-radius-Color-color}
 
@@ -114,8 +122,6 @@ it should be in range 1-8
 ### table GetInfo() {#table-GetInfo}
 
 ### nil CopyTo(VoxelDB destVoxelDB) {#nil-CopyTo-VoxelDB-destVoxelDB}
-
-### nil Save(string filePath, string compression, number quality) {#nil-Save-string-filePath-string-compression-number-quality}
 
 ### table InspectNormals(Vec3 pos, integer radiusVoxels, integer lod, VoxelData? vr) {#table-InspectNormals-Vec3-pos-integer-radiusVoxels-integer-lod-VoxelData-vr}
 

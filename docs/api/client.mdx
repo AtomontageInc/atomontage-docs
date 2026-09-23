@@ -9,9 +9,6 @@ This class is only available on client
 
 ## Methods
 
-### boolean IsInitMode() {#boolean-IsInitMode}
-True while the client is in Init mode (the editor's edit mode), as opposed to live/play.
-
 ### integer GetID() {#integer-GetID}
 
 ### nil OpenScriptFile(string fileName, integer? lineNumber) {#nil-OpenScriptFile-string-fileName-integer-lineNumber}
@@ -19,6 +16,8 @@ True while the client is in Init mode (the editor's edit mode), as opposed to li
 ### nil OpenMontageScriptFile(string fileName, integer? lineNumber) {#nil-OpenMontageScriptFile-string-fileName-integer-lineNumber}
 
 ### string GetMontageURL() {#string-GetMontageURL}
+
+### boolean NeedsRestartToOpen(string url) {#boolean-NeedsRestartToOpen-string-url}
 
 ### nil SetMontageURL(string url) {#nil-SetMontageURL-string-url}
 
@@ -47,6 +46,8 @@ Disconnected
 
 ### string GetConnectionStatusDetailed() {#string-GetConnectionStatusDetailed}
 
+### string GetEngineMismatchUrl() {#string-GetEngineMismatchUrl}
+
 ### nil Disconnect(string? reason) {#nil-Disconnect-string-reason}
 
 ### integer GetPing() {#integer-GetPing}
@@ -55,17 +56,41 @@ Time for a network message to travel from client to server and back
 
 ### integer GetSceneMsgsInQueue() {#integer-GetSceneMsgsInQueue}
 
+### boolean IsInitialAssetSyncDone() {#boolean-IsInitialAssetSyncDone}
+
 ### table GetMainDispatcherStats() {#table-GetMainDispatcherStats}
 
 ### table GetRenderStats() {#table-GetRenderStats}
+
+### table GetRenderStatsWrites() {#table-GetRenderStatsWrites}
 
 ### boolean GetRenderStatsEnabled() {#boolean-GetRenderStatsEnabled}
 
 ### nil SetRenderStatsEnabled(boolean enable) {#nil-SetRenderStatsEnabled-boolean-enable}
 
-### nil ConnectToServer() {#nil-ConnectToServer}
+### nil SignIn() {#nil-SignIn}
+
+### nil SignOut() {#nil-SignOut}
+
+### string GetAuthStatus() {#string-GetAuthStatus}
+
+### string GetAuthPrompt() {#string-GetAuthPrompt}
+
+### string GetAuthError() {#string-GetAuthError}
+
+### string StartAISession() {#string-StartAISession}
 
 ### boolean opened OpenFolder(string path) {#boolean-opened-OpenFolder-string-path}
+
+### nil SetSky(Asset|AssetLink sky) {#nil-SetSky-AssetAssetLink-sky}
+
+### nil ClearSky() {#nil-ClearSky}
+
+### nil SetSkyEnabled(boolean enabled) {#nil-SetSkyEnabled-boolean-enabled}
+
+### boolean GetSkyEnabled() {#boolean-GetSkyEnabled}
+
+### table GetSkyInfo() {#table-GetSkyInfo}
 
 ### boolean GetNetworkThrottlingNow() {#boolean-GetNetworkThrottlingNow}
 
@@ -84,6 +109,12 @@ Time for a network message to travel from client to server and back
 ### Vec2 GetWindowSize() {#Vec2-GetWindowSize}
 
 ### Vec2 GetViewportSize() {#Vec2-GetViewportSize}
+
+### Vec2 GetRenderSize() {#Vec2-GetRenderSize}
+
+### Vec2 GetViewportPos() {#Vec2-GetViewportPos}
+
+### boolean IsAppVisible() {#boolean-IsAppVisible}
 
 ### string CaptureObjectThumbnail(Object target, table? opts) {#string-CaptureObjectThumbnail-Object-target-table-opts}
 
@@ -125,9 +156,9 @@ Time for a network message to travel from client to server and back
 
 ### boolean IsDownloadingFiles() {#boolean-IsDownloadingFiles}
 
-### nil Restart() {#nil-Restart}
+### string GetDragDropBlockedReason() {#string-GetDragDropBlockedReason}
 
-### string ReloadShaders() {#string-ReloadShaders}
+### nil Restart() {#nil-Restart}
 
 ### nil ToggleChannelRendering() {#nil-ToggleChannelRendering}
 
@@ -141,9 +172,17 @@ Time for a network message to travel from client to server and back
 
 ### integer GetMemoryUsage() {#integer-GetMemoryUsage}
 
+### integer? GetMemoryLimit() {#integer-GetMemoryLimit}
+
 ### string GetCredits() {#string-GetCredits}
 
 ### table GetErrors() {#table-GetErrors}
+
+### table GetShaderErrors() {#table-GetShaderErrors}
+
+### nil SetVPuzzleShaderDefines(string defines) {#nil-SetVPuzzleShaderDefines-string-defines}
+
+### nil RequestReloadShaders() {#nil-RequestReloadShaders}
 
 ### nil CopyToClipboard(string text) {#nil-CopyToClipboard-string-text}
 
@@ -151,6 +190,14 @@ Time for a network message to travel from client to server and back
 may not work on all platforms
 
 ### nil OpenBrowserWithURL(string url) {#nil-OpenBrowserWithURL-string-url}
+
+### nil HttpGet(string url, fun(success:boolean, response:string, statusCode:integer) onResponse) {#nil-HttpGet-string-url-fun-successboolean-responsestring-statusCodeinteger-onResponse}
+
+### nil HttpDownload(string url, string fileName, fun(success:boolean, response:string, statusCode:integer, asset:Asset?) onResponse) {#nil-HttpDownload-string-url-string-fileName-fun-successboolean-responsestring-statusCodeinteger-assetAsset-onResponse}
+
+### nil HttpDownloadToClientCache(string url, string fileName, fun(success:boolean, response:string, statusCode:integer, asset:Asset?) onResponse) {#nil-HttpDownloadToClientCache-string-url-string-fileName-fun-successboolean-responsestring-statusCodeinteger-assetAsset-onResponse}
+
+### nil ReleaseClientCacheResources() {#nil-ReleaseClientCacheResources}
 
 ### nil ReloadPage(boolean fromCache) {#nil-ReloadPage-boolean-fromCache}
 
@@ -184,11 +231,9 @@ Draw a camera-facing textured quad in world space. Client-side, call every frame
 ### nil DrawBillboards(table billboards) {#nil-DrawBillboards-table-billboards}
 Batch-draw multiple billboards from a table of descriptors.
 
+### nil DrawBillboardTexture(Asset|AssetLink texture, Vec3 pos, number size, Vec4 color, number angleDeg) {#nil-DrawBillboardTexture-AssetAssetLink-texture-Vec3-pos-number-size-Vec4-color-number-angleDeg}
+
 ## Properties
 
 ### ClientPermission permission {#ClientPermission-permission}
-
-### string platform {#string-platform}
-
-### string sysInfo {#string-sysInfo}
 

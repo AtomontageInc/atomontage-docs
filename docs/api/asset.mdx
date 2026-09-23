@@ -13,9 +13,21 @@ id: Asset
 
 ### Asset[] GetAssetsReferencingAsset(Asset asset) {#Asset-GetAssetsReferencingAsset-Asset-asset}
 
+### boolean IsDownloaded() {#boolean-IsDownloaded}
+
+### nil Download() {#nil-Download}
+
+### boolean IsDownloading() {#boolean-IsDownloading}
+
+### boolean DownloadFailed() {#boolean-DownloadFailed}
+
+### number DownloadProgress() {#number-DownloadProgress}
+
 ## Properties
 
 ### string name {#string-name}
+
+### string id {#string-id}
 
 ### integer type {#integer-type}
 
@@ -28,4 +40,10 @@ id: Asset
 ### string relpath {#string-relpath}
 
 ### boolean canReferenceAssets {#boolean-canReferenceAssets}
+
+### boolean cloud {#boolean-cloud}
+
+### integer fileSize {#integer-fileSize}
+
+### integer lastModified {#integer-lastModified}
 

@@ -12,6 +12,45 @@ Base class for the [`Vox`](./vox.mdx) operation builders ([`OpAdd`](./opAdd.mdx)
 ### OpBase Target(opTarget target) {#OpBase-Target-opTarget-target}
 Set the target shape/object(s) for this operation. Updates the cached VoxelEdit shape in-place if already built.
 
+### self Batch(boolean? on) {#self-Batch-boolean-on}
+Batch this edit instead of applying it the moment you call `Run()`. It joins a shared queue and
+lands within `Vox.editQueue.flushFrames` frames (default 8), in the order it was issued.
+**Why it is worth it.** A voxel edit costs far more for the FRAME it lands on than for itself:
+applying it invalidates blocks, which makes the renderer reload them and the server re-stream
+them to every client. Pay that once for 40 edits instead of once each and most of it disappears.
+Measured in a Cortex Command firefight (2 troops, ~200 edits/s, wall clock, 6 interleaved pairs):
+   | server frame | immediate | batched (every 8) |
+   | median       | 123ms     | 65ms              |
+   | average      | 127ms     | 85ms              |
+   | fps          | 7.9       | 12.1              |
+Cutting the effects instead is far weaker: dropping blood entirely won ~20%, spark scorch ~17%,
+bullet craters ~4% - because whatever you leave in still edits every frame and still pays the
+per-frame toll. Batching everything got 89% of the win available from deleting every edit.
+**Use it for cosmetic scarring** - blood splatter, scorch marks, bullet craters, rubble, shell
+casings. Anything the player only looks at.
+**Do NOT use it for anything read back synchronously** - digging progress, `volume`/`volumePerc`
+health checks, build placement validation, or an edit another edit depends on this frame. A
+queued edit is invisible to those reads until it flushes and the failure mode is a silent
+desync, not an error. Leave those alone; un-batched is the default.
+**What it costs.** Up to `flushFrames` frames of latency before the mark appears (~0.5s at 15fps).
+The flush frame itself is heavier, so batching trades tail for median: measured p95 183 -&gt; 199ms
+and max 215 -&gt; 270ms while the median halved. Lower `flushFrames` to flatten that, raise it to
+push the median lower.
+**When it silently declines** (the edit just runs immediately, which is always correct):
+* the edit is forced onto a dynamic object - it would land where the object *was*, and troop
+  damage has to register on the frame the bullet lands. One splatter op alternating between
+  terrain and body hits is decided per `Run()`, so this is normal, not a mistake.
+* the shape is a `Polyhedron` or `Polygon` (no cheap way to snapshot it).
+* `Vox.editQueue.enabled` is false - the global off switch, for A/B profiling.
+```lua
+Vox:Paint(Sphere(hit.pos, 0.04)):Color(0, 0, 0, 0.5):Batch():Run()  -- scorch mark
+```
+
+### nil AcceptStall() {#nil-AcceptStall}
+Opt-in for ONE oversized edit (soft limit only — the hard limit stays refused).
+Confirm with the user first: the edit executes as a single multi-second frame
+stall for every connected client.
+
 ### nil OnFinished(fun onFinished) {#nil-OnFinished-fun-onFinished}
 Callback function. `OnFinished` is called after `OnProgress` if it was last part
 

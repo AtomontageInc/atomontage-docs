@@ -10,6 +10,13 @@ id: Util
 ### nil schedule(number time, fun func, any ...) {#nil-schedule-number-time-fun-func-any}
 Call function once after time
 
+### nil scheduleUnscaled(number time, fun func, any ...) {#nil-scheduleUnscaled-number-time-fun-func-any}
+Call function once after time, on the unscaled wall clock (Time.appTime): immune to
+Time.timeScale, a paused sim, and a scene reset (Time.time freezes at timeScale 0 and resets
+to 0 on scene reset, so a sim-clock deadline can simply never arrive). Use for real-world
+deadlines - autosave, idle timeouts, reconnect grace - never for gameplay.
+Still plain Lua state: a LuaReset drops anything pending.
+
 ### nil scheduleUpdate(number time, fun func, any ...) {#nil-scheduleUpdate-number-time-fun-func-any}
 Call function every frame until time passed.
 Passes paramter t (0-1) for time passed to function, last call always finishes with 1 
@@ -17,6 +24,43 @@ Passes paramter t (0-1) for time passed to function, last call always finishes w
 ### table makeNetworkedTable(ScriptInstance script, table? tab, boolean? allowPrediction) {#table-makeNetworkedTable-ScriptInstance-script-table-tab-boolean-allowPrediction}
 Changes in this table are synced from server to clients.
 New clients connecting receive all current values in the networked table
+
+### nil findImage(any tex) {#nil-findImage-any-tex}
+Resolve a brush image ASSET by its name ("color_9", "normal_9", "graybox_dark"). Assets and
+AssetLinks pass straight through, so a call site can take either form without branching - which is
+how the Vox API's :Texture and the editor tools accept both. Returns nil when the name is not in
+the set; callers decide whether that is fatal (a color texture) or fine (a normal map).
+A NAME, never a path: file paths do not appear in scripts, so "Textures/texpaint/color_9" is not
+a thing you can pass - it simply is not a name in the set and resolves to nil.
+
+### nil normalImageFor(any colorImage) {#nil-normalImageFor-any-colorImage}
+The normal map that pairs with a color image, or nil when it has none (graybox, flesh, decals).
+Takes the asset (or an AssetLink); a raw Image has no identity in the set, so it pairs with nothing.
+
+### nil whenAssetsReady(table links, fun func, number? timeout, fun onTimeout) {#nil-whenAssetsReady-table-links-fun-func-number-timeout-fun-onTimeout}
+Hand over assets once they actually exist, for callers that were given AssetLinks.
+A file dropped from the OS reaches a receiver as a LINK before its bytes finish syncing across, so
+link.asset reads nil for a moment and a handler that uses it right away gets nothing (the link
+keeps the id, so the same link resolves later). Without this every receiver - viewport, image
+picker, material slot - would hand-roll the same wait and get it subtly wrong in its own way.
+Already-resolved Assets pass straight through, so a caller never branches on where its input came
+from; when nothing has to be waited for, func runs immediately rather than a frame later.
+Polls the UNSCALED clock: the editor can sit with a paused sim, which freezes Time.time, and a
+wait keyed to that would simply never come back.
+
+### nil whenAssetsSynced(table owner, table links, fun setPending, string what) {#nil-whenAssetsSynced-table-owner-table-links-fun-setPending-string-what}
+Park a PICK whose assets have not reached this side yet, and commit it when they do. The receiving
+side of a drop holds an id it cannot resolve for as long as the bytes are in flight, and every tool
+that lets you pick a dropped asset needs the same three things around that: report itself pending,
+refuse to act meanwhile, and un-pend when the file lands. This is that pattern, once.
+`owner` is any table to hang the generation counter on - a per-client context, or the script itself.
+The counter is what makes a fast re-pick safe: pick A, pick B before A arrives, and A's late callback
+must not clear B's pending flag. Bumped on EVERY call, so a pick that resolves immediately also
+supersedes an earlier one still waiting.
+`setPending(bool)` is called with the answer right away and again when the wait ends - the caller owns
+what pending MEANS (its own flag, and telling its client about it).
+`what` names the thing for the timeout error ('Brush image', 'Shape texture').
+Returns true when it had to park, false when everything already resolved.
 
 ### Vec3|Vec4 hexToRgb(string hex) {#Vec3Vec4-hexToRgb-string-hex}
 returns Vec3 or Vec4 with alpha depending on length of hex value
@@ -71,4 +115,12 @@ g = &#123;[1]=accumulated_time, [2]=call_count, [3]=accumulated_KB&#125; — int
 ### nil expensive(any us) {#nil-expensive-any-us}
 Spin for a given number of microseconds (busy-wait). Useful for testing the profiler.
 Usage: util:expensive(500) -- burn ~500µs
+
+### string baseState() {#string-baseState}
+One-call orientation snapshot for AI agents. Server: client ids, per-client
+camera pos + view target (from the Editor's server-side camera sync), loaded scene name + mode,
+terrain name + unsaved state + bounds + static voxels-per-meter, object tree to depth 2 (Editor Tools omitted,
+deeper descendants collapsed to "(+N)"), and the Montage .lua layout (Examples/
+listed in full, other folders with script counts). Client: camera pos + view target.
+See baseStateView for the view/below10m semantics.
 

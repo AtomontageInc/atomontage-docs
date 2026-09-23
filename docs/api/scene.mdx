@@ -7,9 +7,6 @@ id: Scene
 
 ## Methods
 
-### Material? CreateMaterial(string path) {#Material-CreateMaterial-string-path}
-Gets the shared [`Material`](./material.mdx) the renderer actually draws with (the cached instance, not a copy) — use it to drive live shader uniforms via [`Material:SetProperty`](./material.mdx#nil-SetProperty-string-name-Vec3Vec4-vec).
-
 ### number GetTime() {#number-GetTime}
 Simulation time in seconds; use this instead of the sandboxed `os.time`.
 
@@ -32,7 +29,7 @@ High-resolution wall-clock time in seconds, for measuring real-time differences.
 ### string GetProcessState() {#string-GetProcessState}
 What is currently being processed i.e Start, Update, LateUpdate etc.
 
-### Object CreateObject(string? name, Object? parentObj, boolean? save, boolean? selectInEditor) {#Object-CreateObject-string-name-Object-parentObj-boolean-save-boolean-selectInEditor}
+### Object CreateObject(string? name, Object? parentObj) {#Object-CreateObject-string-name-Object-parentObj}
 Create an object on server or client. The object is not automatically synced to clients unless its set to.
 For naming we recommend to: 
 * Use capital case 
@@ -46,17 +43,20 @@ local ob = Scene:CreateObject("Player Controller 1")
 
 Also see [`Scene:MakeNameValid`](#string-MakeNameValid-string-name)
 
+### Object CreateObject(string name, Object? parentObj, boolean active, boolean save) {#Object-CreateObject-string-name-Object-parentObj-boolean-active-boolean-save}
 
-### Object CreateObject(string name, boolean save, boolean selectInEditor) {#Object-CreateObject-string-name-boolean-save-boolean-selectInEditor}
+### Object CreateObject(string name, boolean active, boolean save) {#Object-CreateObject-string-name-boolean-active-boolean-save}
 
 ### nil DestroyObject(Object obj) {#nil-DestroyObject-Object-obj}
 Flags the object for deletion. The object will not actually be destroyed until the next frame.
 
 ### Object[] GetObjectsByName(string name) {#Object-GetObjectsByName-string-name}
 
-### Object GetObjectByName(string name) {#Object-GetObjectByName-string-name}
+### Object? GetObjectByName(string name) {#Object-GetObjectByName-string-name}
 
-### Object GetObjectById(string id) {#Object-GetObjectById-string-id}
+### Object? GetObjectById(string id) {#Object-GetObjectById-string-id}
+
+### Component? GetComponentById(string id) {#Component-GetComponentById-string-id}
 
 ### boolean IsComponentOnePerObject(string typeName) {#boolean-IsComponentOnePerObject-string-typeName}
 
@@ -74,27 +74,29 @@ Flags the object for deletion. The object will not actually be destroyed until t
 
 ### Object CloneObject(Object obj, string name) {#Object-CloneObject-Object-obj-string-name}
 
-### Object CloneObject(Object obj, boolean keepPrefabLink) {#Object-CloneObject-Object-obj-boolean-keepPrefabLink}
+### Object CloneObject(Object obj, boolean setSaveToFalse) {#Object-CloneObject-Object-obj-boolean-setSaveToFalse}
 
-### Object CloneObject(Object obj, string name, boolean keepPrefabLink) {#Object-CloneObject-Object-obj-string-name-boolean-keepPrefabLink}
+### Object CloneObject(Object obj, string name, boolean setSaveToFalse) {#Object-CloneObject-Object-obj-string-name-boolean-setSaveToFalse}
 
-### nil MoveObject(Object obj, Object newParentObj) {#nil-MoveObject-Object-obj-Object-newParentObj}
+### boolean MoveObject(Object obj, Object newParentObj) {#boolean-MoveObject-Object-obj-Object-newParentObj}
 
-### nil MoveObjectAfter(Object obj, Object siblingObj) {#nil-MoveObjectAfter-Object-obj-Object-siblingObj}
+### boolean MoveObjectAfter(Object obj, Object siblingObj) {#boolean-MoveObjectAfter-Object-obj-Object-siblingObj}
 
-### nil MoveObjectBefore(Object obj, Object siblingObj) {#nil-MoveObjectBefore-Object-obj-Object-siblingObj}
+### boolean MoveObjectBefore(Object obj, Object siblingObj) {#boolean-MoveObjectBefore-Object-obj-Object-siblingObj}
 
-### nil MoveObjectToRoot(Object obj) {#nil-MoveObjectToRoot-Object-obj}
+### boolean MoveObjectToRoot(Object obj) {#boolean-MoveObjectToRoot-Object-obj}
 
 ### boolean CanMoveObject(Object obj, Object newParentObj) {#boolean-CanMoveObject-Object-obj-Object-newParentObj}
 
-### Camera GetActiveCamera() {#Camera-GetActiveCamera}
-Returns the currently active (rendering) camera.
+### Camera? GetActiveCamera() {#Camera-GetActiveCamera}
+Returns the currently active (rendering) camera, falling back to the first active camera found in the hierarchy. Nil when the scene has none.
 
 ### nil SetActiveCamera(Camera cam) {#nil-SetActiveCamera-Camera-cam}
 Makes the given camera the active view.
 
-### VoxelDB? GetVoxelDB(string db) {#VoxelDB-GetVoxelDB-string-db}
+### VoxelDB? GetVoxelDB(string name) {#VoxelDB-GetVoxelDB-string-name}
+
+### nil ClearNormals(VoxelData vd) {#nil-ClearNormals-VoxelData-vd}
 
 ### boolean IsNameValid(string name) {#boolean-IsNameValid-string-name}
 
@@ -135,8 +137,6 @@ Returns an array of per-script-**type** rows (summed across all instances of tha
 All times are in microseconds (may come back as comma-formatted strings — parse with `tonumber((tostring(v):gsub(",","")))`). Collection must first be enabled with [`SetProfileScriptsUpdate(true)`](#nil-SetProfileScriptsUpdate-boolean-value), otherwise the rows stay empty/stale. Only time spent inside `Update`/`LateUpdate` is counted — work in RPC handlers, event listeners, and `Attach`/`Start` is **not** attributed here.
 
 ## Properties
-
-### integer voxelDataResourceTemplateSizeThreshold {#integer-voxelDataResourceTemplateSizeThreshold}
 
 ### boolean simulationPaused {#boolean-simulationPaused}
 

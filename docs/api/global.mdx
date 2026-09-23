@@ -12,6 +12,15 @@ shoud be Scene:FindObjectsWithTag
 
 ### OpCollide Collide(Shape shape) {#OpCollide-Collide-Shape-shape}
 
+### number emPx TextFontSizePx(number? size) {#number-emPx-TextFontSizePx-number-size}
+Em size Text()/WriteToScreen actually renders at, in the same pixel units their `pixelOffset`
+takes - so a width measured with TextWidth can be fed straight back in as an offset.
+Mirrors Client::UpdateScreenLabels: muiSize = 1 + 0.3*size, the em size is 20x that, and the
+whole thing scales with the SHORT side of the viewport against a 2160px reference. Text
+therefore GROWS WITH RESOLUTION while a raw pixelOffset does not - which is exactly why offsets
+hand-tuned at one window size drift at another. The MUI/user scale deliberately does not appear:
+the engine divides it out and the layout multiplies it back, so it cancels exactly.
+
 ### number widthPx TextWidth(string text, number? size) {#number-widthPx-TextWidth-string-text-number-size}
 doesnt really work idk why, need this in engine
 

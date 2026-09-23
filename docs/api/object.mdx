@@ -30,15 +30,13 @@ Rotates the object to face the given world point (optional up vector).
 ### Object? GetChild(string name) {#Object-GetChild-string-name}
 Get child object by name
 
-### Script AddScript(string fileName, boolean? sync) {#Script-AddScript-string-fileName-boolean-sync}
+### Script AddScript(Asset luaFile, boolean? sync) {#Script-AddScript-Asset-luaFile-boolean-sync}
 
 ### Mesh AddMesh() {#Mesh-AddMesh}
 
 ### VoxelData? AddVoxelData() {#VoxelData-AddVoxelData}
 
 ### Camera AddCamera() {#Camera-AddCamera}
-
-### Sky AddSkybox() {#Sky-AddSkybox}
 
 ### boolean RemoveParent() {#boolean-RemoveParent}
 
@@ -55,6 +53,8 @@ Find all components by type name
 ### Component[] GetComponents(string typeName) {#Component-GetComponents-string-typeName}
 
 ### Component AddComponent(string componentType) {#Component-AddComponent-string-componentType}
+
+### boolean MoveComponentBefore(Component component, Component before) {#boolean-MoveComponentBefore-Component-component-Component-before}
 
 ### Object[] WithChildren(boolean? includeInactive) {#Object-WithChildren-boolean-includeInactive}
 get the object and all its children, descendants, does not returns destroyed objects
@@ -159,6 +159,14 @@ Readonly. Check if the object is active in the scene. It may be inactive because
 ### boolean save {#boolean-save}
 Save this object in the hierarchy. If not saved it will be deleted after lua reset or server restart
 
+### integer owner {#integer-owner}
+
+### boolean receiveTransform {#boolean-receiveTransform}
+Receive transform(pos, rot scale) to render with from server. By default this is true.
+If you set this to false, you will need to manually set the transform of the object on the client side.
+This is useful for making objects respond immediately if something happened on the client side i.e. input
+Disable RigidBody simulation before setting this to false.
+
 ### boolean isDestroyed {#boolean-isDestroyed}
 True if the object was destroyed. Note that references to this object will still be valid 
 
@@ -180,8 +188,6 @@ This object's position among its parent's children.
 ### Component[] components {#Component-components}
 
 ### VoxelData? voxelData {#VoxelData-voxelData}
-
-### VoxelData? voxelRenderer {#VoxelData-voxelRenderer}
 
 ### RigidBody? rigidBody {#RigidBody-rigidBody}
 
