@@ -23,6 +23,12 @@ id: AE
 
 ### number GetDebugTime() {#number-GetDebugTime}
 
+### string GetLuaGCMode() {#string-GetLuaGCMode}
+Garbage-collector mode of the Lua state this call runs in (the server's on the server, the client's on a client): 'generational' (the engine default) or 'incremental'. Reports the mode set through the engine (the --lua-gc-mode command-line option or SetLuaGCMode), so switch modes with SetLuaGCMode rather than collectgarbage() to keep the two in step.
+
+### nil SetLuaGCMode(string mode) {#nil-SetLuaGCMode-string-mode}
+Switches the garbage collector of the calling Lua state to 'generational' or 'incremental', each with Lua 5.4's default tuning. The choice is kept by the engine for the rest of the process, so it survives Server:LuaReset() and script reloads. Generational is the default because script garbage is short-lived and the incremental collector paid for it with steps inside whichever script allocated: on the Jazz world server all script Updates summed to 16.2 ms/frame incremental vs 3.4 ms/frame generational. Errors on any other mode name.
+
 ### number GetDisplayScale() {#number-GetDisplayScale}
 
 ### table GetSafeArea() {#table-GetSafeArea}
@@ -57,6 +63,9 @@ Lists all engine profiler timer **names** under a prefix — use it to discover 
 ### nil SetLogValue(string name, number value) {#nil-SetLogValue-string-name-number-value}
 
 ### table GetLogValuesWithPrefix(string namePrefix) {#table-GetLogValuesWithPrefix-string-namePrefix}
+
+### string GetStrLogValue(string name) {#string-GetStrLogValue-string-name}
+Returns the string log value with the given name (multi-line summaries such as Renderer/ScanPhaseSummary), or an empty string if it doesn't exist.
 
 ### Asset[] assets, string[] folders GetAssetsFiltered(string assetFolder, string subfolder, string assetType) {#Asset-assets-string-folders-GetAssetsFiltered-string-assetFolder-string-subfolder-string-assetType}
 

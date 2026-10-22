@@ -62,11 +62,35 @@ Time for a network message to travel from client to server and back
 
 ### table GetRenderStats() {#table-GetRenderStats}
 
+### table TranslateShaders(boolean? writeFiles) {#table-TranslateShaders-boolean-writeFiles}
+WebGPU shader translation check (native only): runs every loaded effect's vertex + fragment pair through the GLSL -> WGSL translator (glslang SPIR-V + Tint). Translations complete over frames (a worker thread, or the server for a browser client), so poll until pending is 0. Returns &#123; available, translator, translatesLocally, effects, ready, pending, failed, skipped, failures = &#123; &#123;effect, error&#125; ... &#125;, folder &#125;; with writeFiles the ready WGSL lands under UserData/ShaderTranslation/&lt;effect>.vs.wgsl / .fs.wgsl.
+
+### table GetRenderProfile() {#table-GetRenderProfile}
+Immutable completed renderer snapshot: publication, frame, enabled, summary, commands, passes, resources, buffers, textures. Rows contain name/value/unit or named counts. Upload lists capped at 60 plus an aggregate; passes at 128 plus an aggregate. CPU replay timing is not GPU time.
+
 ### table GetRenderStatsWrites() {#table-GetRenderStatsWrites}
 
 ### boolean GetRenderStatsEnabled() {#boolean-GetRenderStatsEnabled}
 
 ### nil SetRenderStatsEnabled(boolean enable) {#nil-SetRenderStatsEnabled-boolean-enable}
+
+### nil SetRenderErrorChecksEnabled(boolean enable) {#nil-SetRenderErrorChecksEnabled-boolean-enable}
+Debug OpenGL: enable diagnostic glGetError polling on the graphics owner at the next frame boundary. Explicit result checks remain active.
+
+### boolean GetRenderErrorChecksEnabled() {#boolean-GetRenderErrorChecksEnabled}
+Returns the requested GL diagnostic error-check setting.
+
+### nil SetStrictRenderValidation(boolean enable) {#nil-SetStrictRenderValidation-boolean-enable}
+Debug OpenGL: check errors per call and framebuffers per draw. Applied at the owner frame boundary.
+
+### boolean GetStrictRenderValidation() {#boolean-GetStrictRenderValidation}
+Returns the requested strict rendering validation mode.
+
+### nil SetGpuFinishTiming(boolean enable) {#nil-SetGpuFinishTiming-boolean-enable}
+Profiling: with render stats on and no GPU timer queries (e.g. Mali GL ES), time each pass with glFinish at run boundaries. Serializes the GPU, so frame times are inflated while on; GetRenderProfile().gpuTiming then holds this frame's real per-pass GPU costs.
+
+### boolean GetGpuFinishTiming() {#boolean-GetGpuFinishTiming}
+Returns the requested GPU finish-timing mode.
 
 ### nil SignIn() {#nil-SignIn}
 
@@ -86,9 +110,27 @@ Time for a network message to travel from client to server and back
 
 ### nil ClearSky() {#nil-ClearSky}
 
+### nil ResetSkyToDefault() {#nil-ResetSkyToDefault}
+Goes back to the built-in default sky (ClearSky leaves no sky at all).
+
 ### nil SetSkyEnabled(boolean enabled) {#nil-SetSkyEnabled-boolean-enabled}
 
 ### boolean GetSkyEnabled() {#boolean-GetSkyEnabled}
+
+### nil SetSkyLook(table look) {#nil-SetSkyLook-table-look}
+Sets VM Sky's clouds and atmosphere for this client: any of coverNear, coverFar, towers, cirrus, veil, haze, exposure, seed (mostly 0-1; fields left out keep their value). A change rebakes the sky and crossfades to it, so easing a value over seconds changes the sky smoothly (cover 0.1/0.6 is the default fair-weather sky, 0.9/1 overcast). Kept across sky changes until ResetSkyLook.
+
+### table GetSkyLook(boolean? assetOnly) {#table-GetSkyLook-boolean-assetOnly}
+Returns the look the sky bakes with (coverNear, coverFar, towers, cirrus, veil, haze, exposure, seed); with assetOnly, the sky's own, ignoring SetSkyLook.
+
+### nil ResetSkyLook() {#nil-ResetSkyLook}
+Goes back to the sky's own look (undoes SetSkyLook).
+
+### nil SetSunDirection(number azimuth, number altitude) {#nil-SetSunDirection-number-azimuth-number-altitude}
+Places the scene's sun, in degrees (azimuth 0 = +Z, 90 = +X; altitude above the horizon, negative below): the sky, shadows, sea and lighting follow, and below the horizon the moon takes over. Sky.lua's day and night set it every frame while they run.
+
+### number azimuth, number altitude GetSunDirection() {#number-azimuth-number-altitude-GetSunDirection}
+Returns the scene's sun, in degrees.
 
 ### table GetSkyInfo() {#table-GetSkyInfo}
 
@@ -160,6 +202,9 @@ Time for a network message to travel from client to server and back
 
 ### nil Restart() {#nil-Restart}
 
+### nil ChooseImage() {#nil-ChooseImage}
+Opens the device's own picker to take a photo or choose an image (iOS, Android, and browsers, where phones offer the camera). The image arrives like a dropped file: it is copied into .dropped-assets and events.assetsDropped fires on this client and, once it has synced, on the server. Returns at once; nothing arrives if the player cancels. Desktop apps have no picker and log an error.
+
 ### nil ToggleChannelRendering() {#nil-ToggleChannelRendering}
 
 ### integer GetRenderChannelsCount() {#integer-GetRenderChannelsCount}
@@ -192,6 +237,9 @@ may not work on all platforms
 ### nil OpenBrowserWithURL(string url) {#nil-OpenBrowserWithURL-string-url}
 
 ### nil HttpGet(string url, fun(success:boolean, response:string, statusCode:integer) onResponse) {#nil-HttpGet-string-url-fun-successboolean-responsestring-statusCodeinteger-onResponse}
+
+### nil HttpGetAuthed(string url, fun(success:boolean, response:string, statusCode:integer) onResponse) {#nil-HttpGetAuthed-string-url-fun-successboolean-responsestring-statusCodeinteger-onResponse}
+Client:HttpGet as the signed-in maker: the client's own sign-in token is sent as the bearer (script never sees it), refreshed first if it expired. Same platform-hosts-only rule as HttpGet. Signed out: onResponse gets (false, 'signed out', 401) without a request. Throws in the web client.
 
 ### nil HttpDownload(string url, string fileName, fun(success:boolean, response:string, statusCode:integer, asset:Asset?) onResponse) {#nil-HttpDownload-string-url-string-fileName-fun-successboolean-responsestring-statusCodeinteger-assetAsset-onResponse}
 

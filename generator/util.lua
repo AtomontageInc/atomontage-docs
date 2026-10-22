@@ -43,6 +43,24 @@ function util:getDocumentation(lines)
     end
 end
 
+--escape MDX-breaking { } < in prose, outside `code spans`
+function util:escapeMdx(str)
+    local parts, n = {}, 0
+    for seg in (str .. "`"):gmatch("(.-)`") do
+        n = n + 1
+        if n % 2 == 1 then
+            seg = seg:gsub("{", "&#123;"):gsub("}", "&#125;"):gsub("<", "&lt;")
+        end
+        parts[n] = seg
+    end
+    return table.concat(parts, "`")
+end
+
+--undo escapeMdx (and the same hand-written entities) for the emmy file
+function util:unescapeMdx(str)
+    return (str:gsub("&#123;", "{"):gsub("&#125;", "}"):gsub("&lt;", "<"):gsub("&gt;", ">"))
+end
+
 function util:file_exists(name)
    local f=io.open(name,"r")
    if f~=nil then io.close(f) return true else return false end

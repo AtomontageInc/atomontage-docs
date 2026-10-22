@@ -2,6 +2,14 @@ local genEmmy = {}
 
 local util = require("generator.util")
 
+-- Richer @return types than the bindings carry (e.g. a table's shape). Only the @return line is
+-- replaced; the description from the mdx is kept, unlike manualMethodOverrides.
+local returnTypeOverrides = {
+    Scene = {
+        GetPointLights = "{ objectId: string, pos: Vec3, color: Color, intensity: number, radius: number, inner: number, falloff: number, remote: boolean }[]",
+    },
+}
+
 -- Methods whose auto-generated emmy emission isn't expressive enough — e.g. they need EmmyLua
 -- generics, type-literal magic (`\`T\``), aliased param types (keyCode/mouseButton), static `.`
 -- syntax, or multiple overloads. Each entry's value is the emmy text to emit at the position
@@ -761,7 +769,7 @@ function genEmmy:isMethodDeprecated(className, methodName)
     return deprecatedMethods[className] and deprecatedMethods[className][methodName] or false
 end
 
-function genEmmy:addEnum(file, name, intro, finalRows)
+function genEmmy:addEnum(file, name, intro, finalRows, values)
     local docsPath = "enums/"
     local className = util:firstToUpper(name)
     self:writeClassHeader(file, className, intro, docsPath)
@@ -775,7 +783,8 @@ function genEmmy:addEnum(file, name, intro, finalRows)
         if desc and desc ~= "" then
             file:write("\t-- ", desc, "\n")
         end 
-        file:write("\t", name, " = ", i-1, ",", "\n")
+        --the engine's value; rows the bindings no longer have fall back to their position
+        file:write("\t", name, " = ", values and values[name] or i-1, ",", "\n")
     end
     file:write("}", "\n\n")
 end
@@ -948,7 +957,7 @@ function genEmmy:writeProps(file, className, finalProperties)
 
         local description = util:hasDocumentation(prop.entry) and util:getDocumentation(prop.entry) or nil
         if description then
-            description = description:gsub("[\r\n]+", " ")
+            description = util:unescapeMdx(description:gsub("[\r\n]+", " "))
         end
 
         local flags = {}
@@ -1013,7 +1022,7 @@ function genEmmy:writeMethods(file, className, finalMethods)
                 --title= not supported, strip out
                 local hasTitle = string.find(line, "```lua title=")
                 if (hasTitle) then line = "```lua" end
-                line = line:gsub("bool", "boolean")
+                line = util:unescapeMdx(line:gsub("%f[%w]bool%f[%W]", "boolean"))
                 file:write(line, "\n")
             end
             local _, _, headingId = string.find(header, "{(%S*)}")
@@ -1033,7 +1042,7 @@ function genEmmy:writeMethods(file, className, finalMethods)
         --write function
         local paramNames = {}
         for i, info in ipairs(params) do
-            local paramType = info[1]
+            local paramType = prop.paramTypes and prop.paramTypes[i] or info[1]
             local paramName = info[2] or ("p" .. i)
             -- @param name type info
             if paramType == "..." then
@@ -1047,7 +1056,7 @@ function genEmmy:writeMethods(file, className, finalMethods)
         end
 
         local paramNamesStr = table.concat(paramNames, ", ")
-        file:write("--- @return ", returnType, "\n")
+        file:write("--- @return ", (returnTypeOverrides[className] or {})[name] or returnType, "\n")
         if (isConstructor) or className == "Global" then
             -- constructor, or a real global function (no receiver)
             file:write("function ", name, "(", paramNamesStr, ") end", "\n\n")

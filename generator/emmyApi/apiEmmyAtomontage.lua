@@ -339,6 +339,7 @@ Callbacks = {}
 --- @alias componentType
 ---| '"Camera"'
 ---| '"Mesh"'
+---| '"PointLight"'
 ---| '"RigidBody"'
 ---| '"Script"'
 ---| '"VoxelData"'
@@ -379,6 +380,23 @@ function AE:OnClient() end
 
 --- @return number
 function AE:GetDebugTime() end
+
+--[[
+Garbage-collector mode of the Lua state this call runs in (the server's on the server, the client's on a client): 'generational' (the engine default) or 'incremental'. Reports the mode set through the engine (the --lua-gc-mode command-line option or SetLuaGCMode), so switch modes with SetLuaGCMode rather than collectgarbage() to keep the two in step.
+
+[View Documentation](https://docs.atomontage.com/api/AE#string-GetLuaGCMode)
+]]
+--- @return string
+function AE:GetLuaGCMode() end
+
+--[[
+Switches the garbage collector of the calling Lua state to 'generational' or 'incremental', each with Lua 5.4's default tuning. The choice is kept by the engine for the rest of the process, so it survives Server:LuaReset() and script reloads. Generational is the default because script garbage is short-lived and the incremental collector paid for it with steps inside whichever script allocated: on the Jazz world server all script Updates summed to 16.2 ms/frame incremental vs 3.4 ms/frame generational. Errors on any other mode name.
+
+[View Documentation](https://docs.atomontage.com/api/AE#nil-SetLuaGCMode-string-mode)
+]]
+--- @param mode string
+--- @return nil
+function AE:SetLuaGCMode(mode) end
 
 --- @return number
 function AE:GetDisplayScale() end
@@ -450,6 +468,15 @@ function AE:SetLogValue(name, value) end
 --- @param namePrefix string
 --- @return table
 function AE:GetLogValuesWithPrefix(namePrefix) end
+
+--[[
+Returns the string log value with the given name (multi-line summaries such as Renderer/ScanPhaseSummary), or an empty string if it doesn't exist.
+
+[View Documentation](https://docs.atomontage.com/api/AE#string-GetStrLogValue-string-name)
+]]
+--- @param name string
+--- @return string
+function AE:GetStrLogValue(name) end
 
 --- @param assetFolder string
 --- @param subfolder string
@@ -1123,6 +1150,23 @@ function Client:GetMainDispatcherStats() end
 --- @return table
 function Client:GetRenderStats() end
 
+--[[
+WebGPU shader translation check (native only): runs every loaded effect's vertex + fragment pair through the GLSL -> WGSL translator (glslang SPIR-V + Tint). Translations complete over frames (a worker thread, or the server for a browser client), so poll until pending is 0. Returns { available, translator, translatesLocally, effects, ready, pending, failed, skipped, failures = { {effect, error} ... }, folder }; with writeFiles the ready WGSL lands under UserData/ShaderTranslation/<effect>.vs.wgsl / .fs.wgsl.
+
+[View Documentation](https://docs.atomontage.com/api/Client#table-TranslateShaders-boolean-writeFiles)
+]]
+--- @param writeFiles boolean?
+--- @return table
+function Client:TranslateShaders(writeFiles) end
+
+--[[
+Immutable completed renderer snapshot: publication, frame, enabled, summary, commands, passes, resources, buffers, textures. Rows contain name/value/unit or named counts. Upload lists capped at 60 plus an aggregate; passes at 128 plus an aggregate. CPU replay timing is not GPU time.
+
+[View Documentation](https://docs.atomontage.com/api/Client#table-GetRenderProfile)
+]]
+--- @return table
+function Client:GetRenderProfile() end
+
 --- @return table
 function Client:GetRenderStatsWrites() end
 
@@ -1132,6 +1176,57 @@ function Client:GetRenderStatsEnabled() end
 --- @param enable boolean
 --- @return nil
 function Client:SetRenderStatsEnabled(enable) end
+
+--[[
+Debug OpenGL: enable diagnostic glGetError polling on the graphics owner at the next frame boundary. Explicit result checks remain active.
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-SetRenderErrorChecksEnabled-boolean-enable)
+]]
+--- @param enable boolean
+--- @return nil
+function Client:SetRenderErrorChecksEnabled(enable) end
+
+--[[
+Returns the requested GL diagnostic error-check setting.
+
+[View Documentation](https://docs.atomontage.com/api/Client#boolean-GetRenderErrorChecksEnabled)
+]]
+--- @return boolean
+function Client:GetRenderErrorChecksEnabled() end
+
+--[[
+Debug OpenGL: check errors per call and framebuffers per draw. Applied at the owner frame boundary.
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-SetStrictRenderValidation-boolean-enable)
+]]
+--- @param enable boolean
+--- @return nil
+function Client:SetStrictRenderValidation(enable) end
+
+--[[
+Returns the requested strict rendering validation mode.
+
+[View Documentation](https://docs.atomontage.com/api/Client#boolean-GetStrictRenderValidation)
+]]
+--- @return boolean
+function Client:GetStrictRenderValidation() end
+
+--[[
+Profiling: with render stats on and no GPU timer queries (e.g. Mali GL ES), time each pass with glFinish at run boundaries. Serializes the GPU, so frame times are inflated while on; GetRenderProfile().gpuTiming then holds this frame's real per-pass GPU costs.
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-SetGpuFinishTiming-boolean-enable)
+]]
+--- @param enable boolean
+--- @return nil
+function Client:SetGpuFinishTiming(enable) end
+
+--[[
+Returns the requested GPU finish-timing mode.
+
+[View Documentation](https://docs.atomontage.com/api/Client#boolean-GetGpuFinishTiming)
+]]
+--- @return boolean
+function Client:GetGpuFinishTiming() end
 
 --- @return nil
 function Client:SignIn() end
@@ -1162,12 +1257,64 @@ function Client:SetSky(sky) end
 --- @return nil
 function Client:ClearSky() end
 
+--[[
+Goes back to the built-in default sky (ClearSky leaves no sky at all).
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-ResetSkyToDefault)
+]]
+--- @return nil
+function Client:ResetSkyToDefault() end
+
 --- @param enabled boolean
 --- @return nil
 function Client:SetSkyEnabled(enabled) end
 
 --- @return boolean
 function Client:GetSkyEnabled() end
+
+--[[
+Sets VM Sky's clouds and atmosphere for this client: any of coverNear, coverFar, towers, cirrus, veil, haze, exposure, seed (mostly 0-1; fields left out keep their value). A change rebakes the sky and crossfades to it, so easing a value over seconds changes the sky smoothly (cover 0.1/0.6 is the default fair-weather sky, 0.9/1 overcast). Kept across sky changes until ResetSkyLook.
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-SetSkyLook-table-look)
+]]
+--- @param look table
+--- @return nil
+function Client:SetSkyLook(look) end
+
+--[[
+Returns the look the sky bakes with (coverNear, coverFar, towers, cirrus, veil, haze, exposure, seed); with assetOnly, the sky's own, ignoring SetSkyLook.
+
+[View Documentation](https://docs.atomontage.com/api/Client#table-GetSkyLook-boolean-assetOnly)
+]]
+--- @param assetOnly boolean?
+--- @return table
+function Client:GetSkyLook(assetOnly) end
+
+--[[
+Goes back to the sky's own look (undoes SetSkyLook).
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-ResetSkyLook)
+]]
+--- @return nil
+function Client:ResetSkyLook() end
+
+--[[
+Places the scene's sun, in degrees (azimuth 0 = +Z, 90 = +X; altitude above the horizon, negative below): the sky, shadows, sea and lighting follow, and below the horizon the moon takes over. Sky.lua's day and night set it every frame while they run.
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-SetSunDirection-number-azimuth-number-altitude)
+]]
+--- @param azimuth number
+--- @param altitude number
+--- @return nil
+function Client:SetSunDirection(azimuth, altitude) end
+
+--[[
+Returns the scene's sun, in degrees.
+
+[View Documentation](https://docs.atomontage.com/api/Client#number-azimuth-number-altitude-GetSunDirection)
+]]
+--- @return number azimuth, number altitude
+function Client:GetSunDirection() end
 
 --- @return table
 function Client:GetSkyInfo() end
@@ -1302,6 +1449,14 @@ function Client:GetDragDropBlockedReason() end
 --- @return nil
 function Client:Restart() end
 
+--[[
+Opens the device's own picker to take a photo or choose an image (iOS, Android, and browsers, where phones offer the camera). The image arrives like a dropped file: it is copied into .dropped-assets and events.assetsDropped fires on this client and, once it has synced, on the server. Returns at once; nothing arrives if the player cancels. Desktop apps have no picker and log an error.
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-ChooseImage)
+]]
+--- @return nil
+function Client:ChooseImage() end
+
 --- @return nil
 function Client:ToggleChannelRendering() end
 
@@ -1362,6 +1517,16 @@ function Client:OpenBrowserWithURL(url) end
 --- @param onResponse fun(success:boolean, response:string, statusCode:integer)
 --- @return nil
 function Client:HttpGet(url, onResponse) end
+
+--[[
+Client:HttpGet as the signed-in maker: the client's own sign-in token is sent as the bearer (script never sees it), refreshed first if it expired. Same platform-hosts-only rule as HttpGet. Signed out: onResponse gets (false, 'signed out', 401) without a request. Throws in the web client.
+
+[View Documentation](https://docs.atomontage.com/api/Client#nil-HttpGetAuthed-string-url-fun-successboolean-responsestring-statusCodeinteger-onResponse)
+]]
+--- @param url string
+--- @param onResponse fun(success:boolean, response:string, statusCode:integer)
+--- @return nil
+function Client:HttpGetAuthed(url, onResponse) end
 
 --- @param url string
 --- @param fileName string
@@ -1961,6 +2126,15 @@ function Gamepad:ButtonUp(button) end
 --- @return number
 function Gamepad:Axis(axis) end
 
+--[[
+RAW joystick hat as an SDL bitmask: 1 up, 2 right, 4 down, 8 left, 0 centred. On mapped pads the d-pad is also GamepadButton.DpadUp/Down/Left/Right.
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#integer-Hat-integer-hat)
+]]
+--- @param hat integer
+--- @return integer
+function Gamepad:Hat(hat) end
+
 --- @param lowFrequencyRumble integer
 --- @param highFrequencyRumble integer
 --- @param duration integer
@@ -1972,6 +2146,117 @@ function Gamepad:Rumble(lowFrequencyRumble, highFrequencyRumble, duration) end
 --- @param duration integer
 --- @return integer
 function Gamepad:RumbleTriggers(leftRumble, rightRumble, duration) end
+
+--[[
+True when SDL recognises this device as a gamepad, so the Mapped* functions report the standard layout. Almost every pad is (Xbox, PlayStation, Switch, Steam Controller, Steam Deck, browser 'standard' pads).
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#boolean-IsMapped)
+]]
+--- @return boolean
+function Gamepad:IsMapped() end
+
+--[[
+Standard-layout button pressed this frame; same on every platform.
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#boolean-MappedButtonDown-GamepadButton-button)
+]]
+--- @param button GamepadButton
+--- @return boolean
+function Gamepad:MappedButtonDown(button) end
+
+--[[
+Standard-layout button held.
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#boolean-MappedButton-GamepadButton-button)
+]]
+--- @param button GamepadButton
+--- @return boolean
+function Gamepad:MappedButton(button) end
+
+--[[
+Standard-layout button released this frame.
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#boolean-MappedButtonUp-GamepadButton-button)
+]]
+--- @param button GamepadButton
+--- @return boolean
+function Gamepad:MappedButtonUp(button) end
+
+--[[
+Standard-layout axis, no deadzone: sticks -1..1 (up is negative), triggers 0..1 (0 at rest).
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#number-MappedAxis-GamepadAxis-axis)
+]]
+--- @param axis GamepadAxis
+--- @return number
+function Gamepad:MappedAxis(axis) end
+
+--[[
+Stick 0 (left) or 1 (right) as a Vec2 with a RADIAL deadzone (default 0.15), rescaled so full deflection reads length 1. y is negative when pushed up.
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#Vec2-MappedStick-integer-stick-number-deadzone)
+]]
+--- @param stick integer
+--- @param deadzone number?
+--- @return Vec2
+function Gamepad:MappedStick(stick, deadzone) end
+
+--[[
+What is printed on that button of this pad: A/B/X/Y or Cross/Circle/Square/Triangle; empty when unknown. Use it to draw the right glyph.
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#string-ButtonLabel-GamepadButton-button)
+]]
+--- @param button GamepadButton
+--- @return string
+function Gamepad:ButtonLabel(button) end
+
+--[[
+Device instance id; the `id` field of this pad's Input:GetEvents() entries.
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#integer-Id)
+]]
+--- @return integer
+function Gamepad:Id() end
+
+--[[
+Human-readable device name, e.g. 'Steam Controller' or 'Xbox Series X Controller'.
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#string-Name)
+]]
+--- @return string
+function Gamepad:Name() end
+
+--[[
+SDL gamepad type: xbox360, xboxone, ps3, ps4, ps5, switchpro, joyconleft, joyconright, joyconpair, gamecube, standard; empty if not mapped. Steam Controllers report standard - check VendorId() == 0x28DE (Valve).
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#string-Type)
+]]
+--- @return string
+function Gamepad:Type() end
+
+--[[
+SDL joystick GUID as a hex string.
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#string-Guid)
+]]
+--- @return string
+function Gamepad:Guid() end
+
+--[[
+USB vendor id (0 if unknown). 0x28DE = Valve (Steam Controller, Steam Deck, Steam Input virtual pads).
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#integer-VendorId)
+]]
+--- @return integer
+function Gamepad:VendorId() end
+
+--[[
+USB product id (0 if unknown).
+
+[View Documentation](https://docs.atomontage.com/api/Gamepad#integer-ProductId)
+]]
+--- @return integer
+function Gamepad:ProductId() end
 
 --[[
 `Client`
@@ -2445,6 +2730,74 @@ user ignoreTags change (via IgnoreTag()).
 --- @param builtinIgnoreTag string?
 --- @return Filter
 function InteractionFilter:prepareFilter(builtinIgnoreTag) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/Interp)
+]]
+--- @class Interp
+--- @field keyCount integer (readonly) Number of keys, the first and last key included.
+Interp = {}
+
+--- @return Interp
+function Interp() end
+
+--[[
+True if both curves have the same keys and tangents.
+
+[View Documentation](https://docs.atomontage.com/api/Interp#boolean-eq-Interp-a-Interp-b)
+]]
+--- @param a Interp
+--- @param b Interp
+--- @return boolean
+function Interp:__eq(a, b) end
+
+--[[
+Adds a key at time pnt.x with value pnt.y. The time must be strictly between 0 and 1 and not equal to an existing key's time, the value is clamped to 0..1. Returns the 1-based index of the new key, which is determined by its time among the existing keys, or 0 when the key could not be added.
+
+[View Documentation](https://docs.atomontage.com/api/Interp#integer-AddKey-Vec2-pnt)
+]]
+--- @param pnt Vec2
+--- @return integer
+function Interp:AddKey(pnt) end
+
+--[[
+Removes the key with the given 1-based index. Returns false when the index is invalid or points to the first or last key, those cannot be removed.
+
+[View Documentation](https://docs.atomontage.com/api/Interp#boolean-RemoveKey-integer-index)
+]]
+--- @param index integer
+--- @return boolean
+function Interp:RemoveKey(index) end
+
+--[[
+Returns the interpolated value of the curve at the given time 0..1.
+
+[View Documentation](https://docs.atomontage.com/api/Interp#number-GetValue-number-time)
+]]
+--- @param time number
+--- @return number
+function Interp:GetValue(time) end
+
+--[[
+Returns a copy of this curve.
+
+[View Documentation](https://docs.atomontage.com/api/Interp#Interp-Copy)
+]]
+--- @return Interp
+function Interp:Copy() end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/InterpEdit)
+]]
+--- @class InterpEdit : Widget
+--- @field value Interp The edited curve (a copy - assign it back after changing it in Lua). Click adds a key, Ctrl+click removes one, keys and tangent handles are dragged.
+InterpEdit = {}
 
 --[[
 ---
@@ -3250,6 +3603,10 @@ The voxel **add** operation, returned by [`Vox:Add(target)`](./vox.mdx#OpAdd-Add
 --- @class OpAdd : OpBaseColored
 OpAdd = {}
 
+--- @param mat materialName|'none'|nil
+--- @return OpAdd
+function OpAdd:Material(mat) end
+
 --[[
 `Client`
 `Server`
@@ -3291,8 +3648,8 @@ health checks, build placement validation, or an edit another edit depends on th
 queued edit is invisible to those reads until it flushes and the failure mode is a silent
 desync, not an error. Leave those alone; un-batched is the default.
 **What it costs.** Up to `flushFrames` frames of latency before the mark appears (~0.5s at 15fps).
-The flush frame itself is heavier, so batching trades tail for median: measured p95 183 -&gt; 199ms
-and max 215 -&gt; 270ms while the median halved. Lower `flushFrames` to flatten that, raise it to
+The flush frame itself is heavier, so batching trades tail for median: measured p95 183 -> 199ms
+and max 215 -> 270ms while the median halved. Lower `flushFrames` to flatten that, raise it to
 push the median lower.
 **When it silently declines** (the edit just runs immediately, which is always correct):
 * the edit is forced onto a dynamic object - it would land where the object *was*, and troop
@@ -3325,7 +3682,7 @@ Callback function. `OnFinished` is called after `OnProgress` if it was last part
 
 [View Documentation](https://docs.atomontage.com/api/OpBase#nil-OnFinished-fun-onFinished)
 ]]
---- @param onFinished fun()
+--- @param onFinished fun(removeStats: table<materialName, number>, computeTimeMs: number, status: "success"|"noop"|"error")
 --- @return nil
 function OpBase:OnFinished(onFinished) end
 
@@ -3334,7 +3691,7 @@ Callback function. May not be called every frame. Is called after script updates
 
 [View Documentation](https://docs.atomontage.com/api/OpBase#nil-OnProgress-fun-onProgress)
 ]]
---- @param onProgress fun()
+--- @param onProgress fun(progress: number)
 --- @return nil
 function OpBase:OnProgress(onProgress) end
 
@@ -3365,10 +3722,12 @@ Apply a voxel material. How it interacts with Color/Texture:
 - textured materials (stone/concrete/bedrock/sand/flesh/bone) always show their texture, ignoring Color
 - metals stay reflective; other (untextured) materials take your Color if set, else their own albedo
 - a Texture image overrides Color too, unless you set a Color which then tints it
+Omitting Material(), or passing nil, preserves existing material assignments.
+On Paint, Material("none") or Material("") clears them. Add does not support clearing yet.
 
-[View Documentation](https://docs.atomontage.com/api/OpBaseColored#nil-Material-materialName-mat)
+[View Documentation](https://docs.atomontage.com/api/OpBaseColored#nil-Material-materialNamenonenil-mat)
 ]]
---- @param mat materialName
+--- @param mat materialName|'none'|nil
 --- @return nil
 function OpBaseColored:Material(mat) end
 
@@ -3419,12 +3778,12 @@ Project an image onto the voxels (works on Add/Paint/Remove). The image replaces
 Color to tint it. Projected along `dir` (planar): lands only on the face toward `dir`, fading out on
 angled faces (decal-style). Use TriplanarTexture to cover every face without fading instead.
 
-[View Documentation](https://docs.atomontage.com/api/OpBaseTextured#OpBaseTextured-Texture-stringAssetAssetLinknil-tex-Vec3-dir-number-scale-stringAssetAssetLinkbooleannil-normal)
+[View Documentation](https://docs.atomontage.com/api/OpBaseTextured#OpBaseTextured-Texture-stringAssetAssetLinknil-tex-Vec3-dir-number-scale-stringAssetAssetLinkfalsenil-normal)
 ]]
 --- @param tex string|Asset|AssetLink|nil
 --- @param dir Vec3
 --- @param scale number?
---- @param normal string|Asset|AssetLink|boolean|nil
+--- @param normal string|Asset|AssetLink|false|nil
 --- @return OpBaseTextured
 function OpBaseTextured:Texture(tex, dir, scale, normal) end
 
@@ -3432,12 +3791,12 @@ function OpBaseTextured:Texture(tex, dir, scale, normal) end
 Texture voxels from all three world axes, blended by surface normal (works on Add/Paint/Remove).
 The image replaces color; set a Color to tint it.
 
-[View Documentation](https://docs.atomontage.com/api/OpBaseTextured#OpBaseTextured-TriplanarTexture-stringAssetAssetLinknil-tex-Vec3-anchor-number-scale-stringAssetAssetLinkbooleannil-normal)
+[View Documentation](https://docs.atomontage.com/api/OpBaseTextured#OpBaseTextured-TriplanarTexture-stringAssetAssetLinknil-tex-Vec3-anchor-number-scale-stringAssetAssetLinkfalsenil-normal)
 ]]
 --- @param tex string|Asset|AssetLink|nil
 --- @param anchor Vec3?
 --- @param scale number?
---- @param normal string|Asset|AssetLink|boolean|nil
+--- @param normal string|Asset|AssetLink|false|nil
 --- @return OpBaseTextured
 function OpBaseTextured:TriplanarTexture(tex, anchor, scale, normal) end
 
@@ -3558,7 +3917,7 @@ Callback function. `OnFinished` is called after `OnProgress` if it was last part
 
 [View Documentation](https://docs.atomontage.com/api/OpRemove#OpRemove-OnFinished-fun-onFinished)
 ]]
---- @param onFinished fun()
+--- @param onFinished fun(removeStats: table<materialName, number>, computeTimeMs: number, status: "success"|"noop"|"error")
 --- @return OpRemove
 function OpRemove:OnFinished(onFinished) end
 
@@ -3574,6 +3933,15 @@ function OpRemove:CountMaterial(countMat) end
 --- @param strength number?
 --- @return OpRemove
 function OpRemove:SoftRemovalStrength(strength) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/OpSmoothNormals)
+]]
+--- @class OpSmoothNormals : OpBase
+OpSmoothNormals = {}
 
 --[[
 `Client`
@@ -3680,6 +4048,37 @@ PhysSimEvents = {}
 --- @param eventType PhysSimEventType?
 --- @return PhysSimEvent[]
 function PhysSimEvents:GetEvents(eventType) end
+
+--[[
+`Client`
+`Server`
+
+[View Documentation](https://docs.atomontage.com/api/PointLight)
+]]
+--- @class PointLight
+--- @field active boolean Get/Set whether the component is active
+--- @field activeInHierarchy boolean (readonly) Get whether the component is active in hierarchy
+--- @field object Object (readonly) Get the object this component is attached to
+--- @field obj Object (readonly) Get the object this component is attached to
+--- @field isDestroyed boolean (readonly) Get whether the component is destroyed
+--- @field type string (readonly) Get the type name of the component
+--- @field onePerObject boolean (readonly) Whether this component type is limited to a single instance per object
+--- @field color Color Light color (alpha is ignored). Default white.
+--- @field intensity number Brightness multiplier, >= 0. Default 1.
+--- @field radius number Range in meters; no light at and beyond it. Default 10.
+--- @field inner number Radius in meters up to which the light is at full intensity. Default 0.
+--- @field falloff number Exponent of the fade between inner and radius: (1 - t)^falloff. 1 = linear, 2 = default, higher = faster drop near the inner radius.
+PointLight = {}
+
+--[[
+True if both reference the same instance.
+
+[View Documentation](https://docs.atomontage.com/api/PointLight#boolean-eq-PointLight-a-PointLight-b)
+]]
+--- @param a PointLight
+--- @param b PointLight
+--- @return boolean
+function PointLight:__eq(a, b) end
 
 --[[
 `Client`
@@ -4263,7 +4662,6 @@ function Recti:Copy() end
 --- @field sleeping boolean
 --- @field startSleeping boolean
 --- @field allowSleeping boolean
---- @field simulate boolean
 --- @field centerOfMass Vec3
 --- @field gravityScale number
 RigidBody = {}
@@ -4429,6 +4827,14 @@ function Scene:GetRootObjects() end
 --- @return Object[]
 function Scene:GetAllObjects() end
 
+--[[
+Returns the PointLight components active in the hierarchy as {objectId, pos, color, intensity, radius, inner, falloff, remote}, world space. On a client it includes the server's lights (remote = true, objectId names the server object).
+
+[View Documentation](https://docs.atomontage.com/api/Scene#table-GetPointLights)
+]]
+--- @return { objectId: string, pos: Vec3, color: Color, intensity: number, radius: number, inner: number, falloff: number, remote: boolean }[]
+function Scene:GetPointLights() end
+
 --- @return table[]
 function Scene:GetMissingAssetRefs() end
 
@@ -4565,7 +4971,7 @@ Returns an array of per-script-**type** rows (summed across all instances of tha
 | `max` | Worst single frame (µs) |
 | `cnt` | Number of live instances of this script |
 
-All times are in microseconds (may come back as comma-formatted strings — parse with `tonumber((tostring(v):gsub(",","")))`). Collection must first be enabled with [`SetProfileScriptsUpdate(true)`](#nil-SetProfileScriptsUpdate-booleanean-value), otherwise the rows stay empty/stale. Only time spent inside `Update`/`LateUpdate` is counted — work in RPC handlers, event listeners, and `Attach`/`Start` is **not** attributed here.
+All times are in microseconds (may come back as comma-formatted strings — parse with `tonumber((tostring(v):gsub(",","")))`). Collection must first be enabled with [`SetProfileScriptsUpdate(true)`](#nil-SetProfileScriptsUpdate-boolean-value), otherwise the rows stay empty/stale. Only time spent inside `Update`/`LateUpdate` is counted — work in RPC handlers, event listeners, and `Attach`/`Start` is **not** attributed here.
 
 [View Documentation](https://docs.atomontage.com/api/Scene#table-GetScriptsProfiling)
 ]]
@@ -4906,6 +5312,15 @@ Server = {}
 --- @return integer[]
 function Server:GetClients() end
 
+--[[
+Server-to-client asset sync state of a client (Dev Tools' Assets Sync window): { helloAnswered = boolean, assets = { {id, path, source, type, size, state, highPrio, position, progress, age}, ... } }. state is 'queued' (position = place in the send queue), 'sending' (progress 0..1), 'sent', 'registered' (the client confirmed registering it) or 'up to date' (offered at connect, the client already had it); age = seconds since a sent asset finished. nil for an unknown client.
+
+[View Documentation](https://docs.atomontage.com/api/Server#table-GetAssetSyncStatus-integer-clientID)
+]]
+--- @param clientID integer
+--- @return table?
+function Server:GetAssetSyncStatus(clientID) end
+
 --- @param clientID integer
 --- @return boolean
 function Server:IsVRClient(clientID) end
@@ -4921,6 +5336,30 @@ Re-runs all server Lua scripts from scratch. The entire Lua state is wiped — n
 ]]
 --- @return nil
 function Server:LuaReset() end
+
+--[[
+How many times a saved .lua change skipped the Lua reset because no changed script had run in the current Lua state.
+
+[View Documentation](https://docs.atomontage.com/api/Server#integer-GetLuaResetsSkipped)
+]]
+--- @return integer
+function Server:GetLuaResetsSkipped() end
+
+--[[
+How many scene loads this server has started: 1 after the boot load, plus one per Server:OpenScene, New Scene or scene reload. A script's Start runs again after both a scene load and a .lua hot reload; compare this with a value kept in Config temp storage to tell them apart.
+
+[View Documentation](https://docs.atomontage.com/api/Server#integer-GetSceneLoadCount)
+]]
+--- @return integer
+function Server:GetSceneLoadCount() end
+
+--[[
+Time.appTime of the last skipped Lua reset (0 when none).
+
+[View Documentation](https://docs.atomontage.com/api/Server#number-GetLuaResetSkippedAt)
+]]
+--- @return number
+function Server:GetLuaResetSkippedAt() end
 
 --- @param prefab Asset
 --- @param newName string?
@@ -5399,6 +5838,16 @@ function UI:AddSeparator(parent, name) end
 --- @param name string?
 --- @return Graph
 function UI:AddGraph(parent, name) end
+
+--[[
+Adds an InterpEdit (Interp curve editor) widget.
+
+[View Documentation](https://docs.atomontage.com/api/UI#InterpEdit-AddInterpEdit-Widget-parent-string-name)
+]]
+--- @param parent Widget
+--- @param name string?
+--- @return InterpEdit
+function UI:AddInterpEdit(parent, name) end
 
 --- @param type string
 --- @param parent Widget
@@ -7367,6 +7816,15 @@ function Vox:Deflate(target) end
 function Vox:Smoothen(target) end
 
 --[[
+Smooth surface normals without changing voxel geometry.
+
+[View Documentation](https://docs.atomontage.com/api/Vox#OpSmoothNormals-SmoothNormals-opTarget-target)
+]]
+--- @param target opTarget
+--- @return OpSmoothNormals
+function Vox:SmoothNormals(target) end
+
+--[[
 `Server`
 
 :::warning Deprecated
@@ -7940,8 +8398,8 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 --- @field copySourceRot Quat
 --- @field copySourceScale number
 --- @field copyResource VoxelData
---- @field colorEnable boolean
---- @field normalEnable boolean
+--- @field colorEnable boolean Add/Paint: true overwrites the color of touched voxels, false keeps it. Voxels created by Add always get the op color.
+--- @field normalEnable boolean Same as colorEnable, for normals. Add with InsertOperation.Full never changes normals.
 --- @field roughnessEnable boolean
 --- @field metallicityEnable boolean
 --- @field materialEnable boolean
@@ -7957,7 +8415,7 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 --- @field removeStats boolean
 --- @field usesPbr boolean (readonly)
 --- @field copyOperation CopyOperation
---- @field insertOperation InsertOperation
+--- @field insertOperation InsertOperation Voxels Add touches: Normal = empty and existing, Empty = empty only, Full = existing only (adds no geometry).
 --- @field kernelType integer 0 = Smooth 7x5x71 = Smooth 3x3x32 = Smooth 5x5x53 = Inflate4 = Deflate5 = Normals smooth6 = Normals sharp
 --- @field imageColor Asset|AssetLink|Image
 --- @field imageNormal Asset|AssetLink|Image
@@ -7968,7 +8426,7 @@ See a different example [here](../manual/scripting/examples/Voxel-Edits)
 --- @field imageProjectionFade boolean Planar projection only: fade the albedo on faces angled away from the projection axis (decal-style, lands only on the facing face). Ignored for triplanar, which covers every face.
 --- @field imageNormalBlendPower number
 --- @field onProgress fun(progress:number) callback function. progress from 0-1. May not be called every frame. Is called after script updates 
---- @field onFinished fun(info:RemoveCountInfo, computeTimeMs:number) callback function. onFinished is called after onProgress if it was last part
+--- @field onFinished fun(info:RemoveCountInfo, computeTimeMs:number, status:string) Called exactly once after a submitted operation ends, including failures and no-ops. OnError runs first on failure. status is success, noop, or error. Argument validation may throw before submission; Lua reset clears pending callbacks. computeTimeMs is the summed compute time (ms) across all worker threads for this op, excluding time spent queued waiting for other ops.
 --- @field onError fun(reason:string, opCount:integer) callback function. Called when the op group is dropped: reason says why, opCount is how many ops that group covered
 VoxelEdit = {}
 
@@ -8283,7 +8741,7 @@ Call function once after time
 [View Documentation](https://docs.atomontage.com/api/util#nil-schedule-number-time-fun-func-any)
 ]]
 --- @param time number
---- @param func fun()
+--- @param func fun(...)
 --- @param ... any
 --- @return nil
 function util:schedule(time, func, ...) end
@@ -8298,7 +8756,7 @@ Still plain Lua state: a LuaReset drops anything pending.
 [View Documentation](https://docs.atomontage.com/api/util#nil-scheduleUnscaled-number-time-fun-func-any)
 ]]
 --- @param time number
---- @param func fun()
+--- @param func fun(...)
 --- @param ... any
 --- @return nil
 function util:scheduleUnscaled(time, func, ...) end
@@ -8310,7 +8768,7 @@ Passes paramter t (0-1) for time passed to function, last call always finishes w
 [View Documentation](https://docs.atomontage.com/api/util#nil-scheduleUpdate-number-time-fun-func-any)
 ]]
 --- @param time number
---- @param func fun()
+--- @param func fun(t:number): boolean?
 --- @param ... any
 --- @return nil
 function util:scheduleUpdate(time, func, ...) end
@@ -8365,9 +8823,9 @@ wait keyed to that would simply never come back.
 [View Documentation](https://docs.atomontage.com/api/util#nil-whenAssetsReady-table-links-fun-func-number-timeout-fun-onTimeout)
 ]]
 --- @param links table
---- @param func fun()
+--- @param func fun(assets:table)
 --- @param timeout number?
---- @param onTimeout fun()
+--- @param onTimeout fun(seconds:number)
 --- @return nil
 function util:whenAssetsReady(links, func, timeout, onTimeout) end
 
@@ -8389,7 +8847,7 @@ Returns true when it had to park, false when everything already resolved.
 ]]
 --- @param owner table
 --- @param links table
---- @param setPending fun()
+--- @param setPending fun(pending:boolean)
 --- @param what string
 --- @return nil
 function util:whenAssetsSynced(owner, links, setPending, what) end
@@ -8506,7 +8964,7 @@ function util:prof(name) end
 --[[
 profile and group measurements of each string passed together for this frame
 GC is paused on first call per frame and restarted in profFlush, so alloc deltas are exact.
-g = &#123;[1]=accumulated_time, [2]=call_count, [3]=accumulated_KB&#125; — integer keys use array part, faster than string fields
+g = {[1]=accumulated_time, [2]=call_count, [3]=accumulated_KB} — integer keys use array part, faster than string fields
 
 [View Documentation](https://docs.atomontage.com/api/util#nil-profGr-any-name)
 ]]
@@ -8577,8 +9035,8 @@ BlendMode = {
 --- @enum ClientPermission
 ClientPermission = {
 	View = 0,
-	DevDebug = 1,
-	Edit = 2,
+	DevDebug = 2,
+	Edit = 1,
 }
 
 --- @enum CopyOperation
@@ -8608,9 +9066,49 @@ Device = {
 
 --- @enum DisplayMode
 DisplayMode = {
-	Fullscreen = 0,
-	Windowed = 1,
-	Borderless = 2,
+	Fullscreen = 2,
+	Windowed = 0,
+	Borderless = 1,
+}
+
+--- @enum GamepadAxis
+GamepadAxis = {
+	LeftX = 0,
+	LeftY = 1,
+	RightX = 2,
+	RightY = 3,
+	LeftTrigger = 4,
+	RightTrigger = 5,
+}
+
+--- @enum GamepadButton
+GamepadButton = {
+	South = 0,
+	East = 1,
+	West = 2,
+	North = 3,
+	Back = 4,
+	Guide = 5,
+	Start = 6,
+	LeftStick = 7,
+	RightStick = 8,
+	LeftShoulder = 9,
+	RightShoulder = 10,
+	DpadUp = 11,
+	DpadDown = 12,
+	DpadLeft = 13,
+	DpadRight = 14,
+	Misc1 = 15,
+	RightPaddle1 = 16,
+	LeftPaddle1 = 17,
+	RightPaddle2 = 18,
+	LeftPaddle2 = 19,
+	Touchpad = 20,
+	Misc2 = 21,
+	Misc3 = 22,
+	Misc4 = 23,
+	Misc5 = 24,
+	Misc6 = 25,
 }
 
 --- @enum HitType
@@ -8643,47 +9141,47 @@ PixelFormat = {
 	RGB565 = 3,
 	RGBA5551 = 4,
 	RGBA4444 = 5,
-	BGR888 = 6,
-	BGRA8888 = 7,
-	Depth16 = 8,
-	Depth24 = 9,
-	Depth32 = 10,
-	Depth24Stencil8 = 11,
-	A8 = 12,
-	LA88 = 13,
-	R32f = 14,
-	RGB32f = 15,
-	RGBA32f = 16,
-	R16f = 17,
-	RGB16f = 18,
-	RGBA16f = 19,
-	DXT1 = 20,
-	DXT1_with_ALPHA = 21,
-	DXT3 = 22,
-	DXT5 = 23,
-	ATC_RGB = 24,
-	ATC_RGBEA = 25,
-	ATC_RGBIA = 26,
-	ETC_RGB = 27,
-	ETC2_RGB = 28,
-	ETC2_RGBA_PUNCHTHROUGH_ALPHA = 29,
-	ETC2_RGBA = 30,
-	PVRTC4_RGB = 31,
-	PVRTC2_RGB = 32,
-	PVRTC4_RGBA = 33,
-	PVRTC2_RGBA = 34,
-	Int8 = 35,
-	Int16 = 36,
-	Int32 = 37,
-	UInt8 = 38,
-	UInt16 = 39,
-	UInt32 = 40,
-	Depth32Stencil8X24 = 41,
-	RGB16U = 42,
-	RGBA16U = 43,
-	SRGB888 = 44,
-	SRGB888A8 = 45,
-	RGB10A2 = 46,
+	BGR888 = 7,
+	BGRA8888 = 8,
+	Depth16 = 11,
+	Depth24 = 12,
+	Depth32 = 13,
+	Depth24Stencil8 = 14,
+	A8 = 16,
+	LA88 = 17,
+	R32f = 20,
+	RGB32f = 21,
+	RGBA32f = 22,
+	R16f = 23,
+	RGB16f = 24,
+	RGBA16f = 25,
+	DXT1 = 26,
+	DXT1_with_ALPHA = 27,
+	DXT3 = 28,
+	DXT5 = 29,
+	ATC_RGB = 30,
+	ATC_RGBEA = 31,
+	ATC_RGBIA = 32,
+	ETC_RGB = 33,
+	ETC2_RGB = 34,
+	ETC2_RGBA_PUNCHTHROUGH_ALPHA = 35,
+	ETC2_RGBA = 36,
+	PVRTC4_RGB = 37,
+	PVRTC2_RGB = 38,
+	PVRTC4_RGBA = 39,
+	PVRTC2_RGBA = 40,
+	Int8 = 41,
+	Int16 = 42,
+	Int32 = 43,
+	UInt8 = 44,
+	UInt16 = 45,
+	UInt32 = 46,
+	Depth32Stencil8X24 = 15,
+	RGB16U = 18,
+	RGBA16U = 19,
+	SRGB888 = 9,
+	SRGB888A8 = 10,
+	RGB10A2 = 6,
 }
 
 --- @enum PrimitiveTopology
@@ -8698,12 +9196,12 @@ PrimitiveTopology = {
 
 --- @enum RTAttachmentFlags
 RTAttachmentFlags = {
-	Color3 = 0,
-	Depth = 1,
-	Color2 = 2,
-	Color0 = 3,
-	Color1 = 4,
-	DepthAndStencil = 5,
+	Color3 = 64,
+	Depth = 2,
+	Color2 = 32,
+	Color0 = 8,
+	Color1 = 16,
+	DepthAndStencil = 4,
 }
 
 --- @enum RemoveType
@@ -8716,15 +9214,15 @@ RemoveType = {
 
 --- @enum RendererStateFlags
 RendererStateFlags = {
-	Shadows = 0,
-	Fog = 1,
-	MultiView = 2,
-	Lighting = 3,
-	DepthPass = 4,
-	VR = 5,
-	PBR = 6,
-	IBL = 7,
-	RASibGrouping = 8,
+	Shadows = 1,
+	Fog = 2,
+	MultiView = 4,
+	Lighting = 8,
+	DepthPass = 131072,
+	VR = 64,
+	PBR = 16,
+	IBL = 32,
+	RASibGrouping = 128,
 }
 
 --[[
@@ -8745,20 +9243,17 @@ ResourceUsage = {
 
 --- @enum ShaderType
 ShaderType = {
-	RayGen = 0,
-	Callable = 1,
+	RayGen = 4,
+	Callable = 9,
 	Fragment = 2,
-	AnyHit = 3,
-	Count = 4,
-	TesselationControl = 5,
+	AnyHit = 5,
+	Count = 10,
 	ClosestHit = 6,
-	Compute = 7,
-	Miss = 8,
-	Intersection = 9,
-	Unknown = 10,
-	Geometry = 11,
-	Vertex = 12,
-	TesselationEvaluation = 13,
+	Compute = 3,
+	Miss = 7,
+	Intersection = 8,
+	Unknown = 0,
+	Vertex = 1,
 }
 
 --- @enum Side
@@ -8769,9 +9264,9 @@ Side = {
 
 --- @enum SkyTextureType
 SkyTextureType = {
-	Dome = 0,
+	Dome = 2,
 	Cube = 1,
-	Unknown = 2,
+	Unknown = 0,
 	Sphere = 3,
 }
 
@@ -8802,8 +9297,8 @@ TmpLayerFlags = {
 
 --- @enum UIButtonType
 UIButtonType = {
-	Gray = 0,
-	Toggle = 1,
+	Gray = 1,
+	Toggle = 6,
 	Normal = 2,
 	Suggest = 3,
 	Transparent = 4,
@@ -8812,9 +9307,9 @@ UIButtonType = {
 
 --- @enum UIInputType
 UIInputType = {
-	Int = 0,
+	Int = 2,
 	Text = 1,
-	Float = 2,
+	Float = 3,
 }
 
 --- @enum UILabelType
@@ -8826,15 +9321,15 @@ UILabelType = {
 --- @enum UIPosType
 UIPosType = {
 	Inline = 0,
-	Percent = 1,
-	Fixed = 2,
+	Percent = 2,
+	Fixed = 1,
 }
 
 --- @enum UIPropertyMode
 UIPropertyMode = {
-	Override = 0,
-	Default = 1,
-	Inherit = 2,
+	Override = 2,
+	Default = 0,
+	Inherit = 1,
 }
 
 --- @enum UIRelativeTo
@@ -8845,62 +9340,62 @@ UIRelativeTo = {
 
 --- @enum UISizeType
 UISizeType = {
-	ByContent = 0,
+	ByContent = 2,
 	Percent = 1,
-	Units = 2,
+	Units = 0,
 	Ratio = 3,
 }
 
 --- @enum UISliderType
 UISliderType = {
-	Transparent = 0,
+	Transparent = 2,
 	Normal = 1,
 }
 
 --- @enum UITextAlign
 UITextAlign = {
-	Center = 0,
-	Right = 1,
-	Stretch = 2,
-	Left = 3,
+	Center = 1,
+	Right = 2,
+	Stretch = 3,
+	Left = 0,
 }
 
 --- @enum VRControllerButton
 VRControllerButton = {
-	A = 0,
-	B = 1,
-	Menu = 2,
-	Thumb = 3,
-	Trigger = 4,
-	Grip = 5,
-	Shoulder = 6,
+	A = 1,
+	B = 2,
+	Menu = 4,
+	Thumb = 8,
+	Trigger = 32,
+	Grip = 64,
+	Shoulder = 16,
 }
 
 --- @enum VSyncMode
 VSyncMode = {
-	Enabled = 0,
-	Default = 1,
-	Adaptive = 2,
-	Disabled = 3,
+	Enabled = 1,
+	Default = 0,
+	Adaptive = 3,
+	Disabled = 2,
 }
 
 --- @enum WidgetEvent
 WidgetEvent = {
-	OnPressCancel = 0,
-	OnKeyUp = 1,
-	OnDragStart = 2,
+	OnPressCancel = 6,
+	OnKeyUp = 10,
+	OnDragStart = 12,
 	OnFocus = 3,
-	OnHover = 4,
-	OnDragOver = 5,
-	OnFocusEnd = 6,
-	OnKeyDown = 7,
-	None = 8,
-	OnDragLeave = 9,
-	OnDragEnd = 10,
-	OnHoverEnd = 11,
-	OnPress = 12,
-	OnPressStart = 13,
-	OnMouseMove = 14,
-	OnValueChange = 15,
+	OnHover = 1,
+	OnDragOver = 13,
+	OnFocusEnd = 4,
+	OnKeyDown = 9,
+	None = 0,
+	OnDragLeave = 15,
+	OnDragEnd = 14,
+	OnHoverEnd = 2,
+	OnPress = 7,
+	OnPressStart = 5,
+	OnMouseMove = 8,
+	OnValueChange = 11,
 }
 

@@ -11,12 +11,24 @@ This class is only available on server
 
 ### integer[] GetClients() {#integer-GetClients}
 
+### table? GetAssetSyncStatus(integer clientID) {#table-GetAssetSyncStatus-integer-clientID}
+Server-to-client asset sync state of a client (Dev Tools' Assets Sync window): &#123; helloAnswered = boolean, assets = &#123; &#123;id, path, source, type, size, state, highPrio, position, progress, age&#125;, ... &#125; &#125;. state is 'queued' (position = place in the send queue), 'sending' (progress 0..1), 'sent', 'registered' (the client confirmed registering it) or 'up to date' (offered at connect, the client already had it); age = seconds since a sent asset finished. nil for an unknown client.
+
 ### boolean IsVRClient(integer clientID) {#boolean-IsVRClient-integer-clientID}
 
 ### nil DisconnectClient(integer clientID) {#nil-DisconnectClient-integer-clientID}
 
 ### nil LuaReset() {#nil-LuaReset}
 Re-runs all server Lua scripts from scratch. The entire Lua state is wiped — no tables, globals, or per-script `self` data survive — then every script reloads. Does not reload scene geometry.
+
+### integer GetLuaResetsSkipped() {#integer-GetLuaResetsSkipped}
+How many times a saved .lua change skipped the Lua reset because no changed script had run in the current Lua state.
+
+### integer GetSceneLoadCount() {#integer-GetSceneLoadCount}
+How many scene loads this server has started: 1 after the boot load, plus one per Server:OpenScene, New Scene or scene reload. A script's Start runs again after both a scene load and a .lua hot reload; compare this with a value kept in Config temp storage to tell them apart.
+
+### number GetLuaResetSkippedAt() {#number-GetLuaResetSkippedAt}
+Time.appTime of the last skipped Lua reset (0 when none).
 
 ### Object InsertPrefab(Asset prefab, string? newName, boolean? setSave) {#Object-InsertPrefab-Asset-prefab-string-newName-boolean-setSave}
 

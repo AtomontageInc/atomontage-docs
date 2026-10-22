@@ -1,0 +1,50 @@
+---
+title: PointLight
+id: PointLight
+---
+`Client`
+`Server`
+
+## Metamethods
+
+### boolean __eq(PointLight a, PointLight b) {#boolean-eq-PointLight-a-PointLight-b}
+True if both reference the same instance.
+
+## Properties
+
+### boolean active {#boolean-active}
+Get/Set whether the component is active
+
+### boolean activeInHierarchy {#boolean-activeInHierarchy}
+Get whether the component is active in hierarchy
+
+### Object object {#Object-object}
+Get the object this component is attached to
+
+### Object obj {#Object-obj}
+Get the object this component is attached to
+
+### boolean isDestroyed {#boolean-isDestroyed}
+Get whether the component is destroyed
+
+### string type {#string-type}
+Get the type name of the component
+
+### boolean onePerObject {#boolean-onePerObject}
+Whether this component type is limited to a single instance per object
+
+### Color color {#Color-color}
+Light color (alpha is ignored). Default white.
+
+### number intensity {#number-intensity}
+Brightness multiplier, >= 0. Default 1.
+
+### number radius {#number-radius}
+Range in meters; no light at and beyond it. Default 10.
+
+### number inner {#number-inner}
+Radius in meters up to which the light is at full intensity. Default 0.
+
+### number falloff {#number-falloff}
+Exponent of the fade between inner and radius: (1 - t)^falloff. 1 = linear, 2 = default, higher = faster drop near the inner radius.
+

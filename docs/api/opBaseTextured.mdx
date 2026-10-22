@@ -7,12 +7,12 @@ id: OpBaseTextured
 
 ## Methods
 
-### OpBaseTextured Texture(string|Asset|AssetLink|nil tex, Vec3 dir, number? scale, string|Asset|AssetLink|boolean|nil normal) {#OpBaseTextured-Texture-stringAssetAssetLinknil-tex-Vec3-dir-number-scale-stringAssetAssetLinkbooleannil-normal}
+### OpBaseTextured Texture(string|Asset|AssetLink|nil tex, Vec3 dir, number? scale, string|Asset|AssetLink|false|nil normal) {#OpBaseTextured-Texture-stringAssetAssetLinknil-tex-Vec3-dir-number-scale-stringAssetAssetLinkfalsenil-normal}
 Project an image onto the voxels (works on Add/Paint/Remove). The image replaces color; set a
 Color to tint it. Projected along `dir` (planar): lands only on the face toward `dir`, fading out on
 angled faces (decal-style). Use TriplanarTexture to cover every face without fading instead.
 
-### OpBaseTextured TriplanarTexture(string|Asset|AssetLink|nil tex, Vec3? anchor, number? scale, string|Asset|AssetLink|boolean|nil normal) {#OpBaseTextured-TriplanarTexture-stringAssetAssetLinknil-tex-Vec3-anchor-number-scale-stringAssetAssetLinkbooleannil-normal}
+### OpBaseTextured TriplanarTexture(string|Asset|AssetLink|nil tex, Vec3? anchor, number? scale, string|Asset|AssetLink|false|nil normal) {#OpBaseTextured-TriplanarTexture-stringAssetAssetLinknil-tex-Vec3-anchor-number-scale-stringAssetAssetLinkfalsenil-normal}
 Texture voxels from all three world axes, blended by surface normal (works on Add/Paint/Remove).
 The image replaces color; set a Color to tint it.
 

@@ -1,0 +1,350 @@
+---
+title: InterpEdit
+id: InterpEdit
+---
+`Client`
+`Server`
+
+## Methods
+
+### InterpEdit Set(table properties) {#InterpEdit-Set-table-properties}
+Sets widget properties from a table and returns the widget for chaining.
+
+### Widget WidgetByName(string name) {#Widget-WidgetByName-string-name}
+Finds a descendant widget by name. Returns nil if not found.
+
+## Properties
+
+### string type {#string-type}
+Widget type name (e.g. 'Button', 'Panel').
+
+### integer id {#integer-id}
+Unique widget ID.
+
+### boolean isDestroyed {#boolean-isDestroyed}
+True if the widget has been destroyed. Safe to read on a dead widget (every other property throws).
+
+### Widget parent {#Widget-parent}
+Parent widget, or nil if at root.
+
+### Window window {#Window-window}
+Owning Window widget.
+
+### table children {#table-children}
+Array of child widgets.
+
+### integer childCount {#integer-childCount}
+Number of direct children.
+
+### boolean hasChildren {#boolean-hasChildren}
+True if the widget has any children.
+
+### Widget next {#Widget-next}
+Next sibling widget.
+
+### Widget prev {#Widget-prev}
+Previous sibling widget.
+
+### boolean isWindow {#boolean-isWindow}
+True if this widget is a Window.
+
+### boolean isContainer {#boolean-isContainer}
+True if this widget is a container (Panel/Window).
+
+### boolean isSelected {#boolean-isSelected}
+True if this widget is currently selected in the editor.
+
+### string name {#string-name}
+Widget name, used for lookup via WidgetByName.
+
+### string tooltip {#string-tooltip}
+Tooltip text shown after hovering for one second. Empty string disables the tooltip.
+
+### string tooltipTitle {#string-tooltipTitle}
+Optional tooltip title line, shown bold and slightly larger above the tooltip text (which renders gray when a title is set).
+
+### boolean visible {#boolean-visible}
+Whether the widget is visible.
+
+### boolean enabled {#boolean-enabled}
+Whether the widget is interactive.
+
+### Vec2 size {#Vec2-size}
+Widget size in current sizing units.
+
+### string sizing {#string-sizing}
+Write-only shorthand for sizingX/Y: '%', 'px', 'bc', 'r', or two values like 'px, %'.
+
+### string sizingX {#string-sizingX}
+Horizontal sizing mode: '%' = percent, 'px' = units, 'bc' = by content, 'r'/'ratio' = ratio of the other axis (uses the size value as a percent).
+
+### string sizingY {#string-sizingY}
+Vertical sizing mode: '%' = percent, 'px' = units, 'bc' = by content, 'r'/'ratio' = ratio of the other axis (uses the size value as a percent).
+
+### Vec2 pos {#Vec2-pos}
+Widget position.
+
+### string posType {#string-posType}
+Position mode: 'fixed', '%', or 'inline'.
+
+### Vec2 sizePx {#Vec2-sizePx}
+Computed rendered size in screen pixels (post-layout, pixel-snapped). size/sizing are the inputs; this is what layout produced. Reflects the last layout pass - reads 0 before a new widget's first layout.
+
+### Vec2 posPx {#Vec2-posPx}
+Computed ABSOLUTE screen position of the top-left corner in pixels (same space as Client:GetWindowSize and mouse coords). Reflects the last layout pass.
+
+### string overflow {#string-overflow}
+Overflow mode: 'Hidden' (default, children past the row edge are clipped) or 'Wrap' (children flow-wrap to the next line, CSS flex-wrap).
+
+### boolean endLine {#boolean-endLine}
+If true, forces a line break after this widget in flow layout.
+
+### integer siblingIndex {#integer-siblingIndex}
+Zero-based index among siblings; assign to reorder.
+
+### Vec2 padding {#Vec2-padding}
+Inner padding between border and children.
+
+### string paddingMode {#string-paddingMode}
+Padding inheritance: 'Default', 'Inherit', 'Override'.
+
+### number rounding {#number-rounding}
+Corner rounding radius.
+
+### string roundingMode {#string-roundingMode}
+Rounding inheritance: 'Default', 'Inherit', 'Override'.
+
+### string cornerShape {#string-cornerShape}
+Corner CURVE, independent of its size - CSS `corner-shape`. `rounding` sets how big a corner is, this sets which curve fills it, and like CSS it does nothing when rounding is 0. Values: 'round' (default, a circular arc), 'squircle' (iOS-style, curvature-continuous - no visible seam where the straight edge meets the arc), 'bevel' (straight cut), 'scoop'/'notch' (concave), 'square', or superellipse(k) / a bare number (k=1 round, 2 squircle, 0 bevel, &lt;0 concave; the exponent is 2^k). Accepts 1-4 values like border-radius: one for all, or 'TL TR BR BL' clockwise. Reads back canonicalised. Squircles pay off at LARGE radii - on a 4px button corner the difference is invisible, and rounding=1000 only gives a true circle at 'round'.
+
+### integer roundCorners {#integer-roundCorners}
+Bitmask of which corners round when rounding>0: TL=1, TR=2, BR=4, BL=8 (default 15=all, 0=none). Combine for sides: left=9, right=6, top=3, bottom=12. On/off only — every rounded corner shares the same radius (no per-corner radius). For segmented controls / grouped buttons / flat-edge cards.
+
+### boolean glyphFade {#boolean-glyphFade}
+If false, this widget's icon/glyph colour changes are instant (no hover/state fade). Default true. Set false on dense list/tree rows to avoid fade lag while scrubbing.
+
+### Vec2 margin {#Vec2-margin}
+Outer margin around this widget.
+
+### string marginMode {#string-marginMode}
+Margin inheritance: 'Default', 'Inherit', 'Override'.
+
+### Vec2 gap {#Vec2-gap}
+Spacing inserted between this widget's children (x = between siblings in a line, y = between lines). Accounts for % sizing.
+
+### Vec2 translate {#Vec2-translate}
+Paint-time offset applied to this widget and its whole subtree, in LOGICAL units like pos/size/margin (so an animation travels the same proportion at any UI Scale). Does NOT affect layout: nothing reflows, siblings do not move, and sizePx/posPx are unchanged - use it for animation, and pos/margin for placement. Clicks follow the offset. Default (0,0).
+
+### Vec2 scale {#Vec2-scale}
+Paint-time scale of this widget and its whole subtree, pivoting on scaleOrigin. Does NOT affect layout (see translate). Text is MTSDF so it stays sharp at any scale. Clicks follow the scale. Default (1,1).
+
+### Vec2 scaleOrigin {#Vec2-scaleOrigin}
+Pivot for scale, normalised inside the widget's rect: (0.5,0.5) = centre (default), (0,0) = top-left, (1,1) = bottom-right.
+
+### number opacity {#number-opacity}
+0..1 paint-time opacity for this widget and its whole subtree, multiplied into every colour at composite time. Inherits multiplicatively through nested widgets. Default 1.
+
+### string alignItems {#string-alignItems}
+Cross-axis alignment of children (flexbox align-items): 'start'|'center'|'end'|'stretch'. Default 'start'.
+
+### string alignSelf {#string-alignSelf}
+This child's own cross-axis override (flexbox align-self): 'auto'|'start'|'center'|'end'|'stretch'. Default 'auto' = use parent's alignItems.
+
+### string justifyContent {#string-justifyContent}
+Main-axis distribution of children (flexbox justify-content): 'start'|'center'|'end'|'space-between'|'space-around'. Default 'start'.
+
+### Vec2 mp {#Vec2-mp}
+Write-only: sets both margin and padding to the same value.
+
+### boolean bgFrame {#boolean-bgFrame}
+Whether to draw the background frame.
+
+### string cursor {#string-cursor}
+Runtime mouse cursor override: 'auto' (widget default), 'ew-resize', or 'ns-resize'. Kept while the widget is pressed, including outside its bounds.
+
+### boolean dragHighlight {#boolean-dragHighlight}
+Whether the engine paints its built-in drag-over highlight on this widget (a halo just outside the rect, in the config hover color, as thick as the widget's resolved rounding). Default true. Set false on a drop target that styles its own drop state, so the two do not stack into what looks like a rendering artifact.
+
+### Color bgColor {#Color-bgColor}
+Background color.
+
+### Color borderColor {#Color-borderColor}
+Border color. Decides whether an outline is drawn at all; borderWidth only sets how thick.
+
+### number borderWidth {#number-borderWidth}
+Outline thickness in UI units (default 1). Drawn INWARD from the widget's edge like a CSS border, so it never changes layout or the widget's size, and it does NOT inset children - add padding if you want clearance. The inner corner radius is the outer radius minus this width, floored at 0 (CSS's rule). Floored at one physical pixel so a hairline never fades out at a low UI scale; 0 = no outline.
+
+### Color textColor {#Color-textColor}
+Text color.
+
+### number fontSize {#number-fontSize}
+Font size override; 0 = use theme default.
+
+### boolean fontBold {#boolean-fontBold}
+If true, use bold font.
+
+### string fontName {#string-fontName}
+Font face name override.
+
+### Vec2 textAlign {#Vec2-textAlign}
+Text alignment: x 0=left 0.5=center 1=right, y 0=top 0.5=center 1=bottom.
+
+### boolean outline {#boolean-outline}
+Draw a coloured outline behind this widget's text (one edge-biased MTSDF pass, not shifted copies). Default false.
+
+### Color outlineColor {#Color-outlineColor}
+Outline colour. Default black.
+
+### number outlineWidth {#number-outlineWidth}
+Outline thickness in SCREEN pixels (not logical units - don't divide by UI Scale). Default 2; capped at half the font's SDF range.
+
+### Color outline2Color {#Color-outline2Color}
+Colour of the optional second, outer outline ring. Default black.
+
+### number outline2Width {#number-outline2Width}
+Width of the second (outer) outline ring in screen px; 0 = no second ring (default). Drawn behind the first, so make it wider than outlineWidth for a double-outline look.
+
+### boolean effectOutline {#boolean-effectOutline}
+If true, the `fx` domain-warp and reveal effects are applied to the shadow and outline passes as well, so the whole glyph warps together instead of the fill sliding off a static outline. Shape/shading (cornerRound, bevel) and pattern stay fill-only. Default false.
+
+### boolean shadow {#boolean-shadow}
+Draw a soft drop shadow behind this widget's text. Default false.
+
+### Color shadowColor {#Color-shadowColor}
+Shadow colour. Default black at ~63% alpha.
+
+### Vec2 shadowOffset {#Vec2-shadowOffset}
+Shadow offset in SCREEN pixels (not logical units). Default (2,2).
+
+### number shadowSoftness {#number-shadowSoftness}
+Shadow fade reach in SCREEN pixels outside the glyph edge. Default 2; 0 = a hard offset copy.
+
+### number weight {#number-weight}
+Fill edge dilation in SCREEN pixels: positive = bolder, negative = thinner. Default 0. Faux-bold/thin without swapping the font face.
+
+### table fx {#table-fx}
+Grouped niche MTSDF text effects (write-only; unlisted keys reset to default, so `fx = {...}` sets the complete warp state; nil clears all). Fields, all 0..1 unless noted: cornerRound, bevel, bevelLight (light azimuth 0..2pi), melt, glitch, bend, twist, wave, hollow; reveal = &#123; amount, mask='noise'|'linear'|'radial', param, edge &#125;; pattern = &#123; kind='halftone'|'dither'|'contour', scale, angle &#125;. See the FX Playground editor tool.
+
+### table fill {#table-fill}
+Write-only 2-color fill gradient: &#123; top=Color, bottom=Color, along='y'|'x' &#125;.
+
+### table layers {#table-layers}
+Array of stacked text layers, each &#123; d=dilate, soft=glow, hollow=hollowness (0 solid..1 thin tube), off=Vec2 shadow offset, color=, colorBottom=, along='y'|'x' &#125;. When set, the layer stack REPLACES the base fill/outline/shadow.
+
+### boolean pixelSnap {#boolean-pixelSnap}
+Whether this widget's layout is snapped to whole pixels. Default true; set false on smoothly animated widgets so sub-pixel motion doesn't jitter.
+
+### boolean ellipsis {#boolean-ellipsis}
+Truncate overflowing single-line text with '...'. Default true; false lets the text overflow freely.
+
+### integer intVar {#integer-intVar}
+General-purpose integer tag for Lua use.
+
+### boolean showNoValue {#boolean-showNoValue}
+If true, the widget displays an indeterminate / no-value state.
+
+### fun(widget:Widget, ...) onHoverEx {#fun-widgetWidget-onHoverEx}
+Lua function called when the mouse enters the widget. Receives the widget and event-specific arguments.
+
+### fun(widget:Widget, ...) onHoverEndEx {#fun-widgetWidget-onHoverEndEx}
+Lua function called when the mouse leaves the widget. Receives the widget and event-specific arguments.
+
+### fun(widget:Widget, ...) onFocusEx {#fun-widgetWidget-onFocusEx}
+Lua function called when the widget gains keyboard focus. Receives the widget and event-specific arguments.
+
+### fun(widget:Widget, ...) onFocusEndEx {#fun-widgetWidget-onFocusEndEx}
+Lua function called when the widget loses keyboard focus. Receives the widget and event-specific arguments.
+
+### fun(widget:Widget, ...) onPressStartEx {#fun-widgetWidget-onPressStartEx}
+Lua function called when a press begins. Receives the widget and event-specific arguments.
+
+### fun(widget:Widget, ...) onPressCancelEx {#fun-widgetWidget-onPressCancelEx}
+Lua function called when a press is canceled. Receives the widget and event-specific arguments.
+
+### fun(widget:Widget, ...) onPressEx {#fun-widgetWidget-onPressEx}
+Lua function called when the widget is clicked. Receives the widget and event-specific arguments.
+
+### fun(widget:Widget, ...) onRightPressEx {#fun-widgetWidget-onRightPressEx}
+Lua function called when the widget is right-clicked. Receives the widget and event-specific arguments.
+
+### fun(widget:Widget, ...) onMouseMoveEx {#fun-widgetWidget-onMouseMoveEx}
+Lua function called when the mouse moves over the widget while pressed. Receives the widget and event-specific arguments.
+
+### fun(widget:Widget, key:string) onKeyDownEx {#fun-widgetWidget-keystring-onKeyDownEx}
+Lua function called on key-down while the widget is focused. Receives the widget and the key name, spelled as in Input:KeyDown ("Return", "Escape", "A").
+
+### fun(widget:Widget, key:string) onKeyUpEx {#fun-widgetWidget-keystring-onKeyUpEx}
+Lua function called on key-up while the widget is focused. Receives the widget and the key name, spelled as in Input:KeyDown.
+
+### fun(widget:Widget, ...) onValueChangeEx {#fun-widgetWidget-onValueChangeEx}
+Lua function called when the widget's value changes via user interaction. Receives the widget and event-specific arguments.
+
+### fun(widget:Widget, value:any, oldValue:any) onValueCommitEx {#fun-widgetWidget-valueany-oldValueany-onValueCommitEx}
+Lua function called once when an edit gesture finishes (scrub released, typed edit confirmed) and the value differs from the gesture start. Receives the widget, the committed value and the value from before the gesture — e.g. for one-step undo.
+
+### fun(widget:Widget):any onDragStartEx {#fun-widgetWidgetany-onDragStartEx}
+Lua function called when a drag operation starts on this widget. Return the drag payload (Object, ServerObject, string, ...) to start a drag, plus optionally a second return value with a table of payloads; return nil to not start one.
+
+### fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean? onDragOverEx {#fun-widgetWidget-varany-varListtable-posVec2boolean-onDragOverEx}
+Lua function called when another widget is dragged over this one. var/varList = the dragged payload(s), pos = position within the widget (0..1). Return false to reject the drop; anything else accepts.
+
+### fun(widget:Widget) onDragLeaveEx {#fun-widgetWidget-onDragLeaveEx}
+Lua function called when a dragged widget leaves this one.
+
+### fun(widget:Widget, var:any, varList:table, pos:Vec2):boolean? onDragEndEx {#fun-widgetWidget-varany-varListtable-posVec2boolean-onDragEndEx}
+Lua function called when a drag is dropped on this widget (only if onDragOverEx accepted). var/varList = the dropped payload(s), pos = position within the widget (0..1). Return false to reject the drop.
+
+### fun(widget:Widget, active:boolean, var:any, varList:table) onDragSessionEx {#fun-widgetWidget-activeboolean-varany-varListtable-onDragSessionEx}
+Lua function called on every drop target (any widget with onDragOver wired) when a drag STARTS anywhere (active=true) and when it ends (active=false) - unlike onDragOver, which only fires once the cursor is already over this widget. Use it to show the widget as an available target for a payload it would accept: test var the same way onDragOverEx does. Fires on every exit path, including a cancelled drag, so the 'available' look always gets cleared.
+
+### string onPress {#string-onPress}
+Name of the window-script function called when the widget is clicked (use onPressEx to assign a Lua function directly).
+
+### string onPressStart {#string-onPressStart}
+Name of the window-script function called when a press begins.
+
+### string onPressCancel {#string-onPressCancel}
+Name of the window-script function called when a press is canceled.
+
+### string onMouseMove {#string-onMouseMove}
+Name of the window-script function called when the mouse moves over the widget while pressed.
+
+### string onHover {#string-onHover}
+Name of the window-script function called when the mouse enters the widget.
+
+### string onHoverEnd {#string-onHoverEnd}
+Name of the window-script function called when the mouse leaves the widget.
+
+### string onFocus {#string-onFocus}
+Name of the window-script function called when the widget gains keyboard focus.
+
+### string onFocusEnd {#string-onFocusEnd}
+Name of the window-script function called when the widget loses keyboard focus.
+
+### string onKeyDown {#string-onKeyDown}
+Name of the window-script function called on key-down while the widget is focused. Receives (widget, key), the key name spelled as in Input:KeyDown.
+
+### string onKeyUp {#string-onKeyUp}
+Name of the window-script function called on key-up while the widget is focused. Receives (widget, key), the key name spelled as in Input:KeyDown.
+
+### string onValueChange {#string-onValueChange}
+Name of the window-script function called when the widget's value changes via user interaction.
+
+### string onValueCommit {#string-onValueCommit}
+Name of the window-script function called once when an edit gesture finishes with a changed value (see onValueCommitEx). Receives (widget, value, oldValue).
+
+### string onDragStart {#string-onDragStart}
+Name of the window-script function called when a drag operation starts on this widget.
+
+### string onDragOver {#string-onDragOver}
+Name of the window-script function called when another widget is dragged over this one.
+
+### string onDragLeave {#string-onDragLeave}
+Name of the window-script function called when a dragged widget leaves this one.
+
+### string onDragEnd {#string-onDragEnd}
+Name of the window-script function called when a drag operation ends.
+
+### Interp value {#Interp-value}
+The edited curve (a copy - assign it back after changing it in Lua). Click adds a key, Ctrl+click removes one, keys and tangent handles are dragged.
+

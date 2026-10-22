@@ -66,6 +66,9 @@ Flags the object for deletion. The object will not actually be destroyed until t
 
 ### Object[] GetAllObjects() {#Object-GetAllObjects}
 
+### table[] GetPointLights() {#table-GetPointLights}
+Returns the PointLight components active in the hierarchy as &#123;objectId, pos, color, intensity, radius, inner, falloff, remote&#125;, world space. On a client it includes the server's lights (remote = true, objectId names the server object).
+
 ### table[] GetMissingAssetRefs() {#table-GetMissingAssetRefs}
 
 ### Object CloneObject(Object obj) {#Object-CloneObject-Object-obj}

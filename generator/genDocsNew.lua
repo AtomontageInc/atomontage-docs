@@ -233,18 +233,30 @@ function genDocs:getFinalFunctionEntries(currentEntriesInfo, newEntriesInfo, cla
     local protoDescriptions = {}
 
     --get values, conert to this table
+    local cppDescriptions = {}
+    local protoParamTypes = {}
     local updatedMethods = {}
     for i, info in ipairs(newEntriesInfo) do
         local name = genDocs:genFunctionEntry(info)
         table.insert(newEntriesStr, name)
         updatedMethods[name] = true
-        --Lua-proto entries carry their own description; seed the mdx body from it (C++ entries don't)
-        if info.isLuaProto and info.description and info.description ~= "" then
-            protoDescriptions[name] = info.description
+        --the heading simplifies Lua-proto callback types to `fun`; keep the full ones for the emmy
+        if info.isLuaProto then
+            local types = {}
+            for k, p in ipairs(info.params) do types[k] = genDocs:normalizeLuaType(p.type) end
+            protoParamTypes[name] = types
+        end
+        --Lua-proto entries carry their own description; seed the mdx body from it
+        --C++ descriptions only seed brand new headings (see getFinalEntries)
+        if info.description and info.description ~= "" then
+            (info.isLuaProto and protoDescriptions or cppDescriptions)[name] = info.description
         end
     end
 
-    local finalEntries = genDocs:getFinalEntries(currentEntriesInfo, newEntriesStr, className, updatedMethods, protoDescriptions)
+    local finalEntries = genDocs:getFinalEntries(currentEntriesInfo, newEntriesStr, className, updatedMethods, protoDescriptions, cppDescriptions)
+    for _, e in ipairs(finalEntries) do
+        e.paramTypes = protoParamTypes[e.entry[1]]
+    end
     return finalEntries
 end
 
@@ -254,17 +266,18 @@ function genDocs:getFinalPropEntries(currentEntriesInfo, newEntriesInfo, classNa
     local protoDescriptions = {}
 
     --get values, conert to this table
+    local cppDescriptions = {}
     local updatedProps = {}
     for i, info in ipairs(newEntriesInfo) do
         local name = genDocs:genPropEntry(info)
         table.insert(newEntriesStr, name)
         updatedProps[name] = true
-        if info.isLuaProto and info.description and info.description ~= "" then
-            protoDescriptions[name] = info.description
+        if info.description and info.description ~= "" then
+            (info.isLuaProto and protoDescriptions or cppDescriptions)[name] = info.description
         end
     end
 
-    local finalEntries = genDocs:getFinalEntries(currentEntriesInfo, newEntriesStr, className, updatedProps, protoDescriptions)
+    local finalEntries = genDocs:getFinalEntries(currentEntriesInfo, newEntriesStr, className, updatedProps, protoDescriptions, cppDescriptions)
     return finalEntries
 end
 
@@ -349,10 +362,17 @@ function genDocs:genPropEntry(info)
     return name
 end
 
-function genDocs:getFinalEntries(currentEntries, newEntries, className, updatedMethods, protoDescriptions)
+function genDocs:getFinalEntries(currentEntries, newEntries, className, updatedMethods, protoDescriptions, cppDescriptions)
     protoDescriptions = protoDescriptions or {}
+    cppDescriptions = cppDescriptions or {}
     local currentEntiesKeys = {}
     local finalEntries = {}
+
+    --headings already in the mdx, documented or not: never seeded from C++ descriptions
+    local existingHeaders = {}
+    for _, methodInfo in ipairs(currentEntries) do
+        existingHeaders[methodInfo.entry[1]] = true
+    end
 
     --readd current rows in same order if still existing
     local i = 1
@@ -397,6 +417,7 @@ function genDocs:getFinalEntries(currentEntries, newEntries, className, updatedM
         --local header = genDocs:generateHeading(v)
         if (updatedMethods[header]) then
             local desc = protoDescriptions[header]
+                or (not existingHeaders[header] and cppDescriptions[header] and util:escapeMdx(cppDescriptions[header]))
             local entry = desc and { header, desc, "" } or { header, "" }
             table.insert(finalEntries, { entry = entry })
         else
@@ -455,7 +476,7 @@ function genDocs:generateEnumFile(name, values)
     --add remaing (new) updatedRows in correct order (sorted by keys)
     local tkeys = {}
     for k in pairs(values) do table.insert(tkeys, k) end
-    --table.sort(tkeys)
+    table.sort(tkeys, function(a, b) return values[a] < values[b] end)
     for _, k in ipairs(tkeys) do
         local v = values[k]
         if (updatedRowsKeys[k]) then
@@ -465,7 +486,7 @@ function genDocs:generateEnumFile(name, values)
     end
 
     --use final entries for emmy generator
-    genEmmy:addEnum(fileEmmyLua, name, intro, finalRows)
+    genEmmy:addEnum(fileEmmyLua, name, intro, finalRows, values)
 
     --write all lines
     local file = io.open(filename, "w")

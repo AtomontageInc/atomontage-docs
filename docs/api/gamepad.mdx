@@ -15,7 +15,49 @@ id: Gamepad
 
 ### number Axis(integer axis) {#number-Axis-integer-axis}
 
+### integer Hat(integer hat) {#integer-Hat-integer-hat}
+RAW joystick hat as an SDL bitmask: 1 up, 2 right, 4 down, 8 left, 0 centred. On mapped pads the d-pad is also GamepadButton.DpadUp/Down/Left/Right.
+
 ### integer Rumble(integer lowFrequencyRumble, integer highFrequencyRumble, integer duration) {#integer-Rumble-integer-lowFrequencyRumble-integer-highFrequencyRumble-integer-duration}
 
 ### integer RumbleTriggers(integer leftRumble, integer rightRumble, integer duration) {#integer-RumbleTriggers-integer-leftRumble-integer-rightRumble-integer-duration}
+
+### boolean IsMapped() {#boolean-IsMapped}
+True when SDL recognises this device as a gamepad, so the Mapped* functions report the standard layout. Almost every pad is (Xbox, PlayStation, Switch, Steam Controller, Steam Deck, browser 'standard' pads).
+
+### boolean MappedButtonDown(GamepadButton button) {#boolean-MappedButtonDown-GamepadButton-button}
+Standard-layout button pressed this frame; same on every platform.
+
+### boolean MappedButton(GamepadButton button) {#boolean-MappedButton-GamepadButton-button}
+Standard-layout button held.
+
+### boolean MappedButtonUp(GamepadButton button) {#boolean-MappedButtonUp-GamepadButton-button}
+Standard-layout button released this frame.
+
+### number MappedAxis(GamepadAxis axis) {#number-MappedAxis-GamepadAxis-axis}
+Standard-layout axis, no deadzone: sticks -1..1 (up is negative), triggers 0..1 (0 at rest).
+
+### Vec2 MappedStick(integer stick, number? deadzone) {#Vec2-MappedStick-integer-stick-number-deadzone}
+Stick 0 (left) or 1 (right) as a Vec2 with a RADIAL deadzone (default 0.15), rescaled so full deflection reads length 1. y is negative when pushed up.
+
+### string ButtonLabel(GamepadButton button) {#string-ButtonLabel-GamepadButton-button}
+What is printed on that button of this pad: A/B/X/Y or Cross/Circle/Square/Triangle; empty when unknown. Use it to draw the right glyph.
+
+### integer Id() {#integer-Id}
+Device instance id; the `id` field of this pad's Input:GetEvents() entries.
+
+### string Name() {#string-Name}
+Human-readable device name, e.g. 'Steam Controller' or 'Xbox Series X Controller'.
+
+### string Type() {#string-Type}
+SDL gamepad type: xbox360, xboxone, ps3, ps4, ps5, switchpro, joyconleft, joyconright, joyconpair, gamecube, standard; empty if not mapped. Steam Controllers report standard - check VendorId() == 0x28DE (Valve).
+
+### string Guid() {#string-Guid}
+SDL joystick GUID as a hex string.
+
+### integer VendorId() {#integer-VendorId}
+USB vendor id (0 if unknown). 0x28DE = Valve (Steam Controller, Steam Deck, Steam Input virtual pads).
+
+### integer ProductId() {#integer-ProductId}
+USB product id (0 if unknown).
 

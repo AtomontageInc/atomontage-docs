@@ -182,8 +182,10 @@ if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least
 ### VoxelData copyResource {#VoxelData-copyResource}
 
 ### boolean colorEnable {#boolean-colorEnable}
+Add/Paint: true overwrites the color of touched voxels, false keeps it. Voxels created by Add always get the op color.
 
 ### boolean normalEnable {#boolean-normalEnable}
+Same as colorEnable, for normals. Add with InsertOperation.Full never changes normals.
 
 ### boolean roughnessEnable {#boolean-roughnessEnable}
 
@@ -216,6 +218,7 @@ if ClampToMinVoxelSize is true (it's default), it sets size of shape to at least
 ### CopyOperation copyOperation {#CopyOperation-copyOperation}
 
 ### InsertOperation insertOperation {#InsertOperation-insertOperation}
+Voxels Add touches: Normal = empty and existing, Empty = empty only, Full = existing only (adds no geometry).
 
 ### integer kernelType {#integer-kernelType}
 0 = Smooth 7x5x7
@@ -248,8 +251,8 @@ Planar projection only: fade the albedo on faces angled away from the projection
 ### fun(progress:number) onProgress {#fun-progressnumber-onProgress}
 callback function. progress from 0-1. May not be called every frame. Is called after script updates 
 
-### fun(info:RemoveCountInfo, computeTimeMs:number) onFinished {#fun-infoRemoveCountInfo-computeTimeMsnumber-onFinished}
-callback function. onFinished is called after onProgress if it was last part
+### fun(info:RemoveCountInfo, computeTimeMs:number, status:string) onFinished {#fun-infoRemoveCountInfo-computeTimeMsnumber-statusstring-onFinished}
+Called exactly once after a submitted operation ends, including failures and no-ops. OnError runs first on failure. status is success, noop, or error. Argument validation may throw before submission; Lua reset clears pending callbacks. computeTimeMs is the summed compute time (ms) across all worker threads for this op, excluding time spent queued waiting for other ops.
 
 ### fun(reason:string, opCount:integer) onError {#fun-reasonstring-opCountinteger-onError}
 callback function. Called when the op group is dropped: reason says why, opCount is how many ops that group covered

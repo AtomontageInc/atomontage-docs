@@ -1,0 +1,35 @@
+---
+title: Interp
+id: Interp
+---
+`Client`
+`Server`
+
+## Constructors
+
+### Interp Interp() {#Interp-Interp}
+
+## Metamethods
+
+### boolean __eq(Interp a, Interp b) {#boolean-eq-Interp-a-Interp-b}
+True if both curves have the same keys and tangents.
+
+## Methods
+
+### integer AddKey(Vec2 pnt) {#integer-AddKey-Vec2-pnt}
+Adds a key at time pnt.x with value pnt.y. The time must be strictly between 0 and 1 and not equal to an existing key's time, the value is clamped to 0..1. Returns the 1-based index of the new key, which is determined by its time among the existing keys, or 0 when the key could not be added.
+
+### boolean RemoveKey(integer index) {#boolean-RemoveKey-integer-index}
+Removes the key with the given 1-based index. Returns false when the index is invalid or points to the first or last key, those cannot be removed.
+
+### number GetValue(number time) {#number-GetValue-number-time}
+Returns the interpolated value of the curve at the given time 0..1.
+
+### Interp Copy() {#Interp-Copy}
+Returns a copy of this curve.
+
+## Properties
+
+### integer keyCount {#integer-keyCount}
+Number of keys, the first and last key included.
+
